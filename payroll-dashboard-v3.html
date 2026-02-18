@@ -1,0 +1,1421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PayAxis — Payroll Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#f2f4f8;
+  --surface:#ffffff;
+  --surface2:#f8f9fc;
+  --surface3:#f0f2f7;
+  --border:#e3e8f0;
+  --border2:#cdd4e3;
+  --text:#0c1322;
+  --text2:#3a4a68;
+  --muted:#7b8faf;
+  --accent:#2563eb;
+  --accent-dk:#1d4ed8;
+  --accent-lt:rgba(37,99,235,.1);
+  --violet:#7c3aed;
+  --teal:#0891b2;
+  --green:#059669;
+  --amber:#d97706;
+  --red:#dc2626;
+  --shadow-xs:0 1px 3px rgba(12,19,34,.06),0 1px 2px rgba(12,19,34,.04);
+  --shadow-sm:0 2px 8px rgba(12,19,34,.08),0 1px 4px rgba(12,19,34,.05);
+  --shadow:0 4px 16px rgba(12,19,34,.1),0 2px 6px rgba(12,19,34,.06);
+  --shadow-lg:0 12px 40px rgba(12,19,34,.14),0 4px 12px rgba(12,19,34,.08);
+  --r:14px;
+  --r2:10px;
+  --mono:'Geist Mono',monospace;
+  --body:'Outfit',sans-serif;
+  --serif:'Instrument Serif',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.55;overflow-x:hidden}
+
+/* ── Number typography system ── */
+.n{font-family:var(--mono);font-variant-numeric:tabular-nums lining-nums;letter-spacing:-.02em}
+.n-xs{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:11px;font-weight:500;letter-spacing:0}
+.n-sm{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px;font-weight:500;letter-spacing:-.01em}
+.n-md{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;letter-spacing:-.02em}
+.n-lg{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:20px;font-weight:600;letter-spacing:-.04em}
+.n-xl{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:28px;font-weight:700;letter-spacing:-.06em}
+.n-2xl{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:34px;font-weight:700;letter-spacing:-.07em}
+
+/* ── Shell ── */
+.shell{display:flex;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:224px;flex-shrink:0;
+  background:var(--text);
+  display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow:hidden;
+  z-index:40
+}
+.sb-logo{
+  padding:20px 16px 16px;
+  border-bottom:1px solid rgba(255,255,255,.08)
+}
+.logo-row{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:34px;height:34px;
+  background:var(--accent);
+  border-radius:9px;display:grid;place-items:center;
+  font-size:16px;flex-shrink:0;
+  box-shadow:0 3px 10px rgba(37,99,235,.45)
+}
+.logo-name{font-family:var(--serif);font-size:18px;color:#fff;font-style:italic;letter-spacing:-.2px}
+.logo-badge{font-size:9px;background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:2px 6px;border-radius:4px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-top:2px;width:fit-content}
+.sb-nav{flex:1;padding:12px 10px;overflow-y:auto}
+.nav-sec{margin-bottom:20px}
+.nav-sec-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:6px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:9px;
+  color:rgba(255,255,255,.55);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all .17s;
+  border:1px solid transparent;margin-bottom:1px
+}
+.nav-item:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.07)}
+.nav-item.active{background:rgba(37,99,235,.35);color:#fff;border-color:rgba(37,99,235,.5);font-weight:600}
+.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:999px;font-family:var(--mono)}
+.nav-badge.amber{background:var(--amber)}
+.sb-footer{padding:12px 10px;border-top:1px solid rgba(255,255,255,.08)}
+.user-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;background:rgba(255,255,255,.07);cursor:pointer;transition:background .17s}
+.user-row:hover{background:rgba(255,255,255,.11)}
+.ua{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--violet));display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.u-name{font-size:12px;font-weight:600;color:#fff}
+.u-role{font-size:10px;color:rgba(255,255,255,.45)}
+
+/* ── Main ── */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+
+/* ── Topbar ── */
+.topbar{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:12px 24px;display:flex;align-items:center;
+  justify-content:space-between;gap:14px;
+  position:sticky;top:0;z-index:30
+}
+.topbar h1{font-family:var(--serif);font-size:22px;font-style:italic;color:var(--text);letter-spacing:-.3px;line-height:1.1}
+.breadcrumb{font-size:11px;color:var(--muted);margin-top:1px}
+.breadcrumb b{color:var(--accent);font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.period-tabs{display:flex;gap:1px;background:var(--surface3);border:1px solid var(--border);border-radius:9px;padding:3px}
+.period-tab{padding:6px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .17s;white-space:nowrap}
+.period-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-xs)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:12px;font-weight:600;font-family:var(--body);cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);transition:all .17s}
+.btn:hover{background:var(--surface3);border-color:var(--border2)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.28)}
+.btn.primary:hover{background:var(--accent-dk);box-shadow:0 4px 14px rgba(37,99,235,.38);transform:translateY(-1px)}
+.btn.sm{padding:6px 12px;font-size:11px;border-radius:8px}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{background:var(--surface3);color:var(--text);border-color:var(--border)}
+.btn.danger{background:rgba(220,38,38,.07);border-color:rgba(220,38,38,.2);color:var(--red)}
+.btn.danger:hover{background:rgba(220,38,38,.12)}
+
+/* ── Content ── */
+.content{padding:20px 24px;flex:1}
+
+/* ── Banner ── */
+.banner{
+  background:var(--text);
+  border-radius:var(--r);padding:18px 22px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-bottom:18px;box-shadow:var(--shadow-lg);
+  position:relative;overflow:hidden
+}
+.banner::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(37,99,235,.15);pointer-events:none}
+.banner::after{content:'';position:absolute;bottom:-80px;right:120px;width:200px;height:200px;border-radius:50%;background:rgba(124,58,237,.08);pointer-events:none}
+.banner-main .bl{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:3px}
+.banner-main h2{font-family:var(--serif);font-size:21px;font-style:italic;color:#fff;letter-spacing:-.2px}
+.banner-prog{margin-top:10px}
+.bp-labels{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.5);font-weight:600;margin-bottom:4px;font-family:var(--mono)}
+.bp-track{height:5px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.bp-fill{height:100%;background:rgba(255,255,255,.7);border-radius:99px;transition:width .7s ease}
+.banner-stats{display:flex;gap:20px;flex-wrap:wrap}
+.bs{text-align:center}
+.bs-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.45);font-weight:700;margin-bottom:3px}
+.bs-val{font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;letter-spacing:-.04em}
+.banner-acts{display:flex;gap:7px;flex-shrink:0}
+.btn-g{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;font-family:var(--body);cursor:pointer;transition:all .17s;display:flex;align-items:center;gap:6px}
+.btn-g:hover{background:rgba(255,255,255,.17)}
+.btn-w{background:#fff;border:1px solid #fff;color:var(--accent);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;font-family:var(--body);cursor:pointer;transition:all .17s;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.btn-w:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+
+/* ── KPI grid ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden;transition:all .2s;box-shadow:var(--shadow-xs);animation:fadeUp .35s ease both}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);border-color:var(--border2)}
+.kpi-card:nth-child(1){animation-delay:.04s}.kpi-card:nth-child(2){animation-delay:.08s}.kpi-card:nth-child(3){animation-delay:.12s}.kpi-card:nth-child(4){animation-delay:.16s}
+.kpi-glow{position:absolute;top:-24px;right:-24px;width:80px;height:80px;border-radius:50%;opacity:.06;pointer-events:none}
+.kpi-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.kpi-icon{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:15px}
+.kpi-trend-badge{font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 7px;border-radius:999px;display:flex;align-items:center;gap:3px}
+.kpi-trend-badge.up{background:rgba(5,150,105,.1);color:var(--green)}
+.kpi-trend-badge.down{background:rgba(220,38,38,.1);color:var(--red)}
+.kpi-trend-badge.flat{background:rgba(37,99,235,.1);color:var(--accent)}
+.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:4px}
+.kpi-val{color:var(--text);line-height:1;margin-bottom:8px}
+.kpi-sub{font-size:11px;color:var(--muted)}
+.kpi-sparkwrap{height:32px;margin-top:6px}
+
+/* ── Tab bar ── */
+.tab-bar{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.stab{padding:9px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .17s;white-space:nowrap}
+.stab:hover{color:var(--text)}
+.stab.active{color:var(--accent);border-color:var(--accent)}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-xs);overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.card-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.1px}
+.card-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.card-body{padding:18px}
+.chart-wrap{position:relative;height:220px}
+
+/* ── Grid layouts ── */
+.g2{display:grid;grid-template-columns:1fr 280px;gap:12px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.g2x{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+@media(max-width:1200px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.g2,.g2x{grid-template-columns:1fr}.g3{grid-template-columns:1fr 1fr}}
+
+/* ── Dept bars ── */
+.dept-list{display:flex;flex-direction:column;gap:10px}
+.dept-item .dept-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+.dept-name{font-size:12px;font-weight:600;color:var(--text)}
+.dept-right{display:flex;align-items:baseline;gap:5px}
+.dept-amt{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+.dept-pct{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.pbar{height:6px;background:var(--border);border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+
+/* ── Run history ── */
+.run-list{display:flex;flex-direction:column}
+.run-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:9px;cursor:pointer;transition:background .14s}
+.run-item:hover{background:var(--bg)}
+.run-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.run-date{font-size:12px;font-weight:600;color:var(--text);min-width:72px}
+.run-period{font-size:11px;color:var(--muted);flex:1}
+.run-amount{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);min-width:80px;text-align:right;letter-spacing:-.02em}
+.run-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;font-family:var(--mono)}
+.run-badge.done{background:rgba(5,150,105,.1);color:var(--green);border:1px solid rgba(5,150,105,.2)}
+.run-badge.pending{background:rgba(217,119,6,.1);color:var(--amber);border:1px solid rgba(217,119,6,.2)}
+
+/* ── Alerts ── */
+.alert-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;display:flex;align-items:flex-start;gap:11px;box-shadow:var(--shadow-xs);transition:all .18s;border-left-width:3px}
+.alert-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.alert-card.warn{border-left-color:var(--amber)}.alert-card.success{border-left-color:var(--green)}.alert-card.info{border-left-color:var(--accent)}
+.alert-icon{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+.alert-card.info .alert-icon{background:rgba(37,99,235,.1)}.alert-card.warn .alert-icon{background:rgba(217,119,6,.1)}.alert-card.success .alert-icon{background:rgba(5,150,105,.1)}
+.alert-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.alert-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.alert-action{margin-top:6px;font-size:11px;font-weight:700;color:var(--accent);cursor:pointer}
+.alert-action:hover{text-decoration:underline}
+
+/* ── YTD cards ── */
+.ytd-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow-xs);transition:all .18s}
+.ytd-card:hover{border-color:var(--border2);box-shadow:var(--shadow-sm)}
+.ytd-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
+.ytd-pbar{height:4px;background:var(--border);border-radius:99px;overflow:hidden;margin:6px 0}
+.ytd-sub{font-family:var(--mono);font-size:10px;color:var(--muted)}
+
+/* ── Approval workflow ── */
+.approval-steps{display:flex;align-items:center;gap:0;margin-bottom:14px}
+.ap-step{flex:1;text-align:center;position:relative}
+.ap-step::after{content:'';position:absolute;top:14px;left:50%;width:100%;height:2px;background:var(--border);z-index:0}
+.ap-step:last-child::after{display:none}
+.ap-circle{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;border:2px solid var(--border);background:var(--surface);margin:0 auto 5px;position:relative;z-index:1;transition:all .2s}
+.ap-step.done .ap-circle{background:var(--green);border-color:var(--green);color:#fff}
+.ap-step.active .ap-circle{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.15)}
+.ap-step.pending .ap-circle{color:var(--muted)}
+.ap-step::after{background:var(--border)}
+.ap-step.done::after{background:var(--green)}
+.ap-label{font-size:10px;font-weight:600;color:var(--muted)}
+.ap-step.done .ap-label{color:var(--green)}.ap-step.active .ap-label{color:var(--accent);font-weight:700}
+
+/* ── Leave tracker ── */
+.leave-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.leave-item:last-child{border-bottom:none}
+.leave-av{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.leave-name{font-size:12px;font-weight:600;color:var(--text);flex:1}
+.leave-dept{font-size:10px;color:var(--muted)}
+.leave-dates{font-family:var(--mono);font-size:10px;color:var(--text2);text-align:right}
+.leave-type{font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.leave-type.annual{background:rgba(37,99,235,.1);color:var(--accent)}
+.leave-type.sick{background:rgba(220,38,38,.1);color:var(--red)}
+.leave-type.mat{background:rgba(124,58,237,.1);color:var(--violet)}
+
+/* ── Headcount grid ── */
+.hc-stat{text-align:center;padding:16px 0}
+.hc-val{line-height:1;margin-bottom:4px}
+.hc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.hc-delta{font-family:var(--mono);font-size:10px;font-weight:600;display:block;margin-top:3px}
+
+/* ── Salary bands ── */
+.band-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.band-row:last-child{border-bottom:none}
+.band-range{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text2);min-width:120px;letter-spacing:-.02em}
+.band-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden}
+.band-bar{height:100%;border-radius:99px;transition:width .7s ease}
+.band-count{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text);min-width:28px;text-align:right}
+.band-pct{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:32px;text-align:right}
+
+/* ── Table ── */
+.filters-bar{display:flex;align-items:center;gap:8px;padding:12px 18px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:var(--surface2)}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:7px 12px;flex:1;min-width:180px;transition:all .17s}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.search-box input{border:none;background:transparent;outline:none;font-family:var(--body);font-size:13px;color:var(--text);width:100%}
+.search-box input::placeholder{color:var(--muted)}
+.fsel{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:7px 10px;font-family:var(--body);font-size:12px;font-weight:500;color:var(--text);outline:none;cursor:pointer;transition:border-color .17s}
+.fsel:focus{border-color:var(--accent)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:900px}
+thead th{padding:9px 12px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap}
+thead th.sort{cursor:pointer;user-select:none}
+thead th.sort:hover{color:var(--accent)}
+thead th.sasc::after{content:' ↑';color:var(--accent)}
+thead th.sdesc::after{content:' ↓';color:var(--accent)}
+tbody tr{transition:background .1s;cursor:pointer}
+tbody tr:hover{background:rgba(37,99,235,.03)}
+tbody tr.selected{background:rgba(37,99,235,.05)}
+tbody td{padding:11px 12px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+.emp-av{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0}
+.emp-name{font-size:13px;font-weight:600;color:var(--text)}
+.emp-id{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.dept-chip{display:inline-flex;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.td-g{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+.td-d{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);letter-spacing:-.01em}
+.td-n{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);letter-spacing:-.03em}
+.spill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:999px}
+.spill::before{content:'';width:5px;height:5px;border-radius:50%;display:inline-block}
+.spill.active{background:rgba(5,150,105,.08);color:var(--green)}.spill.active::before{background:var(--green)}
+.spill.leave{background:rgba(217,119,6,.08);color:var(--amber)}.spill.leave::before{background:var(--amber)}
+.spill.inactive{background:rgba(123,143,175,.08);color:var(--muted)}.spill.inactive::before{background:var(--muted)}
+.cb{width:14px;height:14px;cursor:pointer;accent-color:var(--accent)}
+.bulk-bar{
+  display:none;align-items:center;gap:10px;
+  padding:10px 18px;background:rgba(37,99,235,.06);
+  border-bottom:1px solid rgba(37,99,235,.15);
+  font-size:12px;font-weight:600;color:var(--accent)
+}
+.bulk-bar.show{display:flex}
+.table-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-top:1px solid var(--border);background:var(--surface2);font-size:11px;color:var(--muted);gap:10px;flex-wrap:wrap}
+.pag{display:flex;gap:2px}
+.pg{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text2);transition:all .14s}
+.pg:hover{border-color:var(--accent);color:var(--accent)}
+.pg.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.tsum{display:flex;gap:16px;flex-wrap:wrap}
+.tsum-item{font-size:11px;color:var(--muted)}
+.tsum-item b{font-family:var(--mono);font-size:12px;color:var(--text);font-weight:600;letter-spacing:-.02em}
+
+/* ── Drawer ── */
+.drw-backdrop{position:fixed;inset:0;background:rgba(12,19,34,.5);backdrop-filter:blur(4px);z-index:50;display:none}
+.drw-backdrop.open{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(500px,96vw);background:var(--surface);border-left:1px solid var(--border);box-shadow:var(--shadow-lg);z-index:51;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.drawer.open{transform:translateX(0)}
+.drw-hd{padding:16px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.drw-title{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--text)}
+.drw-sub{font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
+.drw-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--surface);cursor:pointer;display:grid;place-items:center;font-size:14px;transition:all .14s;flex-shrink:0}
+.drw-close:hover{background:var(--surface3)}
+.drw-body{flex:1;overflow-y:auto;padding:18px}
+.drw-foot{padding:14px 18px;border-top:1px solid var(--border);background:var(--surface2);display:flex;gap:8px;justify-content:flex-end}
+
+/* ── Payslip ── */
+.ps-banner{background:var(--text);border-radius:12px;padding:16px 18px;color:#fff;margin-bottom:16px}
+.ps-toprow{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px}
+.ps-name{font-family:var(--serif);font-size:20px;font-style:italic;letter-spacing:-.2px}
+.ps-meta{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px;font-family:var(--mono)}
+.ps-net-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.45);font-weight:700;margin-top:12px;margin-bottom:2px}
+.ps-net{font-family:var(--mono);font-size:32px;font-weight:700;color:#fff;letter-spacing:-.06em}
+.ps-date-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.45);font-weight:700;margin-bottom:2px}
+.ps-date{font-family:var(--mono);font-size:13px;font-weight:600;color:#fff;letter-spacing:-.02em}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.dc{background:var(--surface3);border-radius:9px;padding:10px 12px}
+.dc-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:3px}
+.dc-val{font-size:12px;font-weight:600;color:var(--text)}
+.dc-val.mono{font-family:var(--mono);letter-spacing:-.02em}
+.ps-section{margin-bottom:14px}
+.ps-sec-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.ps-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px dashed var(--border)}
+.ps-row:last-child{border-bottom:none}
+.ps-row-label{font-size:12px;color:var(--text2);font-weight:500}
+.ps-row-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);letter-spacing:-.02em}
+.ps-row-val.d{color:var(--red)}.ps-row-val.net{color:var(--accent);font-size:14px;font-weight:700}
+.ps-total{display:flex;justify-content:space-between;padding:10px 12px;background:rgba(37,99,235,.06);border-radius:8px;margin-top:6px;border:1px solid rgba(37,99,235,.1)}
+.ps-total-label{font-size:12px;font-weight:700;color:var(--text)}
+.ps-total-val{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:-.03em}
+.ps-total-val.d{color:var(--red)}.ps-total-val.net{color:var(--accent)}
+.eff-rate-box{padding:10px 12px;background:var(--surface3);border-radius:9px;border:1px solid var(--border);margin-top:10px}
+.eff-rate-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.eff-rate-val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--text);letter-spacing:-.04em}
+.ytd-comparison{margin-top:12px}
+.ytd-cmp-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+.ytd-cmp-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.ytd-cmp-row:last-child{border-bottom:none}
+.ytd-cmp-label{color:var(--text2);font-weight:500}
+.ytd-cmp-val{font-family:var(--mono);font-weight:600;color:var(--text);letter-spacing:-.02em}
+
+/* ── Audit trail ── */
+.audit-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.audit-item:last-child{border-bottom:none}
+.audit-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.audit-time{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:80px}
+.audit-text{font-size:11px;color:var(--text2);flex:1}
+.audit-user{font-size:10px;color:var(--muted);font-weight:600}
+
+/* ── Calendar ── */
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px}
+.cal-day{padding:6px 4px;text-align:center;border-radius:7px;font-size:11px;font-weight:500;color:var(--muted);cursor:default}
+.cal-day.hdr{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);padding:4px 4px 6px}
+.cal-day.today{background:var(--accent);color:#fff;font-weight:700}
+.cal-day.paydate{background:rgba(5,150,105,.12);color:var(--green);font-weight:700;cursor:pointer}
+.cal-day.paydate:hover{background:rgba(5,150,105,.2)}
+.cal-day.has-event{background:rgba(37,99,235,.1);color:var(--accent);font-weight:600}
+.cal-day.dim{opacity:.4}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--text);color:#fff;font-size:12px;font-weight:600;padding:9px 18px;border-radius:999px;box-shadow:var(--shadow);z-index:90;opacity:0;transition:all .22s;pointer-events:none;font-family:var(--body);white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Don legend ── */
+.dl{display:flex;flex-direction:column;gap:7px}
+.dl-row{display:flex;align-items:center;gap:8px}
+.dl-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+.dl-name{font-size:11px;font-weight:600;color:var(--text);flex:1}
+.dl-amt{font-family:var(--mono);font-size:10px;color:var(--text2);font-weight:500;letter-spacing:-.01em}
+.dl-pct{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:26px;text-align:right}
+
+/* ── Animations ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px}
+
+/* ── Print ── */
+@media print{.sidebar,.topbar,.btn,.bulk-bar,.filters-bar,.drawer,.drw-backdrop,.toast{display:none!important}.main{margin:0}.content{padding:0}.card{box-shadow:none;border:1px solid #ccc}}
+@media(max-width:900px){.sidebar{display:none}.content{padding:14px 16px}}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="logo-row">
+      <div class="logo-icon">💼</div>
+      <div>
+        <div class="logo-name">PayAxis</div>
+        <div class="logo-badge">Enterprise</div>
+      </div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-sec">
+      <div class="nav-sec-label">Overview</div>
+      <div class="nav-item active"><span class="nav-icon">📊</span> Dashboard</div>
+      <div class="nav-item"><span class="nav-icon">📅</span> Pay Runs <span class="nav-badge">1</span></div>
+      <div class="nav-item"><span class="nav-icon">📈</span> Analytics</div>
+    </div>
+    <div class="nav-sec">
+      <div class="nav-sec-label">Payroll</div>
+      <div class="nav-item"><span class="nav-icon">👥</span> Employees</div>
+      <div class="nav-item"><span class="nav-icon">⏱️</span> Timesheets <span class="nav-badge amber">3</span></div>
+      <div class="nav-item"><span class="nav-icon">🏖️</span> Leave Tracker</div>
+      <div class="nav-item"><span class="nav-icon">💰</span> Expenses</div>
+      <div class="nav-item"><span class="nav-icon">🎁</span> Benefits</div>
+    </div>
+    <div class="nav-sec">
+      <div class="nav-sec-label">Compliance</div>
+      <div class="nav-item"><span class="nav-icon">📋</span> Tax Reports</div>
+      <div class="nav-item"><span class="nav-icon">📜</span> Payslips</div>
+      <div class="nav-item"><span class="nav-icon">🔍</span> Audit Log</div>
+    </div>
+    <div class="nav-sec">
+      <div class="nav-sec-label">Admin</div>
+      <div class="nav-item"><span class="nav-icon">⚙️</span> Configuration</div>
+      <div class="nav-item"><span class="nav-icon">🔔</span> Notifications <span class="nav-badge">2</span></div>
+    </div>
+  </nav>
+  <div class="sb-footer">
+    <div class="user-row">
+      <div class="ua">SR</div>
+      <div><div class="u-name">Sarah Reynolds</div><div class="u-role">Payroll Manager</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h1>Payroll Dashboard</h1>
+      <div class="breadcrumb">Home / <b>Payroll</b> / Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <div class="period-tabs" id="periodTabs">
+        <div class="period-tab active" data-p="jun">Jun 2025</div>
+        <div class="period-tab" data-p="may">May 2025</div>
+        <div class="period-tab" data-p="apr">Apr 2025</div>
+      </div>
+      <button class="btn" id="btnExport">⬇ Export CSV</button>
+      <button class="btn primary" id="btnRun">▶ Run Payroll</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Banner -->
+    <div class="banner">
+      <div class="banner-main">
+        <div class="bl">Current Pay Period</div>
+        <h2>June 2025 — Monthly Payroll</h2>
+        <div class="banner-prog">
+          <div class="bp-labels"><span>Approval progress</span><span id="bpLabel">0 / 148 approved</span></div>
+          <div class="bp-track"><div class="bp-fill" id="bpFill" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="banner-stats">
+        <div class="bs"><div class="bs-label">Pay Date</div><div class="bs-val" id="bsPayDate">28 Jun</div></div>
+        <div class="bs"><div class="bs-label">Headcount</div><div class="bs-val" id="bsEmps">148</div></div>
+        <div class="bs"><div class="bs-label">Gross</div><div class="bs-val" id="bsGross">€488k</div></div>
+        <div class="bs"><div class="bs-label">Status</div><div class="bs-val" id="bsStatus">Draft</div></div>
+      </div>
+      <div class="banner-acts">
+        <button class="btn-g" id="btnPreview">📋 Preview</button>
+        <button class="btn-w" id="btnProcess">▶ Process</button>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="g3" style="margin-bottom:16px;">
+      <div class="alert-card warn">
+        <div class="alert-icon">⚠️</div>
+        <div><div class="alert-title">3 Timesheet Gaps</div><div class="alert-desc">E006, E017, E023 have unsubmitted timesheets for June 2025.</div><div class="alert-action">Review now →</div></div>
+      </div>
+      <div class="alert-card success">
+        <div class="alert-icon">✅</div>
+        <div><div class="alert-title">May Payroll Processed</div><div class="alert-desc"><span class="n-sm" style="color:var(--text);font-weight:700;">€482,340</span> paid successfully on 30 May 2025.</div><div class="alert-action">View payslips →</div></div>
+      </div>
+      <div class="alert-card info">
+        <div class="alert-icon">📋</div>
+        <div><div class="alert-title">2 Tax Band Updates</div><div class="alert-desc">USC thresholds revised for Q3 2025. Review before next run.</div><div class="alert-action">View updates →</div></div>
+      </div>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card c1">
+        <div class="kpi-glow" style="background:var(--accent)"></div>
+        <div class="kpi-header">
+          <div class="kpi-icon" style="background:rgba(37,99,235,.1)">💵</div>
+          <span class="kpi-trend-badge up">↑ 3.2%</span>
+        </div>
+        <div class="kpi-label">Total Gross Payroll</div>
+        <div class="kpi-val n-xl" id="kpiGross">€482,340</div>
+        <div class="kpi-sub">vs €467,140 last month</div>
+        <div class="kpi-sparkwrap"><canvas id="spk1"></canvas></div>
+      </div>
+      <div class="kpi-card c2">
+        <div class="kpi-glow" style="background:var(--green)"></div>
+        <div class="kpi-header">
+          <div class="kpi-icon" style="background:rgba(5,150,105,.1)">👥</div>
+          <span class="kpi-trend-badge up">+4 starters</span>
+        </div>
+        <div class="kpi-label">Active Employees</div>
+        <div class="kpi-val n-xl">148</div>
+        <div class="kpi-sub">2 on leave, 1 notice period</div>
+        <div class="kpi-sparkwrap"><canvas id="spk2"></canvas></div>
+      </div>
+      <div class="kpi-card c3">
+        <div class="kpi-glow" style="background:var(--amber)"></div>
+        <div class="kpi-header">
+          <div class="kpi-icon" style="background:rgba(217,119,6,.1)">📉</div>
+          <span class="kpi-trend-badge flat">31% of gross</span>
+        </div>
+        <div class="kpi-label">Total Deductions</div>
+        <div class="kpi-val n-xl">€149,520</div>
+        <div class="kpi-sub">PAYE + PRSI + USC</div>
+        <div class="kpi-sparkwrap"><canvas id="spk3"></canvas></div>
+      </div>
+      <div class="kpi-card c4">
+        <div class="kpi-glow" style="background:var(--teal)"></div>
+        <div class="kpi-header">
+          <div class="kpi-icon" style="background:rgba(8,145,178,.1)">💳</div>
+          <span class="kpi-trend-badge down">↓ 0.8%</span>
+        </div>
+        <div class="kpi-label">Net Payroll</div>
+        <div class="kpi-val n-xl">€332,820</div>
+        <div class="kpi-sub">Paid to 148 employees</div>
+        <div class="kpi-sparkwrap"><canvas id="spk4"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Section tabs -->
+    <div class="tab-bar">
+      <div class="stab active" data-stab="overview">Overview</div>
+      <div class="stab" data-stab="ytd">Year-to-Date</div>
+      <div class="stab" data-stab="budget">Budget vs Actual</div>
+      <div class="stab" data-stab="headcount">Headcount</div>
+      <div class="stab" data-stab="workflow">Approval Workflow</div>
+      <div class="stab" data-stab="calendar">Pay Calendar</div>
+    </div>
+
+    <!-- ── OVERVIEW ── -->
+    <div id="panel-overview">
+      <div class="g2">
+        <div class="card">
+          <div class="card-hd">
+            <div><div class="card-title">Payroll Cost Trend</div><div class="card-sub">12-month gross vs net</div></div>
+            <div style="display:flex;gap:12px;font-size:10px;font-weight:700;">
+              <span style="display:flex;align-items:center;gap:4px;color:var(--accent)"><span style="width:8px;height:8px;border-radius:2px;background:var(--accent);display:inline-block"></span>Gross</span>
+              <span style="display:flex;align-items:center;gap:4px;color:var(--green)"><span style="width:8px;height:8px;border-radius:2px;background:var(--green);display:inline-block"></span>Net</span>
+            </div>
+          </div>
+          <div class="card-body"><div class="chart-wrap"><canvas id="chartTrend"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">By Department</div><div class="card-sub">Gross cost this period</div></div></div>
+          <div class="card-body"><div class="dept-list" id="deptList"></div></div>
+        </div>
+      </div>
+      <div class="g2x">
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Pay Composition</div><div class="card-sub">Gross breakdown</div></div></div>
+          <div class="card-body" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+            <div class="chart-wrap" style="height:170px;width:170px;flex-shrink:0;"><canvas id="chartDon"></canvas></div>
+            <div class="dl" id="donLegend" style="flex:1;min-width:130px;"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Pay Run History</div><div class="card-sub">Last 6 pay runs</div></div><span style="font-size:11px;font-weight:600;color:var(--accent);cursor:pointer;">All runs →</span></div>
+          <div class="card-body" style="padding:6px;"><div class="run-list" id="runList"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── YTD ── -->
+    <div id="panel-ytd" style="display:none;">
+      <div id="ytdGrid" class="g3" style="margin-bottom:14px;"></div>
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Monthly Gross YTD</div><div class="card-sub">Jan – Jun 2025 actuals vs target</div></div></div>
+        <div class="card-body"><div class="chart-wrap"><canvas id="chartYtd"></canvas></div></div>
+      </div>
+    </div>
+
+    <!-- ── BUDGET VS ACTUAL ── -->
+    <div id="panel-budget" style="display:none;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-hd"><div><div class="card-title">Budget vs Actual — June 2025</div><div class="card-sub">Department variance analysis</div></div></div>
+        <div class="card-body"><div class="chart-wrap" style="height:240px;"><canvas id="chartBudget"></canvas></div></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Variance Detail</div><div class="card-sub">Positive = under budget</div></div></div>
+        <table style="min-width:500px;">
+          <thead><tr><th>Department</th><th>Budget</th><th>Actual</th><th>Variance €</th><th>Variance %</th><th>Status</th></tr></thead>
+          <tbody id="varTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── HEADCOUNT ── -->
+    <div id="panel-headcount" style="display:none;">
+      <div class="g4" style="margin-bottom:14px;">
+        <div class="card" style="text-align:center;padding:20px;"><div class="kpi-label">Total Headcount</div><div class="n-2xl" style="color:var(--accent);margin:6px 0;">148</div><div style="font-size:11px;color:var(--muted)">+4 this month</div></div>
+        <div class="card" style="text-align:center;padding:20px;"><div class="kpi-label">New Starters</div><div class="n-2xl" style="color:var(--green);margin:6px 0;">4</div><div style="font-size:11px;color:var(--muted)">June 2025</div></div>
+        <div class="card" style="text-align:center;padding:20px;"><div class="kpi-label">Leavers</div><div class="n-2xl" style="color:var(--red);margin:6px 0;">1</div><div style="font-size:11px;color:var(--muted)">June 2025</div></div>
+        <div class="card" style="text-align:center;padding:20px;"><div class="kpi-label">Turnover Rate</div><div class="n-2xl" style="color:var(--amber);margin:6px 0;">8.1<span style="font-size:16px;">%</span></div><div style="font-size:11px;color:var(--muted)">Annualised</div></div>
+      </div>
+      <div class="g2x">
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Headcount by Department</div><div class="card-sub">Active employees</div></div></div>
+          <div class="card-body"><div class="chart-wrap" style="height:200px;"><canvas id="chartHC"></canvas></div></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Salary Band Distribution</div><div class="card-sub">Employees by gross pay bracket</div></div></div>
+          <div class="card-body"><div class="dept-list" id="bandList"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><div><div class="card-title">Leave Status</div><div class="card-sub">Employees currently on leave</div></div><button class="btn sm">+ Log Leave</button></div>
+        <div class="card-body" style="padding:6px 18px;" id="leaveList"></div>
+      </div>
+    </div>
+
+    <!-- ── APPROVAL WORKFLOW ── -->
+    <div id="panel-workflow" style="display:none;">
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-hd"><div><div class="card-title">June 2025 Payroll Approval</div><div class="card-sub">Multi-step approval for processing</div></div></div>
+        <div class="card-body">
+          <div class="approval-steps" id="approvalSteps"></div>
+          <div id="workflowActions" style="display:flex;gap:8px;margin-top:10px;"></div>
+        </div>
+      </div>
+      <div class="g2x">
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Approval Log</div><div class="card-sub">Actions taken on this run</div></div></div>
+          <div class="card-body" style="padding:6px 18px;" id="auditList"></div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Pre-flight Checks</div><div class="card-sub">Validations before processing</div></div></div>
+          <div class="card-body" id="preflightChecks"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CALENDAR ── -->
+    <div id="panel-calendar" style="display:none;">
+      <div class="g2x">
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Pay Calendar — June 2025</div><div class="card-sub">Key payroll dates</div></div></div>
+          <div class="card-body">
+            <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;">
+              <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted);"><span style="width:10px;height:10px;border-radius:3px;background:var(--accent);display:inline-block;"></span>Today</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted);"><span style="width:10px;height:10px;border-radius:3px;background:rgba(5,150,105,.2);display:inline-block;"></span>Pay Date</span>
+              <span style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:600;color:var(--muted);"><span style="width:10px;height:10px;border-radius:3px;background:rgba(37,99,235,.15);display:inline-block;"></span>Deadline</span>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div><div class="card-title">Upcoming Events</div><div class="card-sub">Payroll calendar reminders</div></div></div>
+          <div class="card-body" id="calEvents"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employee Table -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:18px 0 12px;">
+      <div>
+        <div style="font-family:var(--serif);font-size:18px;font-style:italic;color:var(--text);">Employee Payroll Register</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px;">Click any row to view payslip — select multiple for bulk actions</div>
+      </div>
+      <div style="display:flex;gap:7px;">
+        <button class="btn sm" id="btnDl">⬇ CSV</button>
+        <button class="btn sm primary" id="btnAdd">+ Add Employee</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0;">
+      <!-- Bulk action bar -->
+      <div class="bulk-bar" id="bulkBar">
+        <span id="bulkCount">0 selected</span>
+        <button class="btn sm primary" id="bulkApprove">✓ Approve Selected</button>
+        <button class="btn sm" id="bulkEmail">✉ Email Payslips</button>
+        <button class="btn sm danger" id="bulkExclude">⊘ Exclude from Run</button>
+        <button class="btn sm ghost" id="bulkClear">✕ Clear</button>
+      </div>
+
+      <div class="filters-bar">
+        <div class="search-box">
+          <span style="color:var(--muted);font-size:13px;">⌕</span>
+          <input type="text" id="empSearch" placeholder="Search by name, ID, department…" />
+        </div>
+        <select class="fsel" id="deptFilter">
+          <option value="">All Departments</option>
+          <option>Engineering</option><option>Product</option><option>Sales</option>
+          <option>Finance</option><option>HR</option><option>Operations</option>
+        </select>
+        <select class="fsel" id="contractFilter">
+          <option value="">All Contracts</option>
+          <option>Permanent</option><option>Contract</option>
+        </select>
+        <select class="fsel" id="statusFilter">
+          <option value="">All Statuses</option>
+          <option>Active</option><option>On Leave</option>
+        </select>
+        <select class="fsel" id="sortField">
+          <option value="name">Sort: Name</option>
+          <option value="gross">Sort: Gross ↓</option>
+          <option value="net">Sort: Net ↓</option>
+          <option value="dept">Sort: Dept</option>
+        </select>
+        <span id="empCount" style="margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap;"></span>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" class="cb" id="selectAll"></th>
+              <th class="sort" data-col="name">Employee</th>
+              <th>Department</th>
+              <th>Type</th>
+              <th class="sort" data-col="gross">Gross</th>
+              <th class="sort" data-col="paye">PAYE</th>
+              <th class="sort" data-col="prsi">PRSI</th>
+              <th class="sort" data-col="usc">USC</th>
+              <th class="sort" data-col="net">Net Pay</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="empTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="table-foot">
+        <div class="tsum">
+          <div class="tsum-item" id="tableInfo"></div>
+          <div class="tsum-item">Gross: <b id="sumGross">—</b></div>
+          <div class="tsum-item">Deductions: <b id="sumDeduct">—</b></div>
+          <div class="tsum-item">Net: <b id="sumNet">—</b></div>
+        </div>
+        <div class="pag" id="pagination"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- Drawer -->
+<div class="drw-backdrop" id="drwBackdrop"></div>
+<div class="drawer" id="drawer">
+  <div class="drw-hd">
+    <div><div class="drw-title" id="drwTitle">Payslip</div><div class="drw-sub" id="drwSub"></div></div>
+    <button class="drw-close" id="drwClose">✕</button>
+  </div>
+  <div class="drw-body" id="drwBody"></div>
+  <div class="drw-foot">
+    <button class="btn sm ghost" id="btnPrev">← Prev</button>
+    <button class="btn sm ghost" id="btnNext">Next →</button>
+    <button class="btn sm" id="btnPrint">🖨 Print</button>
+    <button class="btn sm primary" id="btnEmail">✉ Email</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ── DATA ─────────────────────────────────────────────────────────────────── */
+const DEPTS = [
+  {name:'Engineering',color:'#2563eb',amount:178440,pct:37,budget:170000,hc:42},
+  {name:'Product',    color:'#7c3aed',amount:86820, pct:18,budget:90000, hc:21},
+  {name:'Sales',      color:'#0891b2',amount:96468, pct:20,budget:92000, hc:28},
+  {name:'Finance',    color:'#059669',amount:57881, pct:12,budget:60000, hc:16},
+  {name:'HR',         color:'#d97706',amount:33764, pct:7, budget:35000, hc:12},
+  {name:'Operations', color:'#dc2626',amount:28967, pct:6, budget:30000, hc:29},
+];
+const DC = {Engineering:'rgba(37,99,235,.1)',Product:'rgba(124,58,237,.1)',Sales:'rgba(8,145,178,.1)',Finance:'rgba(5,150,105,.1)',HR:'rgba(217,119,6,.1)',Operations:'rgba(220,38,38,.1)'};
+const DT = {Engineering:'#2563eb',Product:'#7c3aed',Sales:'#0891b2',Finance:'#059669',HR:'#d97706',Operations:'#dc2626'};
+
+const DON_DATA = [
+  {label:'Base Salary',value:362580,color:'#2563eb'},
+  {label:'Overtime',   value:48234, color:'#7c3aed'},
+  {label:'Commissions',value:38587, color:'#0891b2'},
+  {label:'Bonuses',    value:24117, color:'#059669'},
+  {label:'Allowances', value:8822,  color:'#d97706'},
+];
+const DON_TOTAL = DON_DATA.reduce((s,d)=>s+d.value,0);
+
+const TREND_M = ['Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun'];
+const TREND_G = [418,428,435,441,453,513,449,452,470,468,482,488].map(v=>v*1000);
+const TREND_N = TREND_G.map(v=>Math.round(v*.69));
+const YTD_M   = ['Jan','Feb','Mar','Apr','May','Jun'];
+const YTD_G   = [449,452,470,468,482,488].map(v=>v*1000);
+const YTD_T   = [460,465,475,475,485,490].map(v=>v*1000);
+
+const PAY_RUNS = [
+  {date:'30 May',period:'May 2025', amount:'€482,340',status:'done'},
+  {date:'30 Apr',period:'Apr 2025', amount:'€468,290',status:'done'},
+  {date:'31 Mar',period:'Mar 2025', amount:'€470,180',status:'done'},
+  {date:'28 Feb',period:'Feb 2025', amount:'€451,600',status:'done'},
+  {date:'31 Jan',period:'Jan 2025', amount:'€448,920',status:'done'},
+  {date:'31 Dec',period:'Dec 2024', amount:'€512,880',status:'done'},
+];
+
+const YTD_ITEMS = [
+  {label:'YTD Gross',      value:2808340,target:3000000,color:'#2563eb'},
+  {label:'YTD Net',        value:1937754,target:2070000,color:'#059669'},
+  {label:'YTD PAYE',       value:561668, target:600000, color:'#d97706'},
+  {label:'YTD PRSI',       value:112334, target:120000, color:'#7c3aed'},
+  {label:'YTD USC',        value:196584, target:210000, color:'#0891b2'},
+  {label:'YTD Overtime',   value:289020, target:300000, color:'#dc2626'},
+];
+
+const LEAVE_LIST = [
+  {name:"Niamh O'Brien", id:'E006',dept:'HR',     from:'02 Jun',to:'16 Jun',type:'annual',bg:'#d97706'},
+  {name:'Ronan Power',   id:'E017',dept:'Ops',    from:'01 Jun',to:'30 Jun',type:'mat',   bg:'#7c3aed'},
+  {name:'David Healy',   id:'E023',dept:'Ops',    from:'10 Jun',to:'12 Jun',type:'sick',  bg:'#dc2626'},
+];
+
+const AUDIT_TRAIL = [
+  {time:'10:42 today',text:'Payroll period opened for June 2025',user:'S.Reynolds',color:'#2563eb'},
+  {time:'10:41 today',text:'May 2025 payroll archived successfully',user:'System',  color:'#059669'},
+  {time:'09:15 today',text:'3 timesheet alerts triggered for E006, E017, E023',user:'System',color:'#d97706'},
+  {time:'30 May',     text:'May payroll processed — €482,340 transferred',user:'S.Reynolds',color:'#059669'},
+  {time:'29 May',     text:'May payroll approved by CFO',user:'M.Chen',color:'#059669'},
+  {time:'28 May',     text:'May payroll submitted for approval',user:'S.Reynolds',color:'#2563eb'},
+];
+
+const PREFLIGHT = [
+  {label:'All employees have valid PPS numbers',ok:true},
+  {label:'Bank details verified for 148 employees',ok:true},
+  {label:'Tax certs received for all starters',ok:true},
+  {label:'3 timesheets pending submission',ok:false},
+  {label:'Expenses pending approval: 2 claims',ok:false},
+  {label:'Salary changes applied for June',ok:true},
+];
+
+const WORKFLOW_STEPS = [
+  {label:'Data Entry',    state:'done'},
+  {label:'HR Review',     state:'done'},
+  {label:'Manager Sign-off', state:'active'},
+  {label:'Finance Approval', state:'pending'},
+  {label:'Processing',    state:'pending'},
+];
+let workflowStep = 2; // 0-indexed current active
+
+const CAL_EVENTS = [
+  {day:6,  label:'Timesheet cutoff',    color:'#d97706'},
+  {day:13, label:'Expense submission deadline', color:'#d97706'},
+  {day:18, label:'Payroll data lock',   color:'#2563eb'},
+  {day:25, label:'Approval deadline',   color:'#2563eb'},
+  {day:28, label:'Pay date 💳',          color:'#059669'},
+  {day:30, label:'Month end close',     color:'#7c3aed'},
+];
+
+const EMPLOYEES_RAW = [
+  ["Conor Murphy",      "E001","Engineering","Permanent",9200,"active"],
+  ["Siobhan Kelly",     "E002","Product",    "Permanent",7400,"active"],
+  ["Declan Byrne",      "E003","Sales",      "Permanent",6800,"active"],
+  ["Aoife Ryan",        "E004","Engineering","Permanent",8600,"active"],
+  ["Patrick Walsh",     "E005","Finance",    "Permanent",6200,"active"],
+  ["Niamh O'Brien",     "E006","HR",         "Permanent",5400,"leave"],
+  ["Seán Doyle",        "E007","Engineering","Contract", 7800,"active"],
+  ["Ciara Brennan",     "E008","Sales",      "Permanent",6400,"active"],
+  ["Brian Farrell",     "E009","Operations", "Permanent",5800,"active"],
+  ["Laura Nolan",       "E010","Product",    "Permanent",6900,"active"],
+  ["Eoin Gallagher",    "E011","Engineering","Permanent",8100,"active"],
+  ["Fiona McCarthy",    "E012","Finance",    "Permanent",5900,"active"],
+  ["Mark Collins",      "E013","Sales",      "Permanent",7200,"active"],
+  ["Sarah Dunne",       "E014","HR",         "Contract", 4900,"active"],
+  ["James Fitzpatrick", "E015","Engineering","Permanent",9800,"active"],
+  ["Aoife Sheridan",    "E016","Product",    "Permanent",7100,"active"],
+  ["Ronan Power",       "E017","Operations", "Permanent",5400,"leave"],
+  ["Emma Burke",        "E018","Engineering","Permanent",7600,"active"],
+  ["Cathal O'Sullivan", "E019","Finance",    "Permanent",6500,"active"],
+  ["Sinéad Hughes",     "E020","Sales",      "Contract", 6100,"active"],
+  ["Kevin Moran",       "E021","Engineering","Permanent",8300,"active"],
+  ["Claire Hannigan",   "E022","Product",    "Permanent",6700,"active"],
+  ["David Healy",       "E023","Operations", "Permanent",5200,"active"],
+  ["Aisling Barrett",   "E024","Sales",      "Permanent",6950,"active"],
+].map(([name,id,dept,contract,gross,status])=>{
+  const paye=Math.round(gross*.20),prsi=Math.round(gross*.04),usc=Math.round(gross*.07);
+  const net=gross-paye-prsi-usc;
+  const AVC=['#2563eb','#7c3aed','#0891b2','#059669','#d97706','#dc2626'];
+  const avatarBg=AVC[name.charCodeAt(0)%AVC.length];
+  const initials=name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  const ytdGross=gross*5, ytdNet=net*5, ytdPaye=paye*5;
+  return {name,id,dept,contract,gross,paye,prsi,usc,net,status,avatarBg,initials,ytdGross,ytdNet,ytdPaye};
+});
+
+/* ── HELPERS ─────────────────────────────────────────────────────────────── */
+const fmt  = n=>'€'+n.toLocaleString('en-IE');
+const fmtK = n=>'€'+(n/1000).toFixed(0)+'k';
+const $ = id=>document.getElementById(id);
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ── BUILD DEPT LIST ─────────────────────────────────────────────────────── */
+const deptList=$('deptList');
+DEPTS.forEach(d=>{
+  deptList.innerHTML+=`<div class="dept-item">
+    <div class="dept-top"><span class="dept-name">${d.name}</span>
+      <span class="dept-right"><span class="dept-amt">${fmt(d.amount)}</span><span class="dept-pct">${d.pct}%</span></span>
+    </div>
+    <div class="pbar"><div class="pfill" style="width:${d.pct}%;background:${d.color};"></div></div>
+  </div>`;
+});
+
+/* ── PAY RUN HISTORY ─────────────────────────────────────────────────────── */
+const runList=$('runList');
+PAY_RUNS.forEach(r=>{
+  const c=r.status==='done'?'#059669':'#d97706';
+  runList.innerHTML+=`<div class="run-item"><div class="run-dot" style="background:${c}"></div>
+    <span class="run-date">${r.date}</span><span class="run-period">${r.period}</span>
+    <span class="run-amount">${r.amount}</span><span class="run-badge ${r.status}">${r.status}</span></div>`;
+});
+
+/* ── DON LEGEND ──────────────────────────────────────────────────────────── */
+const donLegend=$('donLegend');
+DON_DATA.forEach(d=>{
+  donLegend.innerHTML+=`<div class="dl-row">
+    <div class="dl-dot" style="background:${d.color}"></div>
+    <span class="dl-name">${d.label}</span>
+    <span class="dl-amt">${fmt(d.value)}</span>
+    <span class="dl-pct">${Math.round(d.value/DON_TOTAL*100)}%</span>
+  </div>`;
+});
+
+/* ── YTD CARDS ───────────────────────────────────────────────────────────── */
+const ytdGrid=$('ytdGrid');
+YTD_ITEMS.forEach(y=>{
+  const pct=Math.round(y.value/y.target*100);
+  ytdGrid.innerHTML+=`<div class="ytd-card">
+    <div class="ytd-label">${y.label}</div>
+    <div class="n-lg" style="color:${y.color};margin-bottom:3px;">${fmt(y.value)}</div>
+    <div class="ytd-pbar"><div class="pfill" style="width:${pct}%;background:${y.color};"></div></div>
+    <div class="ytd-sub">${pct}% of ${fmtK(y.target)} target</div>
+  </div>`;
+});
+
+/* ── SALARY BANDS ────────────────────────────────────────────────────────── */
+const BANDS = [{range:'€3k–€5k',min:3000,max:5000},{range:'€5k–€6k',min:5000,max:6000},{range:'€6k–€7k',min:6000,max:7000},{range:'€7k–€8k',min:7000,max:8000},{range:'€8k–€10k',min:8000,max:10000}];
+const bandCounts = BANDS.map(b=>({...b,count:EMPLOYEES_RAW.filter(e=>e.gross>=b.min&&e.gross<b.max).length}));
+const maxBC = Math.max(...bandCounts.map(b=>b.count));
+const bandList=$('bandList');
+bandCounts.forEach(b=>{
+  const pct=Math.round(b.count/EMPLOYEES_RAW.length*100);
+  bandList.innerHTML+=`<div class="band-row">
+    <span class="band-range">${b.range}</span>
+    <div class="band-bar-wrap"><div class="band-bar" style="width:${b.count/maxBC*100}%;background:var(--accent);"></div></div>
+    <span class="band-count">${b.count}</span>
+    <span class="band-pct">${pct}%</span>
+  </div>`;
+});
+
+/* ── LEAVE LIST ──────────────────────────────────────────────────────────── */
+const leaveList=$('leaveList');
+LEAVE_LIST.forEach(l=>{
+  leaveList.innerHTML+=`<div class="leave-item">
+    <div class="leave-av" style="background:${l.bg}">${l.name.split(' ').map(n=>n[0]).join('').slice(0,2)}</div>
+    <div><div class="leave-name">${l.name}</div><div class="leave-dept">${l.id} · ${l.dept}</div></div>
+    <span class="leave-type ${l.type}">${l.type==='mat'?'Maternity':l.type==='sick'?'Sick':'Annual'}</span>
+    <div class="leave-dates">${l.from} – ${l.to}</div>
+  </div>`;
+});
+
+/* ── AUDIT TRAIL ─────────────────────────────────────────────────────────── */
+const auditList=$('auditList');
+AUDIT_TRAIL.forEach(a=>{
+  auditList.innerHTML+=`<div class="audit-item">
+    <div class="audit-dot" style="background:${a.color}"></div>
+    <span class="audit-time">${a.time}</span>
+    <div style="flex:1;"><div class="audit-text">${a.text}</div><div class="audit-user">${a.user}</div></div>
+  </div>`;
+});
+
+/* ── PREFLIGHT CHECKS ────────────────────────────────────────────────────── */
+const preflightChecks=$('preflightChecks');
+PREFLIGHT.forEach(p=>{
+  preflightChecks.innerHTML+=`<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;">
+    <span style="font-size:14px;">${p.ok?'✅':'⚠️'}</span>
+    <span style="font-weight:${p.ok?500:600};color:${p.ok?'var(--text2)':'var(--amber)'};">${p.label}</span>
+  </div>`;
+});
+
+/* ── APPROVAL WORKFLOW ───────────────────────────────────────────────────── */
+function renderWorkflow(){
+  const steps=$('approvalSteps');
+  steps.innerHTML='';
+  WORKFLOW_STEPS.forEach((s,i)=>{
+    const st = i<workflowStep?'done':i===workflowStep?'active':'pending';
+    steps.innerHTML+=`<div class="ap-step ${st}">
+      <div class="ap-circle">${st==='done'?'✓':i+1}</div>
+      <div class="ap-label">${s.label}</div>
+    </div>`;
+  });
+  const acts=$('workflowActions');
+  acts.innerHTML='';
+  if(workflowStep<WORKFLOW_STEPS.length-1){
+    const b=document.createElement('button');
+    b.className='btn primary';
+    b.textContent=`✓ Approve: ${WORKFLOW_STEPS[workflowStep].label}`;
+    b.addEventListener('click',()=>{
+      workflowStep++;
+      renderWorkflow();
+      const pct=Math.round(workflowStep/WORKFLOW_STEPS.length*100);
+      $('bpFill').style.width=pct+'%';
+      $('bpLabel').textContent=`Step ${workflowStep} of ${WORKFLOW_STEPS.length} complete`;
+      toast('Step approved ✓');
+      if(workflowStep===WORKFLOW_STEPS.length-1){$('bsStatus').textContent='Approved';}
+    });
+    acts.appendChild(b);
+  } else {
+    acts.innerHTML='<span style="font-size:12px;font-weight:600;color:var(--green);">✅ Fully approved — ready to process</span>';
+  }
+}
+renderWorkflow();
+
+/* ── CALENDAR ────────────────────────────────────────────────────────────── */
+(function buildCalendar(){
+  const grid=$('calGrid');
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  days.forEach(d=>{ grid.innerHTML+=`<div class="cal-day hdr">${d}</div>`; });
+  const today=10; // pretend today is June 10
+  const firstDow=6; // June 1 2025 = Sunday → offset 6
+  for(let i=0;i<firstDow;i++) grid.innerHTML+=`<div class="cal-day dim"></div>`;
+  for(let d=1;d<=30;d++){
+    const ev=CAL_EVENTS.find(e=>e.day===d);
+    const cls=d===today?'today':ev&&ev.color==='#059669'?'paydate':ev?'has-event':'';
+    grid.innerHTML+=`<div class="cal-day ${cls}" title="${ev?ev.label:''}">${d}</div>`;
+  }
+  const evList=$('calEvents');
+  CAL_EVENTS.forEach(e=>{
+    evList.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;">
+      <span style="font-family:var(--mono);font-weight:700;color:${e.color};min-width:32px;">${e.day} Jun</span>
+      <span style="flex:1;font-weight:500;color:var(--text2);">${e.label}</span>
+      <span style="width:8px;height:8px;border-radius:50%;background:${e.color};flex-shrink:0;"></span>
+    </div>`;
+  });
+})();
+
+/* ── VARIANCE TABLE ──────────────────────────────────────────────────────── */
+const varTbody=$('varTbody');
+DEPTS.forEach(d=>{
+  const v=d.budget-d.amount, p=(v/d.budget*100).toFixed(1);
+  const cls=v>=0?'color:var(--green)':'color:var(--red)';
+  const sign=v>=0?'+':'';
+  varTbody.innerHTML+=`<tr>
+    <td><span class="dept-chip" style="background:${DC[d.name]};color:${DT[d.name]};">${d.name}</span></td>
+    <td class="td-d">${fmt(d.budget)}</td><td class="td-d">${fmt(d.amount)}</td>
+    <td class="td-d" style="${cls}">${sign}${fmt(v)}</td>
+    <td class="td-d" style="${cls}">${sign}${p}%</td>
+    <td><span class="spill ${v>=0?'active':'leave'}">${v>=0?'Under':'Over'}</span></td>
+  </tr>`;
+});
+
+/* ── CHARTS ──────────────────────────────────────────────────────────────── */
+const CFONT="'Geist Mono',monospace";
+Chart.defaults.color='#7b8faf'; Chart.defaults.font.family="'Outfit',sans-serif";
+
+// Trend
+const ctxT=document.getElementById('chartTrend').getContext('2d');
+const gB=ctxT.createLinearGradient(0,0,0,220); gB.addColorStop(0,'rgba(37,99,235,.14)'); gB.addColorStop(1,'rgba(37,99,235,.01)');
+const gG=ctxT.createLinearGradient(0,0,0,220); gG.addColorStop(0,'rgba(5,150,105,.14)'); gG.addColorStop(1,'rgba(5,150,105,.01)');
+new Chart(ctxT,{type:'line',data:{labels:TREND_M,datasets:[
+  {label:'Gross',data:TREND_G,borderColor:'#2563eb',backgroundColor:gB,borderWidth:2,fill:true,tension:.4,pointRadius:2,pointHoverRadius:5,pointBackgroundColor:'#2563eb'},
+  {label:'Net',  data:TREND_N,borderColor:'#059669',backgroundColor:gG,borderWidth:2,fill:true,tension:.4,pointRadius:2,pointHoverRadius:5,pointBackgroundColor:'#059669'}
+]},options:{responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmtK(c.parsed.y)}}},
+  scales:{x:{grid:{color:'rgba(227,232,240,.6)'},ticks:{font:{size:10}}},y:{grid:{color:'rgba(227,232,240,.6)'},ticks:{font:{family:CFONT,size:10},callback:v=>fmtK(v)}}}}});
+
+// Doughnut
+new Chart(document.getElementById('chartDon').getContext('2d'),{type:'doughnut',data:{
+  labels:DON_DATA.map(d=>d.label),
+  datasets:[{data:DON_DATA.map(d=>d.value),backgroundColor:DON_DATA.map(d=>d.color),borderWidth:3,borderColor:'#fff',hoverOffset:5}]
+},options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${fmt(c.parsed)} (${Math.round(c.parsed/DON_TOTAL*100)}%)`}}}}});
+
+// YTD
+new Chart(document.getElementById('chartYtd').getContext('2d'),{type:'bar',data:{labels:YTD_M,datasets:[
+  {label:'Target', data:YTD_T,backgroundColor:'rgba(37,99,235,.12)',borderColor:'rgba(37,99,235,.35)',borderWidth:1,borderRadius:4,borderSkipped:false},
+  {label:'Actual', data:YTD_G,backgroundColor:'rgba(37,99,235,.65)',borderColor:'#2563eb',borderWidth:1,borderRadius:4,borderSkipped:false}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10,boxHeight:10}},tooltip:{callbacks:{label:c=>' '+fmtK(c.parsed.y)}}},
+  scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(227,232,240,.6)'},ticks:{font:{family:CFONT,size:10},callback:v=>fmtK(v)}}}}});
+
+// Budget
+new Chart(document.getElementById('chartBudget').getContext('2d'),{type:'bar',data:{labels:DEPTS.map(d=>d.name),datasets:[
+  {label:'Budget',data:DEPTS.map(d=>d.budget),backgroundColor:'rgba(37,99,235,.18)',borderColor:'rgba(37,99,235,.5)',borderWidth:1,borderRadius:4},
+  {label:'Actual',data:DEPTS.map(d=>d.amount),backgroundColor:'rgba(37,99,235,.65)',borderColor:'#2563eb',borderWidth:1,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'top',labels:{font:{size:11},boxWidth:10,boxHeight:10}},tooltip:{callbacks:{label:c=>' '+fmt(c.parsed.y)}}},
+  scales:{x:{grid:{display:false}},y:{grid:{color:'rgba(227,232,240,.6)'},ticks:{font:{family:CFONT,size:10},callback:v=>fmtK(v)}}}}});
+
+// Headcount doughnut
+new Chart(document.getElementById('chartHC').getContext('2d'),{type:'doughnut',data:{
+  labels:DEPTS.map(d=>d.name),
+  datasets:[{data:DEPTS.map(d=>d.hc),backgroundColor:DEPTS.map(d=>d.color),borderWidth:3,borderColor:'#fff',hoverOffset:5}]
+},options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:true,position:'right',labels:{font:{size:10},boxWidth:8,boxHeight:8}}}}});
+
+// Sparklines
+[[spk1,[418,428,435,441,453,482],'#2563eb'],[spk2,[136,138,140,142,144,148],'#059669'],[spk3,[129,132,135,137,143,149],'#d97706'],[spk4,[288,295,300,304,313,332],'#0891b2']].forEach(([id,data,col])=>{
+  const el=document.getElementById(id); if(!el) return;
+  new Chart(el.getContext('2d'),{type:'line',data:{labels:data.map((_,i)=>i),datasets:[{data,borderColor:col,borderWidth:1.5,fill:false,tension:.4,pointRadius:0}]},
+  options:{responsive:false,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+});
+
+/* ── EMPLOYEE TABLE ──────────────────────────────────────────────────────── */
+const PAGE=12;
+let curPage=1, sortCol='name', sortDir=1, filteredEmps=[...EMPLOYEES_RAW], selectedIds=new Set();
+
+function applyFilters(){
+  const q   =$('empSearch').value.toLowerCase();
+  const dept=$('deptFilter').value;
+  const con =$('contractFilter').value;
+  const st  =$('statusFilter').value;
+  const sf  =$('sortField').value;
+  filteredEmps=EMPLOYEES_RAW.filter(e=>{
+    if(q && !e.name.toLowerCase().includes(q) && !e.id.includes(q) && !e.dept.toLowerCase().includes(q)) return false;
+    if(dept && e.dept!==dept) return false;
+    if(con  && e.contract!==con) return false;
+    if(st==='Active'   && e.status!=='active') return false;
+    if(st==='On Leave' && e.status!=='leave')  return false;
+    return true;
+  });
+  const colMap={name:'name',gross:'gross',net:'net',dept:'dept'};
+  const col=colMap[sf]||sortCol;
+  filteredEmps.sort((a,b)=>{
+    const va=typeof a[col]==='string'?a[col].toLowerCase():a[col];
+    const vb=typeof b[col]==='string'?b[col].toLowerCase():b[col];
+    return va<vb?-1:va>vb?1:0;
+  });
+  if(sf==='gross'||sf==='net') filteredEmps.reverse();
+  curPage=1; renderTable();
+}
+
+function renderTable(){
+  const tbody=$('empTbody'); tbody.innerHTML='';
+  const start=(curPage-1)*PAGE;
+  const page=filteredEmps.slice(start,start+PAGE);
+  const gSum=filteredEmps.reduce((s,e)=>s+e.gross,0);
+  const dSum=filteredEmps.reduce((s,e)=>s+e.paye+e.prsi+e.usc,0);
+  const nSum=filteredEmps.reduce((s,e)=>s+e.net,0);
+
+  $('empCount').textContent=filteredEmps.length+' employees';
+  $('sumGross').textContent=fmt(gSum);
+  $('sumDeduct').textContent=fmt(dSum);
+  $('sumNet').textContent=fmt(nSum);
+  const end=Math.min(start+PAGE,filteredEmps.length);
+  $('tableInfo').textContent=`Showing ${filteredEmps.length?start+1:0}–${end} of ${filteredEmps.length}`;
+
+  if(!page.length){
+    tbody.innerHTML=`<tr><td colspan="11" style="text-align:center;padding:28px;color:var(--muted);">No employees match.</td></tr>`;
+  }
+  page.forEach(e=>{
+    const dBg=DC[e.dept]||'rgba(123,143,175,.1)';
+    const dTx=DT[e.dept]||'#7b8faf';
+    const tr=document.createElement('tr');
+    tr.dataset.id=e.id;
+    if(selectedIds.has(e.id)) tr.classList.add('selected');
+    tr.innerHTML=`
+      <td onclick="event.stopPropagation()"><input type="checkbox" class="cb row-cb" data-id="${e.id}" ${selectedIds.has(e.id)?'checked':''}></td>
+      <td><div style="display:flex;align-items:center;gap:9px;"><div class="emp-av" style="background:${e.avatarBg}">${e.initials}</div>
+        <div><div class="emp-name">${e.name}</div><div class="emp-id">${e.id}</div></div></div></td>
+      <td><span class="dept-chip" style="background:${dBg};color:${dTx};">${e.dept}</span></td>
+      <td style="font-size:11px;color:var(--muted);font-weight:500;">${e.contract}</td>
+      <td class="td-g">${fmt(e.gross)}</td>
+      <td class="td-d">${fmt(e.paye)}</td>
+      <td class="td-d">${fmt(e.prsi)}</td>
+      <td class="td-d">${fmt(e.usc)}</td>
+      <td class="td-n">${fmt(e.net)}</td>
+      <td><span class="spill ${e.status}">${e.status==='active'?'Active':'On Leave'}</span></td>
+      <td onclick="event.stopPropagation()"><button class="btn sm" style="font-size:10px;padding:4px 9px;" data-open="${e.id}">Payslip</button></td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Row click → drawer
+  tbody.querySelectorAll('tr').forEach(tr=>{
+    tr.addEventListener('click',()=>{ const id=tr.dataset.id; if(id) openDrawer(id); });
+  });
+  // Payslip buttons
+  tbody.querySelectorAll('[data-open]').forEach(btn=>{
+    btn.addEventListener('click',()=>openDrawer(btn.dataset.open));
+  });
+  // Row checkboxes
+  tbody.querySelectorAll('.row-cb').forEach(cb=>{
+    cb.addEventListener('change',e=>{
+      e.target.checked ? selectedIds.add(cb.dataset.id) : selectedIds.delete(cb.dataset.id);
+      updateBulkBar();
+      const tr=cb.closest('tr'); if(tr){ tr.classList.toggle('selected',e.target.checked); }
+    });
+  });
+
+  // Pagination
+  const pages=Math.ceil(filteredEmps.length/PAGE)||1;
+  const pag=$('pagination'); pag.innerHTML='';
+  for(let i=1;i<=pages;i++){
+    const b=document.createElement('div');
+    b.className='pg'+(i===curPage?' active':'');
+    b.textContent=i;
+    b.addEventListener('click',()=>{ curPage=i; renderTable(); });
+    pag.appendChild(b);
+  }
+}
+
+function updateBulkBar(){
+  const bar=$('bulkBar');
+  if(selectedIds.size>0){ bar.classList.add('show'); $('bulkCount').textContent=selectedIds.size+' selected'; }
+  else { bar.classList.remove('show'); }
+}
+
+$('selectAll').addEventListener('change',e=>{
+  const page=filteredEmps.slice((curPage-1)*PAGE,curPage*PAGE);
+  page.forEach(emp=>{ e.target.checked ? selectedIds.add(emp.id) : selectedIds.delete(emp.id); });
+  renderTable(); updateBulkBar();
+});
+$('bulkClear').addEventListener('click',()=>{ selectedIds.clear(); $('selectAll').checked=false; renderTable(); updateBulkBar(); });
+$('bulkApprove').addEventListener('click',()=>{ toast(`✓ ${selectedIds.size} employees approved`); selectedIds.clear(); $('selectAll').checked=false; renderTable(); updateBulkBar(); });
+$('bulkEmail').addEventListener('click',()=>{ toast(`✉ Payslips sent to ${selectedIds.size} employees`); });
+$('bulkExclude').addEventListener('click',()=>{ toast(`⊘ ${selectedIds.size} excluded from run`); selectedIds.clear(); renderTable(); updateBulkBar(); });
+
+// Sortable headers
+document.querySelectorAll('th.sort').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const col=th.dataset.col;
+    if(sortCol===col) sortDir*=-1; else { sortCol=col; sortDir=1; }
+    document.querySelectorAll('th.sort').forEach(t=>t.classList.remove('sasc','sdesc'));
+    th.classList.add(sortDir===1?'sasc':'sdesc');
+    $('sortField').value=col;
+    applyFilters();
+  });
+});
+['empSearch','deptFilter','contractFilter','statusFilter','sortField'].forEach(id=>{
+  const el=$(id); if(!el) return;
+  el.addEventListener('input',applyFilters);
+  el.addEventListener('change',applyFilters);
+});
+
+/* ── DRAWER / PAYSLIP ────────────────────────────────────────────────────── */
+let currentEmpIdx=0;
+function openDrawer(empId){
+  currentEmpIdx=EMPLOYEES_RAW.findIndex(e=>e.id===empId);
+  renderDrawer();
+}
+function renderDrawer(){
+  const e=EMPLOYEES_RAW[currentEmpIdx];
+  if(!e) return;
+  const totalD=e.paye+e.prsi+e.usc;
+  const effRate=(totalD/e.gross*100).toFixed(1);
+  $('drwTitle').textContent=e.name;
+  $('drwSub').textContent=`${e.id} · ${e.dept} · ${e.contract} · June 2025`;
+  $('drwBody').innerHTML=`
+    <div class="ps-banner">
+      <div class="ps-toprow">
+        <div>
+          <div class="ps-name">${e.name}</div>
+          <div class="ps-meta">${e.id} · ${e.dept} · ${e.contract}</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="ps-date-label">Pay Date</div>
+          <div class="ps-date">28 Jun 2025</div>
+        </div>
+      </div>
+      <div class="ps-net-label">Net Pay</div>
+      <div class="ps-net">${fmt(e.net)}</div>
+    </div>
+
+    <div class="detail-grid">
+      <div class="dc"><div class="dc-label">Pay Period</div><div class="dc-val mono">01 Jun – 30 Jun</div></div>
+      <div class="dc"><div class="dc-label">Status</div><div class="dc-val">${e.status==='active'?'Active':'On Leave'}</div></div>
+      <div class="dc"><div class="dc-label">Department</div><div class="dc-val">${e.dept}</div></div>
+      <div class="dc"><div class="dc-label">Contract</div><div class="dc-val">${e.contract}</div></div>
+    </div>
+
+    <div class="ps-section">
+      <div class="ps-sec-title">Earnings</div>
+      <div class="ps-row"><span class="ps-row-label">Base Salary</span><span class="ps-row-val">${fmt(Math.round(e.gross*.87))}</span></div>
+      <div class="ps-row"><span class="ps-row-label">Overtime</span><span class="ps-row-val">${fmt(Math.round(e.gross*.08))}</span></div>
+      <div class="ps-row"><span class="ps-row-label">Allowances</span><span class="ps-row-val">${fmt(Math.round(e.gross*.03))}</span></div>
+      <div class="ps-row"><span class="ps-row-label">Commission</span><span class="ps-row-val">${e.dept==='Sales'?fmt(Math.round(e.gross*.02)):'€0'}</span></div>
+      <div class="ps-total"><span class="ps-total-label">Total Gross</span><span class="ps-total-val">${fmt(e.gross)}</span></div>
+    </div>
+
+    <div class="ps-section">
+      <div class="ps-sec-title">Deductions</div>
+      <div class="ps-row"><span class="ps-row-label">PAYE Tax</span><span class="ps-row-val d">–${fmt(e.paye)}</span></div>
+      <div class="ps-row"><span class="ps-row-label">PRSI (Employee)</span><span class="ps-row-val d">–${fmt(e.prsi)}</span></div>
+      <div class="ps-row"><span class="ps-row-label">USC</span><span class="ps-row-val d">–${fmt(e.usc)}</span></div>
+      <div class="ps-total"><span class="ps-total-label">Total Deductions</span><span class="ps-total-val d">–${fmt(totalD)}</span></div>
+    </div>
+
+    <div class="ps-section">
+      <div class="ps-sec-title">Net Pay Summary</div>
+      <div class="ps-row"><span class="ps-row-label">Gross Pay</span><span class="ps-row-val">${fmt(e.gross)}</span></div>
+      <div class="ps-row"><span class="ps-row-label">Less Deductions</span><span class="ps-row-val d">–${fmt(totalD)}</span></div>
+      <div class="ps-row" style="font-weight:700;"><span class="ps-row-label" style="color:var(--text);font-weight:700;">Net Pay</span><span class="ps-row-val net">${fmt(e.net)}</span></div>
+      <div class="eff-rate-box">
+        <div class="eff-rate-label">Effective Tax Rate</div>
+        <div class="eff-rate-val">${effRate}<span style="font-size:16px;font-weight:500;color:var(--muted);">%</span></div>
+      </div>
+    </div>
+
+    <div class="ytd-comparison">
+      <div class="ytd-cmp-title">Year-to-Date (Jan–Jun 2025)</div>
+      <div class="ytd-cmp-row"><span class="ytd-cmp-label">YTD Gross</span><span class="ytd-cmp-val">${fmt(e.ytdGross)}</span></div>
+      <div class="ytd-cmp-row"><span class="ytd-cmp-label">YTD PAYE Paid</span><span class="ytd-cmp-val">${fmt(e.ytdPaye)}</span></div>
+      <div class="ytd-cmp-row"><span class="ytd-cmp-label">YTD Net Received</span><span class="ytd-cmp-val">${fmt(e.ytdNet)}</span></div>
+      <div class="ytd-cmp-row"><span class="ytd-cmp-label">Average Monthly Net</span><span class="ytd-cmp-val">${fmt(Math.round(e.ytdNet/6))}</span></div>
+    </div>`;
+
+  $('drwBackdrop').classList.add('open');
+  $('drawer').classList.add('open');
+  $('btnPrev').disabled=currentEmpIdx===0;
+  $('btnNext').disabled=currentEmpIdx===EMPLOYEES_RAW.length-1;
+}
+function closeDrawer(){ $('drawer').classList.remove('open'); $('drwBackdrop').classList.remove('open'); }
+
+$('drwClose').addEventListener('click',closeDrawer);
+$('drwBackdrop').addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDrawer(); });
+$('btnPrev').addEventListener('click',()=>{ if(currentEmpIdx>0){ currentEmpIdx--; renderDrawer(); } });
+$('btnNext').addEventListener('click',()=>{ if(currentEmpIdx<EMPLOYEES_RAW.length-1){ currentEmpIdx++; renderDrawer(); } });
+$('btnEmail').addEventListener('click',()=>toast('✉ Payslip emailed to employee'));
+$('btnPrint').addEventListener('click',()=>window.print());
+
+/* ── UI WIRING ───────────────────────────────────────────────────────────── */
+// Section tabs
+document.querySelectorAll('.stab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    ['overview','ytd','budget','headcount','workflow','calendar'].forEach(p=>{
+      const el=$('panel-'+p); if(el) el.style.display=tab.dataset.stab===p?'block':'none';
+    });
+  });
+});
+
+// Period tabs
+document.querySelectorAll('.period-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.period-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active'); toast('Switched to '+t.textContent);
+  });
+});
+
+// Nav items
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',function(){ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); this.classList.add('active'); });
+});
+
+// Export
+$('btnExport')?.addEventListener('click',()=>{
+  const headers=['ID','Name','Department','Contract','Gross','PAYE','PRSI','USC','Net','Status'];
+  const rows=filteredEmps.map(e=>[e.id,e.name,e.dept,e.contract,e.gross,e.paye,e.prsi,e.usc,e.net,e.status].join(','));
+  const csv=[headers.join(',')+'\n'+rows.join('\n')];
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='payroll-jun-2025.csv'; a.click();
+  toast('CSV exported ✓');
+});
+$('btnDl')?.addEventListener('click',()=>$('btnExport').click());
+$('btnRun')?.addEventListener('click',()=>toast('Opening payroll run wizard…'));
+$('btnPreview')?.addEventListener('click',()=>toast('Generating preview report…'));
+$('btnProcess')?.addEventListener('click',()=>{
+  $('bpFill').style.width='45%';
+  $('bpLabel').textContent='68 / 148 approved';
+  $('bsStatus').textContent='Processing';
+  toast('Payroll processing started');
+});
+$('btnAdd')?.addEventListener('click',()=>toast('Opening add employee form…'));
+
+/* ── INIT ─────────────────────────────────────────────────────────────────── */
+applyFilters();
+})();
+</script>
+</body>
+</html>

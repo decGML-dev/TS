@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SME Finance Pro | Ireland</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&family=Geist+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+  --sidebar:    #0c1322;
+  --sidebar2:   #111827;
+  --accent:     #2563eb;
+  --accent-dk:  #1d4ed8;
+  --accent-lt:  rgba(37,99,235,.12);
+  --violet:     #7c3aed;
+  --teal:       #0891b2;
+  --green:      #059669;
+  --amber:      #d97706;
+  --red:        #dc2626;
+  --rose:       #e11d48;
+  --bg:         #f1f4f9;
+  --surface:    #ffffff;
+  --surface2:   #f8fafc;
+  --border:     #e2e8f4;
+  --border2:    #c8d3e8;
+  --text:       #0c1322;
+  --text2:      #374563;
+  --muted:      #7289ae;
+  --body-font:  'Outfit', sans-serif;
+  --serif:      'Instrument Serif', serif;
+  --mono:       'Geist Mono', monospace;
+  --radius:     12px;
+  --radius-sm:  8px;
+  --shadow:     0 1px 4px rgba(12,19,34,.07), 0 4px 16px rgba(12,19,34,.05);
+  --shadow-lg:  0 4px 24px rgba(12,19,34,.12);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--body-font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:99px; }
+
+.container { display:flex; min-height:100vh; }
+
+/* ════════════════════════════════════════
+   SIDEBAR
+════════════════════════════════════════ */
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: var(--sidebar);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 24px rgba(12,19,34,.18);
+  z-index: 100;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.logo {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 34px; height: 34px;
+  background: var(--accent);
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(37,99,235,.4);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #fff;
+  letter-spacing: -.1px;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  font-family: var(--mono);
+  margin-top: 6px;
+}
+
+.nav-menu { list-style:none; padding:10px 10px 0; flex:1; }
+
+.nav-section {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.25);
+  padding: 14px 8px 5px;
+}
+
+.nav-item {
+  padding: 9px 10px;
+  margin: 1px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 9px;
+  color: rgba(255,255,255,.5);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all .17s;
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.nav-item:hover { color: rgba(255,255,255,.85); background: rgba(255,255,255,.06); }
+
+.nav-item.active {
+  background: rgba(37,99,235,.32);
+  color: #fff;
+  border-color: rgba(37,99,235,.45);
+  font-weight: 600;
+}
+
+.nav-item .nav-icon {
+  width: 28px; height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  font-size: 12px;
+  background: rgba(255,255,255,.07);
+  flex-shrink: 0;
+  transition: all .17s;
+}
+
+.nav-item.active .nav-icon { background: rgba(37,99,235,.45); }
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 99px;
+  font-family: var(--mono);
+  min-width: 18px;
+  text-align: center;
+}
+
+.nav-badge.amber { background: var(--amber); }
+
+.sidebar-footer {
+  padding: 12px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  margin-top: auto;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.06);
+  cursor: pointer;
+  transition: background .17s;
+}
+
+.sidebar-user:hover { background: rgba(255,255,255,.1); }
+
+.user-av {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--violet));
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.user-name { font-size: 12px; font-weight: 600; color: #fff; }
+.user-role { font-size: 10px; color: rgba(255,255,255,.4); font-family: var(--mono); }
+
+/* ════════════════════════════════════════
+   MAIN CONTENT
+════════════════════════════════════════ */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.topbar-left h2 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.5rem;
+  color: var(--text);
+  letter-spacing: -.2px;
+}
+
+.topbar-left .breadcrumb {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--mono);
+  margin-top: 1px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface2);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.date-range input {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text2);
+  width: 110px;
+  padding: 0;
+}
+
+.date-range input:focus { outline: none; }
+.date-range span { color: var(--muted); font-size: 11px; }
+
+.topbar-icon-btn {
+  width: 34px; height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+  transition: all .17s;
+  position: relative;
+}
+
+.topbar-icon-btn:hover { background: var(--surface); color: var(--text); border-color: var(--border2); }
+
+.notif-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 7px; height: 7px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 1.5px solid var(--surface2);
+}
+
+.page-body { padding: 22px 24px; flex: 1; }
+
+/* ════════════════════════════════════════
+   TABS
+════════════════════════════════════════ */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+  gap: 0;
+}
+
+.tab {
+  padding: 9px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .17s;
+  white-space: nowrap;
+}
+
+.tab:hover { color: var(--accent); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* ════════════════════════════════════════
+   CARDS
+════════════════════════════════════════ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: transform .2s, box-shadow .2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.card-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.card-icon.blue   { background: rgba(37,99,235,.1);  color: var(--accent); }
+.card-icon.green  { background: rgba(5,150,105,.1);  color: var(--green); }
+.card-icon.amber  { background: rgba(217,119,6,.1);  color: var(--amber); }
+.card-icon.red    { background: rgba(220,38,38,.1);  color: var(--red); }
+.card-icon.violet { background: rgba(124,58,237,.1); color: var(--violet); }
+.card-icon.teal   { background: rgba(8,145,178,.1);  color: var(--teal); }
+
+.card-value {
+  font-family: var(--mono);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.05em;
+  line-height: 1;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 99px;
+}
+
+.change-up   { color: var(--green); background: rgba(5,150,105,.09); }
+.change-down { color: var(--red);   background: rgba(220,38,38,.09); }
+.change-flat { color: var(--muted); background: rgba(114,137,174,.1); }
+
+.card-label {
+  font-size: 10px;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+/* ════════════════════════════════════════
+   CONTAINERS
+════════════════════════════════════════ */
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.panel-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-title-actions { display:flex; gap:6px; align-items:center; }
+
+/* ════════════════════════════════════════
+   TABLES
+════════════════════════════════════════ */
+.table-wrap {
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.0rem;
+  color: var(--text);
+}
+
+table { width:100%; border-collapse:collapse; }
+
+th {
+  background: var(--surface2);
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+tr:last-child td { border-bottom: none; }
+
+tbody tr { transition: background .12s; }
+tbody tr:hover { background: rgba(37,99,235,.025); }
+
+.td-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.td-green { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--green); }
+.td-red   { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--red); }
+.td-blue  { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); }
+
+/* ════════════════════════════════════════
+   BUTTONS
+════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--body-font);
+  font-size: 12px;
+  transition: all .17s;
+  background: var(--surface2);
+  color: var(--text2);
+  line-height: 1;
+}
+
+.btn:hover { background: var(--bg); border-color: var(--border2); }
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(37,99,235,.28);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dk);
+  border-color: var(--accent-dk);
+  box-shadow: 0 4px 14px rgba(37,99,235,.38);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+  box-shadow: none;
+  padding: 7px 10px;
+}
+
+.btn-ghost:hover { background: var(--surface2); color: var(--text2); border-color: var(--border); }
+
+.btn-sm { padding: 5px 10px; font-size: 11px; border-radius: 6px; }
+.btn-xs { padding: 4px 8px; font-size: 10px; border-radius: 5px; }
+
+/* ════════════════════════════════════════
+   FORMS
+════════════════════════════════════════ */
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  font-size: 10px;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-family: var(--body-font);
+  color: var(--text);
+  background: var(--surface2);
+  transition: border-color .17s, box-shadow .17s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+  background: var(--surface);
+}
+
+/* ════════════════════════════════════════
+   BADGES & PILLS
+════════════════════════════════════════ */
+.vat-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+
+.vat-std    { background: rgba(37,99,235,.1);  color: var(--accent); }
+.vat-red    { background: rgba(8,145,178,.1);  color: var(--teal); }
+.vat-zero   { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+.vat-exempt { background: rgba(220,38,38,.08); color: var(--red); }
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-family: var(--mono);
+}
+
+.status-pill::before {
+  content:'';
+  width:5px; height:5px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.pill-paid    { background:rgba(5,150,105,.1);  color:var(--green); }
+.pill-paid::before    { background:var(--green); }
+.pill-pending { background:rgba(217,119,6,.1);  color:var(--amber); }
+.pill-pending::before { background:var(--amber); }
+.pill-upcoming{ background:rgba(37,99,235,.1);  color:var(--accent); }
+.pill-upcoming::before{ background:var(--accent); }
+.pill-error   { background:rgba(220,38,38,.1);  color:var(--red); }
+.pill-error::before   { background:var(--red); }
+
+/* ════════════════════════════════════════
+   INFO BOX
+════════════════════════════════════════ */
+.info-box {
+  background: rgba(37,99,235,.04);
+  border: 1px solid rgba(37,99,235,.15);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+}
+
+.info-box strong { color: var(--text); }
+.info-box p + p { margin-top: 6px; }
+
+/* ════════════════════════════════════════
+   ALERT BANNERS
+════════════════════════════════════════ */
+.alert-strip {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.alert-card {
+  flex: 1;
+  min-width: 220px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  box-shadow: var(--shadow);
+}
+
+.alert-card .alert-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.alert-warn  .alert-icon { background:rgba(217,119,6,.12); color:var(--amber); }
+.alert-ok    .alert-icon { background:rgba(5,150,105,.12); color:var(--green); }
+.alert-info  .alert-icon { background:rgba(37,99,235,.12); color:var(--accent); }
+
+.alert-title { font-size: 12px; font-weight: 700; color: var(--text); }
+.alert-desc  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ════════════════════════════════════════
+   TOAST
+════════════════════════════════════════ */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--text);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 320px;
+}
+
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast i { color: var(--green); font-size: 14px; }
+
+/* ════════════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════════════ */
+.prog-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.prog-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width .6s ease;
+}
+
+/* ════════════════════════════════════════
+   SEARCH BAR
+════════════════════════════════════════ */
+.search-bar {
+  position: relative;
+}
+
+.search-bar input {
+  padding-left: 32px;
+  font-size: 12px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* ════════════════════════════════════════
+   CHART AREA
+════════════════════════════════════════ */
+.chart-panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+
+.chart-panel-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.0rem;
+  color: var(--text);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ════════════════════════════════════════
+   KPI ROW (mini stat bars)
+════════════════════════════════════════ */
+.kpi-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.kpi-stat:last-child { border-bottom: none; }
+.kpi-stat-val { font-family: var(--mono); font-weight: 600; color: var(--text); }
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+.footer {
+  text-align: center;
+  padding: 16px 24px;
+  color: var(--muted);
+  font-size: 11px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--mono);
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media (max-width: 900px) {
+  .sidebar { width: 200px; min-width: 200px; }
+}
+
+@media (max-width: 700px) {
+  .container { flex-direction: column; }
+  .sidebar { width: 100%; height: auto; position: relative; }
+  .nav-menu { display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 6px; }
+  .nav-section { display: none; }
+  .nav-item { flex-direction: column; align-items: center; gap: 4px; padding: 8px 12px; flex-shrink: 0; border-radius: 8px; font-size: 10px; }
+  .nav-item .nav-icon { width: 24px; height: 24px; font-size: 11px; }
+  .sidebar-footer { display: none; }
+  .card-grid { grid-template-columns: 1fr 1fr; }
+  .alert-strip { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div id="toast"><i class="fas fa-check-circle"></i> <span id="toast-msg">Done</span></div>
+
+<div class="container">
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-row">
+      <div class="logo-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="logo-text">SME Finance<br>Pro</div>
+    </div>
+    <div class="logo-sub">Ireland Edition · IE VAT</div>
+  </div>
+
+  <ul class="nav-menu">
+    <li class="nav-section">Overview</li>
+    <li class="nav-item active" data-tab="dashboard">
+      <span class="nav-icon"><i class="fas fa-tachometer-alt"></i></span>
+      Dashboard
+    </li>
+    <li class="nav-item" data-tab="analytics">
+      <span class="nav-icon"><i class="fas fa-chart-bar"></i></span>
+      Analytics
+    </li>
+
+    <li class="nav-section">Finance</li>
+    <li class="nav-item" data-tab="transactions">
+      <span class="nav-icon"><i class="fas fa-exchange-alt"></i></span>
+      Transactions
+      <span class="nav-badge amber">6</span>
+    </li>
+    <li class="nav-item" data-tab="profit-loss">
+      <span class="nav-icon"><i class="fas fa-chart-pie"></i></span>
+      Profit &amp; Loss
+    </li>
+    <li class="nav-item" data-tab="balance-sheet">
+      <span class="nav-icon"><i class="fas fa-balance-scale"></i></span>
+      Balance Sheet
+    </li>
+
+    <li class="nav-section">Tax</li>
+    <li class="nav-item" data-tab="vat">
+      <span class="nav-icon"><i class="fas fa-file-invoice-dollar"></i></span>
+      VAT (VAT3)
+      <span class="nav-badge">!</span>
+    </li>
+    <li class="nav-item" data-tab="rct">
+      <span class="nav-icon"><i class="fas fa-receipt"></i></span>
+      RCT
+    </li>
+
+    <li class="nav-section">System</li>
+    <li class="nav-item" data-tab="reports">
+      <span class="nav-icon"><i class="fas fa-file-alt"></i></span>
+      Reports
+    </li>
+    <li class="nav-item" data-tab="settings">
+      <span class="nav-icon"><i class="fas fa-cog"></i></span>
+      Settings
+    </li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-av">ÉE</div>
+      <div>
+        <div class="user-name">Éire Enterprises</div>
+        <div class="user-role">IE1234567X</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main-content">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <h2 id="page-title">Financial Dashboard</h2>
+      <div class="breadcrumb" id="page-breadcrumb">SME Finance Pro · FY 2023</div>
+    </div>
+    <div class="topbar-right">
+      <div class="date-range">
+        <i class="fas fa-calendar-alt" style="color:var(--muted);font-size:11px;"></i>
+        <input type="date" id="start-date" value="2023-01-01">
+        <span>–</span>
+        <input type="date" id="end-date" value="2023-12-31">
+        <button class="btn btn-primary btn-sm" id="update-date">Update</button>
+      </div>
+      <div class="topbar-icon-btn" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="topbar-icon-btn" title="Download Report">
+        <i class="fas fa-download"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ══════════════════════════════════
+         DASHBOARD TAB
+    ══════════════════════════════════ -->
+    <div id="dashboard" class="tab-content active">
+
+      <!-- Alert strip -->
+      <div class="alert-strip">
+        <div class="alert-card alert-warn">
+          <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <div>
+            <div class="alert-title">VAT Return Due</div>
+            <div class="alert-desc">Q4 2023 VAT3 due 23 Jan 2024 · €6,780 net owed</div>
+          </div>
+        </div>
+        <div class="alert-card alert-ok">
+          <div class="alert-icon"><i class="fas fa-check-circle"></i></div>
+          <div>
+            <div class="alert-title">Q3 Returns Filed</div>
+            <div class="alert-desc">All Q3 2023 returns submitted successfully</div>
+          </div>
+        </div>
+        <div class="alert-card alert-info">
+          <div class="alert-icon"><i class="fas fa-info-circle"></i></div>
+          <div>
+            <div class="alert-title">Corporation Tax Reminder</div>
+            <div class="alert-desc">CT return due 21 Mar 2024 for FY 2023</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Total Revenue</span>
+            <div class="card-icon blue"><i class="fas fa-arrow-trend-up"></i></div>
+          </div>
+          <div class="card-value">€145,820</div>
+          <div class="card-meta">
+            <span class="card-change change-up"><i class="fas fa-arrow-up"></i> 12.5%</span>
+            <span class="card-label">vs last year</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:73%;background:var(--accent);"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Net Profit</span>
+            <div class="card-icon green"><i class="fas fa-coins"></i></div>
+          </div>
+          <div class="card-value">€32,450</div>
+          <div class="card-meta">
+            <span class="card-change change-up"><i class="fas fa-arrow-up"></i> 8.3%</span>
+            <span class="card-label">22.2% margin</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:55%;background:var(--green);"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">VAT Due</span>
+            <div class="card-icon amber"><i class="fas fa-file-invoice-dollar"></i></div>
+          </div>
+          <div class="card-value">€16,230</div>
+          <div class="card-meta">
+            <span class="card-change change-down"><i class="fas fa-arrow-down"></i> 5.2%</span>
+            <span class="card-label">Output tax</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:40%;background:var(--amber);"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Cash Balance</span>
+            <div class="card-icon teal"><i class="fas fa-wallet"></i></div>
+          </div>
+          <div class="card-value">€52,670</div>
+          <div class="card-meta">
+            <span class="card-change change-up"><i class="fas fa-arrow-up"></i> 3.7%</span>
+            <span class="card-label">Current account</span>
+          </div>
+          <div class="prog-bar"><div class="prog-fill" style="width:62%;background:var(--teal);"></div></div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="chart-panel">
+        <div class="chart-panel-title">Revenue vs Expenses (2023)</div>
+        <canvas id="revenueExpenseChart" height="90"></canvas>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <div class="chart-panel" style="margin-bottom:0;">
+          <div class="chart-panel-title">Profit Margin Trend</div>
+          <canvas id="profitMarginChart" height="140"></canvas>
+        </div>
+        <div class="chart-panel" style="margin-bottom:0;">
+          <div class="chart-panel-title">Expense Breakdown</div>
+          <canvas id="expenseCategoriesChart" height="140"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="table-wrap">
+        <div class="table-header">
+          <span class="table-title">Recent Transactions</span>
+          <button class="btn btn-sm" onclick="showTab('transactions')">View All</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th><th>Description</th><th>Category</th>
+              <th>Amount</th><th>VAT</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="recent-transactions-body"></tbody>
+        </table>
+      </div>
+
+    </div><!-- /dashboard -->
+
+    <!-- ══════════════════════════════════
+         TRANSACTIONS TAB
+    ══════════════════════════════════ -->
+    <div id="transactions" class="tab-content">
+      <div class="tabs">
+        <div class="tab active" data-subtab="all-transactions">All Transactions</div>
+        <div class="tab" data-subtab="add-transaction">Add Transaction</div>
+        <div class="tab" data-subtab="categories">Categories</div>
+      </div>
+
+      <div id="all-transactions" class="tab-content active">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary btn-sm" id="add-transaction-btn"><i class="fas fa-plus"></i> Add Transaction</button>
+            <button class="btn btn-sm" id="filter-transactions"><i class="fas fa-filter"></i> Filter</button>
+          </div>
+          <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" class="form-control" placeholder="Search transactions…" id="tx-search" style="width:220px;">
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-bottom:0;">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th><th>Type</th><th>Description</th>
+                <th>Category</th><th>Amount</th><th>VAT</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="all-transactions-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="add-transaction" class="tab-content">
+        <div class="panel">
+          <div class="panel-title">Add New Transaction</div>
+          <form id="transaction-form" style="max-width:480px;">
+            <div class="form-group">
+              <label class="form-label" for="transaction-date">Date</label>
+              <input class="form-control" type="date" id="transaction-date" required>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label" for="transaction-type">Type</label>
+                <select class="form-control" id="transaction-type" required>
+                  <option value="">Select Type</option>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="transaction-category">Category</label>
+                <select class="form-control" id="transaction-category" required>
+                  <option value="">Select</option>
+                  <option value="sales">Sales</option>
+                  <option value="services">Services</option>
+                  <option value="rent">Rent</option>
+                  <option value="utilities">Utilities</option>
+                  <option value="salaries">Salaries</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="equipment">Equipment</option>
+                  <option value="travel">Travel</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="transaction-description">Description</label>
+              <input class="form-control" type="text" id="transaction-description" placeholder="Transaction description" required>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label" for="transaction-amount">Amount (€)</label>
+                <input class="form-control" type="number" id="transaction-amount" step="0.01" placeholder="0.00" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="transaction-vat">VAT Rate</label>
+                <select class="form-control" id="transaction-vat">
+                  <option value="0">0% (Zero-rated)</option>
+                  <option value="23" selected>23% (Standard)</option>
+                  <option value="13.5">13.5% (Reduced)</option>
+                  <option value="9">9% (Tourism)</option>
+                  <option value="4.8">4.8% (Livestock)</option>
+                  <option value="exempt">Exempt</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:4px;">
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Transaction</button>
+              <button type="button" class="btn" id="cancel-transaction"><i class="fas fa-times"></i> Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="categories" class="tab-content">
+        <div class="table-wrap" style="margin-bottom:0;">
+          <div class="table-header">
+            <span class="table-title">Transaction Categories</span>
+            <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Category</button>
+          </div>
+          <table>
+            <thead>
+              <tr><th>Category</th><th>Type</th><th>Count</th><th>Total Amount</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="categories-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- /transactions -->
+
+    <!-- ══════════════════════════════════
+         PROFIT & LOSS
+    ══════════════════════════════════ -->
+    <div id="profit-loss" class="tab-content">
+      <div class="table-wrap">
+        <div class="table-header">
+          <span class="table-title">Profit &amp; Loss Statement</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select class="form-control" id="pl-period" style="width:140px;font-size:12px;padding:6px 10px;">
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly" selected>Yearly</option>
+            </select>
+            <button class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Export</button>
+            <button class="btn btn-sm"><i class="fas fa-print"></i> Print</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Account</th><th>Current Period</th><th>Previous Period</th><th>Change</th></tr>
+          </thead>
+          <tbody id="profit-loss-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         BALANCE SHEET
+    ══════════════════════════════════ -->
+    <div id="balance-sheet" class="tab-content">
+      <div class="table-wrap">
+        <div class="table-header">
+          <span class="table-title">Balance Sheet</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <label style="font-size:12px;color:var(--muted);">As of</label>
+            <input type="date" id="balance-sheet-date" value="2023-12-31" class="form-control" style="width:150px;font-size:12px;padding:6px 10px;">
+            <button class="btn btn-primary btn-sm"><i class="fas fa-download"></i> Export</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Assets</th><th>Amount (€)</th><th>Liabilities &amp; Equity</th><th>Amount (€)</th></tr>
+          </thead>
+          <tbody id="balance-sheet-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════
+         VAT TAB
+    ══════════════════════════════════ -->
+    <div id="vat" class="tab-content">
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">VAT Due (Output)</span><div class="card-icon amber"><i class="fas fa-arrow-up"></i></div></div>
+          <div class="card-value">€16,230</div>
+          <div class="card-meta"><span class="card-label">Q4 2023</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">VAT Reclaimable (Input)</span><div class="card-icon green"><i class="fas fa-arrow-down"></i></div></div>
+          <div class="card-value">€9,450</div>
+          <div class="card-meta"><span class="card-label">Recoverable</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Net VAT Owed</span><div class="card-icon red"><i class="fas fa-receipt"></i></div></div>
+          <div class="card-value">€6,780</div>
+          <div class="card-meta"><span class="card-label">Payable to Revenue</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Next VAT Return</span><div class="card-icon blue"><i class="fas fa-calendar"></i></div></div>
+          <div class="card-value" style="font-size:1.2rem;">23 Jan 2024</div>
+          <div class="card-meta"><span class="status-pill pill-upcoming">Upcoming</span></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header">
+          <span class="table-title">VAT Return History (VAT3)</span>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary btn-sm"><i class="fas fa-file-export"></i> Submit VAT3</button>
+            <button class="btn btn-sm"><i class="fas fa-history"></i> History</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>VAT Period</th><th>Output VAT</th><th>Input VAT</th><th>Net VAT</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="vat-returns-body"></tbody>
+        </table>
+      </div>
+
+      <div class="chart-panel">
+        <div class="chart-panel-title">Irish VAT Rate Schedule</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+          <div class="card" style="text-align:center;margin-bottom:0;">
+            <div class="card-title" style="margin-bottom:8px;">Standard Rate</div>
+            <div class="card-value" style="color:var(--accent);">23%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Most goods &amp; services</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;">
+            <div class="card-title" style="margin-bottom:8px;">Reduced Rate</div>
+            <div class="card-value" style="color:var(--teal);">13.5%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Fuel, cleaning, etc.</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;">
+            <div class="card-title" style="margin-bottom:8px;">Tourism Rate</div>
+            <div class="card-value" style="color:var(--violet);">9%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Tourism, newspapers</div>
+          </div>
+          <div class="card" style="text-align:center;margin-bottom:0;">
+            <div class="card-title" style="margin-bottom:8px;">Livestock Rate</div>
+            <div class="card-value" style="color:var(--amber);">4.8%</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Agricultural supplies</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /vat -->
+
+    <!-- ══════════════════════════════════
+         RCT TAB
+    ══════════════════════════════════ -->
+    <div id="rct" class="tab-content">
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-header"><span class="card-title">RCT Due</span><div class="card-icon red"><i class="fas fa-hard-hat"></i></div></div>
+          <div class="card-value">€8,420</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Active Contractors</span><div class="card-icon blue"><i class="fas fa-users"></i></div></div>
+          <div class="card-value">12</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Next RCT Return</span><div class="card-icon amber"><i class="fas fa-calendar"></i></div></div>
+          <div class="card-value" style="font-size:1.2rem;">14 Feb 2024</div>
+          <div class="card-meta"><span class="status-pill pill-upcoming">Upcoming</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Standard RCT Rate</span><div class="card-icon violet"><i class="fas fa-percentage"></i></div></div>
+          <div class="card-value">20%</div>
+          <div class="card-meta"><span class="card-label">35% higher rate</span></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header">
+          <span class="table-title">RCT Contractor Register</span>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Add Contractor</button>
+            <button class="btn btn-sm"><i class="fas fa-file-export"></i> Submit Return</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Contractor</th><th>RCT Number</th><th>Contract Value</th><th>RCT Rate</th><th>RCT Amount</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="rct-contractors-body"></tbody>
+        </table>
+      </div>
+
+      <div class="chart-panel">
+        <div class="chart-panel-title">Relevant Contracts Tax — Overview</div>
+        <div class="info-box">
+          <p><strong>Relevant Contracts Tax (RCT)</strong> applies to payments made by principal contractors to subcontractors in the construction, forestry and meat processing sectors in Ireland.</p>
+          <p><strong>Standard Rate:</strong> 20% &nbsp;·&nbsp; <strong>Higher Rate:</strong> 35% &nbsp;·&nbsp; <strong>Zero Rate:</strong> 0% (registered &amp; compliant contractors)</p>
+          <p>All principal contractors must register with Revenue and operate RCT through Revenue's Online Service (ROS). Deduction authorisations must be obtained before making payments.</p>
+        </div>
+      </div>
+    </div><!-- /rct -->
+
+    <!-- ══════════════════════════════════
+         ANALYTICS TAB
+    ══════════════════════════════════ -->
+    <div id="analytics" class="tab-content">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+        <div class="chart-panel" style="margin-bottom:0;">
+          <div class="chart-panel-title">Financial Health Score</div>
+          <div style="display:flex;align-items:center;gap:20px;padding:8px 0;">
+            <div style="width:140px;height:140px;position:relative;flex-shrink:0;">
+              <canvas id="financialHealthChart"></canvas>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                <div style="font-family:var(--mono);font-size:2rem;font-weight:700;color:var(--text);letter-spacing:-.05em;">78</div>
+                <div style="font-size:10px;color:var(--muted);">/100</div>
+              </div>
+            </div>
+            <div style="flex:1;">
+              <div class="kpi-stat"><span>Cash Flow</span><span class="kpi-stat-val">85/100</span></div>
+              <div class="prog-bar" style="margin-bottom:10px;"><div class="prog-fill" style="width:85%;background:var(--green);"></div></div>
+              <div class="kpi-stat"><span>Profitability</span><span class="kpi-stat-val">72/100</span></div>
+              <div class="prog-bar" style="margin-bottom:10px;"><div class="prog-fill" style="width:72%;background:var(--accent);"></div></div>
+              <div class="kpi-stat"><span>Liquidity</span><span class="kpi-stat-val">81/100</span></div>
+              <div class="prog-bar" style="margin-bottom:10px;"><div class="prog-fill" style="width:81%;background:var(--teal);"></div></div>
+              <div class="kpi-stat"><span>Tax Compliance</span><span class="kpi-stat-val">90/100</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:90%;background:var(--violet);"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-panel" style="margin-bottom:0;">
+          <div class="chart-panel-title">Cash Flow Forecast</div>
+          <canvas id="cashFlowChart" height="155"></canvas>
+        </div>
+      </div>
+
+      <!-- KPI cards -->
+      <div class="card-grid" style="grid-template-columns:repeat(4,1fr);">
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Gross Profit Margin</div>
+          <div class="card-value" style="color:var(--accent);margin-top:8px;">42.5%</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Net Profit Margin</div>
+          <div class="card-value" style="color:var(--green);margin-top:8px;">22.8%</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Current Ratio</div>
+          <div class="card-value" style="color:var(--teal);margin-top:8px;">2.4</div>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div class="card-title">Debt to Equity</div>
+          <div class="card-value" style="color:var(--amber);margin-top:8px;">0.6</div>
+        </div>
+      </div>
+
+      <!-- Tax Calendar -->
+      <div class="table-wrap" style="margin-bottom:0;">
+        <div class="table-header">
+          <span class="table-title">Irish Tax Calendar 2024</span>
+          <span style="font-family:var(--mono);font-size:10px;color:var(--muted);">Revenue Ireland</span>
+        </div>
+        <table>
+          <thead><tr><th>Tax</th><th>Due Date</th><th>Period</th><th>Est. Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>VAT Return (VAT3)</strong></td>
+              <td class="td-mono">23 Jan 2024</td>
+              <td>Nov–Dec 2023</td>
+              <td class="td-blue">€6,780</td>
+              <td><span class="status-pill pill-upcoming">Upcoming</span></td>
+            </tr>
+            <tr>
+              <td><strong>PAYE / PRSI / USC</strong></td>
+              <td class="td-mono">14 Jan 2024</td>
+              <td>Dec 2023</td>
+              <td class="td-blue">€2,400</td>
+              <td><span class="status-pill pill-upcoming">Upcoming</span></td>
+            </tr>
+            <tr>
+              <td><strong>Corporation Tax (CT1)</strong></td>
+              <td class="td-mono">21 Mar 2024</td>
+              <td>FY 2023</td>
+              <td class="td-blue">€4,060</td>
+              <td><span class="status-pill pill-upcoming">Upcoming</span></td>
+            </tr>
+            <tr>
+              <td><strong>RCT Return</strong></td>
+              <td class="td-mono">14 Feb 2024</td>
+              <td>Jan 2024</td>
+              <td class="td-blue">€1,700</td>
+              <td><span class="status-pill pill-upcoming">Upcoming</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- /analytics -->
+
+    <!-- ══════════════════════════════════
+         REPORTS TAB
+    ══════════════════════════════════ -->
+    <div id="reports" class="tab-content">
+      <div class="card-grid" style="grid-template-columns:repeat(2,1fr);">
+        <div class="card" style="cursor:pointer;" data-report="profit-loss-report">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-chart-pie" style="color:var(--accent);margin-right:4px;"></i> Profit &amp; Loss</span>
+            <div class="card-icon blue"><i class="fas fa-file-alt"></i></div>
+          </div>
+          <p style="color:var(--muted);font-size:12px;margin-top:4px;">Full income and expense summary for the period</p>
+          <div style="margin-top:12px;font-size:11px;color:var(--accent);font-weight:600;">Click to generate →</div>
+        </div>
+        <div class="card" style="cursor:pointer;" data-report="balance-sheet-report">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-balance-scale" style="color:var(--teal);margin-right:4px;"></i> Balance Sheet</span>
+            <div class="card-icon teal"><i class="fas fa-file-alt"></i></div>
+          </div>
+          <p style="color:var(--muted);font-size:12px;margin-top:4px;">Assets, liabilities and equity snapshot</p>
+          <div style="margin-top:12px;font-size:11px;color:var(--teal);font-weight:600;">Click to generate →</div>
+        </div>
+        <div class="card" style="cursor:pointer;" data-report="vat-report">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-file-invoice-dollar" style="color:var(--violet);margin-right:4px;"></i> VAT3 Return</span>
+            <div class="card-icon violet"><i class="fas fa-file-alt"></i></div>
+          </div>
+          <p style="color:var(--muted);font-size:12px;margin-top:4px;">VAT3 summary ready for Revenue Ireland / ROS</p>
+          <div style="margin-top:12px;font-size:11px;color:var(--violet);font-weight:600;">Click to generate →</div>
+        </div>
+        <div class="card" style="cursor:pointer;" data-report="rct-report">
+          <div class="card-header">
+            <span class="card-title"><i class="fas fa-receipt" style="color:var(--amber);margin-right:4px;"></i> RCT Return</span>
+            <div class="card-icon amber"><i class="fas fa-file-alt"></i></div>
+          </div>
+          <p style="color:var(--muted);font-size:12px;margin-top:4px;">Relevant Contracts Tax report for contractors</p>
+          <div style="margin-top:12px;font-size:11px;color:var(--amber);font-weight:600;">Click to generate →</div>
+        </div>
+      </div>
+
+      <div class="panel" id="report-output" style="display:none;">
+        <div class="panel-title">
+          <span id="report-title">Report</span>
+          <div class="panel-title-actions">
+            <button class="btn btn-primary btn-sm" id="export-pdf"><i class="fas fa-file-pdf"></i> Export PDF</button>
+            <button class="btn btn-sm" id="export-excel"><i class="fas fa-file-excel"></i> Excel</button>
+            <button class="btn btn-ghost btn-sm" id="close-report"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+        <div id="report-content"></div>
+      </div>
+    </div><!-- /reports -->
+
+    <!-- ══════════════════════════════════
+         SETTINGS TAB
+    ══════════════════════════════════ -->
+    <div id="settings" class="tab-content">
+      <div class="panel">
+        <div class="panel-title">System Settings</div>
+        <div class="tabs">
+          <div class="tab active" data-settings-tab="company">Company Info</div>
+          <div class="tab" data-settings-tab="financial">Financial</div>
+          <div class="tab" data-settings-tab="vat-settings">VAT Settings</div>
+          <div class="tab" data-settings-tab="rct-settings">RCT Settings</div>
+        </div>
+
+        <div id="company" class="tab-content active" style="max-width:500px;">
+          <form id="company-form">
+            <div class="form-group">
+              <label class="form-label" for="company-name">Company Name</label>
+              <input class="form-control" type="text" id="company-name" value="Éire Enterprises Ltd" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="company-address">Business Address</label>
+              <input class="form-control" type="text" id="company-address" value="123 Business Street, Dublin 2, Ireland">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label" for="company-vat">VAT Number (IE)</label>
+                <input class="form-control" type="text" id="company-vat" value="IE1234567X">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="company-ros">ROS Number</label>
+                <input class="form-control" type="text" id="company-ros" value="1234567X">
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label" for="company-currency">Currency</label>
+                <select class="form-control" id="company-currency">
+                  <option value="EUR" selected>Euro (€)</option>
+                  <option value="GBP">Pound (£)</option>
+                  <option value="USD">Dollar ($)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="financial-year-start">FY Start</label>
+                <input class="form-control" type="date" id="financial-year-start" value="2023-01-01">
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Company Info</button>
+          </form>
+        </div>
+
+        <div id="financial" class="tab-content" style="max-width:500px;">
+          <form id="financial-settings-form">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label" for="default-tax-rate">Default VAT Rate (%)</label>
+                <input class="form-control" type="number" id="default-tax-rate" value="23" step="0.1">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="invoice-prefix">Invoice Prefix</label>
+                <input class="form-control" type="text" id="invoice-prefix" value="INV-">
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group">
+                <label class="form-label" for="payment-terms">Payment Terms (days)</label>
+                <input class="form-control" type="number" id="payment-terms" value="30">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="vat-period">VAT Period</label>
+                <select class="form-control" id="vat-period">
+                  <option value="bi-monthly">Bi-monthly</option>
+                  <option value="quarterly" selected>Quarterly</option>
+                  <option value="annual">Annual</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Settings</button>
+          </form>
+        </div>
+
+        <div id="vat-settings" class="tab-content" style="max-width:500px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="form-group">
+              <label class="form-label" for="vat-registration-date">VAT Registration Date</label>
+              <input class="form-control" type="date" id="vat-registration-date" value="2020-01-01">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="vat-return-day">Return Day of Month</label>
+              <input class="form-control" type="number" id="vat-return-day" min="1" max="28" value="23">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="vat-accounting-scheme">VAT Accounting Scheme</label>
+            <select class="form-control" id="vat-accounting-scheme">
+              <option value="invoice">Invoice Basis</option>
+              <option value="cash" selected>Cash Receipts Basis</option>
+              <option value="flat">Flat Rate Scheme</option>
+            </select>
+          </div>
+          <button class="btn btn-primary"><i class="fas fa-save"></i> Save VAT Settings</button>
+        </div>
+
+        <div id="rct-settings" class="tab-content" style="max-width:500px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="form-group">
+              <label class="form-label" for="rct-registered">RCT Registered</label>
+              <select class="form-control" id="rct-registered">
+                <option value="yes">Yes</option>
+                <option value="no" selected>No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rct-sector">Principal Contractor Sector</label>
+              <select class="form-control" id="rct-sector">
+                <option value="">Not Applicable</option>
+                <option value="construction">Construction</option>
+                <option value="forestry">Forestry</option>
+                <option value="meat">Meat Processing</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary"><i class="fas fa-save"></i> Save RCT Settings</button>
+        </div>
+      </div>
+    </div><!-- /settings -->
+
+  </div><!-- /page-body -->
+
+  <div class="footer">
+    SME Finance Pro &nbsp;·&nbsp; Ireland Edition &nbsp;·&nbsp; © 2024 &nbsp;·&nbsp;
+    For informational use only — always consult a qualified accountant for tax advice.
+  </div>
+
+</div><!-- /main-content -->
+</div><!-- /container -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════════════ */
+const navItems = document.querySelectorAll('.nav-item[data-tab]');
+const mainTabs = document.querySelectorAll('.main-content > .page-body > .tab-content');
+const pageTitle = document.getElementById('page-title');
+const pageBC = document.getElementById('page-breadcrumb');
+
+const titleMap = {
+  dashboard:     ['Financial Dashboard', 'Overview · FY 2023'],
+  analytics:     ['Analytics & KPIs', 'Performance · FY 2023'],
+  transactions:  ['Transactions', 'Finance · All Records'],
+  'profit-loss': ['Profit & Loss', 'Finance · Statement'],
+  'balance-sheet':['Balance Sheet', 'Finance · Snapshot'],
+  vat:           ['VAT (VAT3)', 'Tax · Revenue Ireland'],
+  rct:           ['RCT – Contractors', 'Tax · Revenue Ireland'],
+  reports:       ['Reports', 'System · Generate'],
+  settings:      ['Settings', 'System · Configuration'],
+};
+
+function showTab(tabId) {
+  navItems.forEach(i => i.classList.toggle('active', i.dataset.tab === tabId));
+  mainTabs.forEach(t => t.classList.toggle('active', t.id === tabId));
+  const info = titleMap[tabId] || [tabId, ''];
+  pageTitle.textContent = info[0];
+  pageBC.textContent = 'SME Finance Pro · ' + info[1];
+  if (tabId === 'dashboard')   initDashboard();
+  if (tabId === 'analytics')   initAnalytics();
+  if (tabId === 'rct')         loadRCTContractors();
+}
+
+navItems.forEach(n => n.addEventListener('click', () => showTab(n.dataset.tab)));
+
+/* Sub-tabs */
+function setupSubTabs(parentId, attr) {
+  const tabs = document.querySelectorAll(`[${attr}]`);
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const id = this.getAttribute(attr);
+      tabs.forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+      const parent = document.getElementById(parentId);
+      parent?.querySelectorAll(':scope > .tab-content').forEach(c => {
+        c.classList.toggle('active', c.id === id);
+      });
+    });
+  });
+}
+
+setupSubTabs('transactions', 'data-subtab');
+
+const settingsTabs = document.querySelectorAll('[data-settings-tab]');
+settingsTabs.forEach(tab => {
+  tab.addEventListener('click', function() {
+    const id = this.dataset.settingsTab;
+    settingsTabs.forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('#settings .tab-content').forEach(c => {
+      c.classList.toggle('active', c.id === id);
+    });
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════════ */
+function toast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DATA HELPERS
+═══════════════════════════════════════════════════════════ */
+function initData() {
+  if (!localStorage.getItem('smfpTx')) {
+    const sample = [
+      {id:1,date:'2023-11-15',type:'income',description:'Software Development Project',category:'services',amount:6000,vatRate:'23',vatAmount:1380,totalAmount:7380,status:'paid'},
+      {id:2,date:'2023-11-10',type:'expense',description:'Office Rent Dublin',category:'rent',amount:1500,vatRate:'23',vatAmount:345,totalAmount:1845,status:'paid'},
+      {id:3,date:'2023-11-05',type:'expense',description:'Digital Marketing Campaign',category:'marketing',amount:1000,vatRate:'23',vatAmount:230,totalAmount:1230,status:'paid'},
+      {id:4,date:'2023-11-01',type:'income',description:'Product Sales – Q3',category:'sales',amount:15000,vatRate:'23',vatAmount:3450,totalAmount:18450,status:'paid'},
+      {id:5,date:'2023-10-28',type:'expense',description:'Employee Salaries',category:'salaries',amount:8000,vatRate:'0',vatAmount:0,totalAmount:8000,status:'paid'},
+      {id:6,date:'2023-10-20',type:'expense',description:'Hotel Accommodation (Tourism)',category:'travel',amount:500,vatRate:'9',vatAmount:45,totalAmount:545,status:'paid'},
+    ];
+    localStorage.setItem('smfpTx', JSON.stringify(sample));
+  }
+  if (!localStorage.getItem('smfpRCT')) {
+    const rct = [
+      {id:1,name:"O'Brien Construction Ltd",rctNumber:'1234567X',contractValue:25000,rctRate:20,rctAmount:5000,status:'Pending'},
+      {id:2,name:'Murphy Building Services',rctNumber:'2345678Y',contractValue:12000,rctRate:0,rctAmount:0,status:'Zero Rated'},
+      {id:3,name:'Ryan Electrical Ltd',rctNumber:'3456789Z',contractValue:8500,rctRate:20,rctAmount:1700,status:'Pending'},
+    ];
+    localStorage.setItem('smfpRCT', JSON.stringify(rct));
+  }
+}
+
+function vatBadge(rate) {
+  const m = {
+    '23':    '<span class="vat-badge vat-std">23%</span>',
+    '13.5':  '<span class="vat-badge vat-red">13.5%</span>',
+    '9':     '<span class="vat-badge vat-red">9%</span>',
+    '4.8':   '<span class="vat-badge vat-red">4.8%</span>',
+    '0':     '<span class="vat-badge vat-zero">0%</span>',
+    'exempt':'<span class="vat-badge vat-exempt">Exempt</span>',
+  };
+  return m[rate] || '';
+}
+
+function saveTransaction(tx) {
+  const list = JSON.parse(localStorage.getItem('smfpTx')) || [];
+  list.push(tx);
+  localStorage.setItem('smfpTx', JSON.stringify(list));
+}
+
+function deleteTransaction(id) {
+  if (!confirm('Delete this transaction?')) return;
+  let list = JSON.parse(localStorage.getItem('smfpTx')) || [];
+  list = list.filter(t => t.id !== id);
+  localStorage.setItem('smfpTx', JSON.stringify(list));
+  loadTransactions();
+  loadRecentTransactions();
+  toast('Transaction deleted.');
+}
+
+function loadRecentTransactions() {
+  const list = JSON.parse(localStorage.getItem('smfpTx')) || [];
+  const tbody = document.getElementById('recent-transactions-body');
+  if (!tbody) return;
+  tbody.innerHTML = [...list].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,5).map(tx => `
+    <tr>
+      <td class="td-mono">${tx.date}</td>
+      <td>${tx.description}</td>
+      <td>${tx.category.charAt(0).toUpperCase()+tx.category.slice(1)}</td>
+      <td class="td-mono">€${tx.totalAmount.toFixed(2)}</td>
+      <td>${vatBadge(tx.vatRate)}</td>
+      <td><span class="status-pill pill-paid">${tx.status}</span></td>
+    </tr>`).join('');
+}
+
+function loadTransactions() {
+  const list = JSON.parse(localStorage.getItem('smfpTx')) || [];
+  const tbody = document.getElementById('all-transactions-body');
+  if (!tbody) return;
+  tbody.innerHTML = list.map(tx => {
+    const updown = tx.type==='income'
+      ? '<span style="color:var(--green);font-size:11px;"><i class="fas fa-arrow-down"></i></span>'
+      : '<span style="color:var(--red);font-size:11px;"><i class="fas fa-arrow-up"></i></span>';
+    return `<tr>
+      <td class="td-mono">${tx.date}</td>
+      <td>${updown} ${tx.type==='income'?'Income':'Expense'}</td>
+      <td>${tx.description}</td>
+      <td>${tx.category.charAt(0).toUpperCase()+tx.category.slice(1)}</td>
+      <td class="td-mono">€${tx.amount.toFixed(2)}</td>
+      <td>${vatBadge(tx.vatRate)} <span class="td-mono" style="font-size:11px;">€${tx.vatAmount.toFixed(2)}</span></td>
+      <td><button class="btn btn-xs" style="margin-right:4px;">Edit</button><button class="btn btn-xs" style="color:var(--red);" onclick="deleteTransaction(${tx.id})">Delete</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function loadProfitLossData() {
+  const tbody = document.getElementById('profit-loss-body');
+  if (!tbody) return;
+  const rows = [
+    {account:'Revenue',            current:145820, previous:129750, change:12.5, bold:true},
+    {account:'Cost of Goods Sold', current:62100,  previous:58700,  change:5.8},
+    {account:'Gross Profit',       current:83720,  previous:71050,  change:17.8, bold:true, accent:true},
+    {account:'Operating Expenses', current:50270,  previous:44500,  change:13.0},
+    {account:'Operating Income',   current:33450,  previous:26550,  change:26.0, bold:true},
+    {account:'Interest Expense',   current:1000,   previous:1200,   change:-16.7},
+    {account:'Net Income',         current:32450,  previous:25350,  change:28.0, bold:true, accent:true},
+  ];
+  tbody.innerHTML = rows.map(r => {
+    const cls  = r.change >= 0 ? 'td-green' : 'td-red';
+    const icon = r.change >= 0 ? '<i class="fas fa-arrow-up" style="font-size:9px;"></i>' : '<i class="fas fa-arrow-down" style="font-size:9px;"></i>';
+    const valCls = r.accent ? 'td-blue' : 'td-mono';
+    const weight = r.bold ? 'font-weight:700;' : '';
+    return `<tr style="${weight}">
+      <td>${r.account}</td>
+      <td class="${valCls}">€${r.current.toLocaleString()}</td>
+      <td class="td-mono" style="color:var(--muted);">€${r.previous.toLocaleString()}</td>
+      <td class="${cls}">${icon} ${r.change>=0?'+':''}${r.change.toFixed(1)}%</td>
+    </tr>`;
+  }).join('');
+}
+
+function loadBalanceSheetData() {
+  const tbody = document.getElementById('balance-sheet-body');
+  if (!tbody) return;
+  const assets = [
+    {name:'Cash', amount:52670},
+    {name:'Accounts Receivable', amount:38500},
+    {name:'Inventory', amount:22750},
+    {name:'Equipment', amount:48500},
+    {name:'Total Assets', amount:162420, total:true},
+  ];
+  const liabs = [
+    {name:'Accounts Payable', amount:24500},
+    {name:'Short-term Debt', amount:15000},
+    {name:'VAT Payable', amount:16230},
+    {name:'Long-term Debt', amount:40000},
+    {name:'Total Liabilities', amount:95730, total:true},
+    {name:"Owner's Equity", amount:66690, total:true},
+    {name:'Total Liabilities & Equity', amount:162420, total:true},
+  ];
+  const max = Math.max(assets.length, liabs.length);
+  const rows = [];
+  for (let i=0; i<max; i++) {
+    const a = assets[i]||{name:'',amount:''};
+    const l = liabs[i]||{name:'',amount:''};
+    const aBold = a.total ? 'style="font-weight:700;border-top:1px solid var(--border2);"' : '';
+    const lBold = l.total ? 'style="font-weight:700;border-top:1px solid var(--border2);"' : '';
+    rows.push(`<tr>
+      <td ${aBold}>${a.name}</td>
+      <td ${aBold} class="${a.total?'td-blue':'td-mono'}">${a.amount?'€'+a.amount.toLocaleString():''}</td>
+      <td ${lBold}>${l.name}</td>
+      <td ${lBold} class="${l.total?'td-blue':'td-mono'}">${l.amount?'€'+l.amount.toLocaleString():''}</td>
+    </tr>`);
+  }
+  tbody.innerHTML = rows.join('');
+}
+
+function loadVATReturns() {
+  const tbody = document.getElementById('vat-returns-body');
+  if (!tbody) return;
+  const data = [
+    {period:'Q3 2023 (Jul–Sep)', vatSales:14500, vatPurchases:5200, netVat:9300, status:'Paid'},
+    {period:'Q2 2023 (Apr–Jun)', vatSales:13800, vatPurchases:6200, netVat:7600, status:'Paid'},
+    {period:'Q1 2023 (Jan–Mar)', vatSales:12500, vatPurchases:5100, netVat:7400, status:'Paid'},
+    {period:'Q4 2022 (Oct–Dec)', vatSales:11800, vatPurchases:4800, netVat:7000, status:'Paid'},
+  ];
+  tbody.innerHTML = data.map(r => `<tr>
+    <td>${r.period}</td>
+    <td class="td-mono">€${r.vatSales.toLocaleString()}</td>
+    <td class="td-mono">€${r.vatPurchases.toLocaleString()}</td>
+    <td class="td-blue">€${r.netVat.toLocaleString()}</td>
+    <td><span class="status-pill pill-paid">${r.status}</span></td>
+    <td><button class="btn btn-xs" style="margin-right:4px;">View</button><button class="btn btn-primary btn-xs">Download</button></td>
+  </tr>`).join('');
+}
+
+function loadRCTContractors() {
+  const tbody = document.getElementById('rct-contractors-body');
+  if (!tbody) return;
+  const list = JSON.parse(localStorage.getItem('smfpRCT')) || [];
+  tbody.innerHTML = list.map(c => {
+    const pill = c.status==='Zero Rated'
+      ? '<span class="status-pill pill-paid">Zero Rated</span>'
+      : '<span class="status-pill pill-pending">Pending</span>';
+    return `<tr>
+      <td><strong>${c.name}</strong></td>
+      <td class="td-mono">${c.rctNumber}</td>
+      <td class="td-mono">€${c.contractValue.toLocaleString()}</td>
+      <td class="td-mono">${c.rctRate}%</td>
+      <td class="td-blue">€${c.rctAmount.toLocaleString()}</td>
+      <td>${pill}</td>
+      <td><button class="btn btn-xs" style="margin-right:4px;">Edit</button><button class="btn btn-primary btn-xs">Certify</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function loadCategories() {
+  const tbody = document.getElementById('categories-body');
+  if (!tbody) return;
+  const cats = [
+    {name:'Sales',    type:'Income', count:48, total:145820},
+    {name:'Services', type:'Income', count:32, total:98600},
+    {name:'Rent',     type:'Expense',count:12, total:18000},
+    {name:'Salaries', type:'Expense',count:36, total:96000},
+    {name:'Marketing',type:'Expense',count:18, total:24500},
+    {name:'Utilities',type:'Expense',count:12, total:10500},
+    {name:'Equipment',type:'Expense',count:8,  total:15500},
+  ];
+  tbody.innerHTML = cats.map(c => `<tr>
+    <td><strong>${c.name}</strong></td>
+    <td><span class="status-pill ${c.type==='Income'?'pill-paid':'pill-pending'}">${c.type}</span></td>
+    <td class="td-mono">${c.count}</td>
+    <td class="td-blue">€${c.total.toLocaleString()}</td>
+    <td><button class="btn btn-xs" style="margin-right:4px;">Edit</button><button class="btn btn-xs">Delete</button></td>
+  </tr>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FORMS
+═══════════════════════════════════════════════════════════ */
+document.getElementById('add-transaction-btn')?.addEventListener('click', () => {
+  document.querySelector('[data-subtab="add-transaction"]').click();
+});
+
+document.getElementById('cancel-transaction')?.addEventListener('click', () => {
+  document.querySelector('[data-subtab="all-transactions"]').click();
+});
+
+document.getElementById('transaction-form')?.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const amount  = parseFloat(document.getElementById('transaction-amount').value);
+  const vatRate = document.getElementById('transaction-vat').value;
+  const vatAmt  = (vatRate !== 'exempt' && vatRate !== '0') ? amount * parseFloat(vatRate) / 100 : 0;
+  const tx = {
+    id: Date.now(),
+    date:        document.getElementById('transaction-date').value,
+    type:        document.getElementById('transaction-type').value,
+    description: document.getElementById('transaction-description').value,
+    category:    document.getElementById('transaction-category').value,
+    amount, vatRate, vatAmount: vatAmt, totalAmount: amount + vatAmt,
+    status: 'recorded',
+  };
+  saveTransaction(tx);
+  toast('Transaction saved successfully.');
+  this.reset();
+  document.querySelector('[data-subtab="all-transactions"]').click();
+  loadTransactions();
+  loadRecentTransactions();
+});
+
+document.getElementById('company-form')?.addEventListener('submit', e => { e.preventDefault(); toast('Company info saved.'); });
+document.getElementById('financial-settings-form')?.addEventListener('submit', e => { e.preventDefault(); toast('Financial settings saved.'); });
+
+/* Transaction search */
+document.getElementById('tx-search')?.addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('#all-transactions-body tr').forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   REPORTS
+═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('[data-report]').forEach(card => {
+  card.addEventListener('click', function() {
+    const type = this.dataset.report;
+    const out  = document.getElementById('report-output');
+    const title = document.getElementById('report-title');
+    const content = document.getElementById('report-content');
+    out.style.display = 'block';
+    out.scrollIntoView({ behavior:'smooth', block:'start' });
+    const map = {
+      'profit-loss-report':   ['Profit & Loss Report', genPLReport],
+      'balance-sheet-report': ['Balance Sheet Report', genBSReport],
+      'vat-report':           ['VAT3 Return Report',   genVATReport],
+      'rct-report':           ['RCT Return Report',    genRCTReport],
+    };
+    title.textContent = map[type][0];
+    content.innerHTML = map[type][1]();
+  });
+});
+
+document.getElementById('close-report')?.addEventListener('click', () => {
+  document.getElementById('report-output').style.display = 'none';
+});
+
+/* ═══════════════════════════════════════════════════════════
+   CHARTS
+═══════════════════════════════════════════════════════════ */
+const MF  = "'Geist Mono',monospace";
+const C = {
+  accent:  'rgba(37,99,235,',
+  violet:  'rgba(124,58,237,',
+  teal:    'rgba(8,145,178,',
+  green:   'rgba(5,150,105,',
+  amber:   'rgba(217,119,6,',
+  muted:   'rgba(203,212,227,',
+  border:  'rgba(226,232,244,.8)',
+};
+
+const gridStyle = { color: C.muted+'0.3)', drawBorder: false };
+
+let dashDone = false, analyticsDone = false;
+
+function initDashboard() {
+  if (dashDone) return;
+  dashDone = true;
+
+  // Revenue vs Expenses
+  const ctx1 = document.getElementById('revenueExpenseChart').getContext('2d');
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets: [
+        {
+          label: 'Revenue',
+          data: [11500,12200,13000,12500,13500,14500,15000,14800,15200,16000,16500,17000],
+          backgroundColor: C.accent+'0.7)', borderColor: C.accent+'1)',
+          borderRadius: 5, borderWidth: 1,
+        },
+        {
+          label: 'Expenses',
+          data: [7200,7500,7800,8000,8200,8500,8800,9000,9200,9500,9800,10000],
+          backgroundColor: C.muted+'0.6)', borderColor: C.muted+'1)',
+          borderRadius: 5, borderWidth: 1,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { position:'top', labels:{ font:{family:MF,size:11}, boxWidth:10 } } },
+      scales: {
+        x: { grid:{color:C.border}, ticks:{font:{family:MF,size:10}} },
+        y: { grid:{color:C.border}, ticks:{font:{family:MF,size:10}, callback:v=>'€'+v.toLocaleString()}, beginAtZero:true },
+      }
+    }
+  });
+
+  // Profit Margin
+  const ctx2 = document.getElementById('profitMarginChart').getContext('2d');
+  const g2 = ctx2.createLinearGradient(0,0,0,200);
+  g2.addColorStop(0, C.accent+'0.15)'); g2.addColorStop(1, C.accent+'0.0)');
+  new Chart(ctx2, {
+    type:'line',
+    data: {
+      labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets:[{
+        label:'Margin %', data:[22,23,24,22,23,24,25,24,25,26,27,28],
+        borderColor:C.accent+'1)', backgroundColor:g2, borderWidth:2.5,
+        fill:true, tension:.4, pointRadius:3, pointBackgroundColor:C.accent+'1)',
+      }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:true,
+      plugins:{legend:{position:'top',labels:{font:{family:MF,size:11},boxWidth:10}}},
+      scales:{
+        x:{grid:{color:C.border},ticks:{font:{family:MF,size:10}}},
+        y:{grid:{color:C.border},ticks:{font:{family:MF,size:10},callback:v=>v+'%'},beginAtZero:true},
+      }
+    }
+  });
+
+  // Doughnut
+  const ctx3 = document.getElementById('expenseCategoriesChart').getContext('2d');
+  new Chart(ctx3, {
+    type:'doughnut',
+    data: {
+      labels:['Salaries','Rent','Marketing','Utilities','Equipment','Other'],
+      datasets:[{
+        data:[38,12,10,8,10,22],
+        backgroundColor:[
+          C.accent+'0.82)',C.violet+'0.82)',C.teal+'0.82)',
+          C.amber+'0.82)',C.green+'0.82)',C.muted+'0.82)'
+        ],
+        borderColor:'#fff', borderWidth:2, hoverOffset:4,
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:true, cutout:'60%',
+      plugins:{legend:{position:'right',labels:{font:{family:MF,size:10},boxWidth:10}}},
+    }
+  });
+}
+
+function initAnalytics() {
+  if (analyticsDone) return;
+  analyticsDone = true;
+
+  // Health gauge
+  new Chart(document.getElementById('financialHealthChart').getContext('2d'), {
+    type:'doughnut',
+    data:{datasets:[{
+      data:[78,22],
+      backgroundColor:[C.accent+'0.88)',C.muted+'0.3)'],
+      borderWidth:0, circumference:250, rotation:125,
+    }]},
+    options:{
+      responsive:true,cutout:'80%',
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+    }
+  });
+
+  // Cash Flow
+  const ctx = document.getElementById('cashFlowChart').getContext('2d');
+  const gIn  = ctx.createLinearGradient(0,0,0,200);
+  gIn.addColorStop(0,C.green+'0.15)'); gIn.addColorStop(1,C.green+'0.0)');
+  const gOut = ctx.createLinearGradient(0,0,0,200);
+  gOut.addColorStop(0,C.muted+'0.15)'); gOut.addColorStop(1,C.muted+'0.0)');
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets:[
+        {label:'Cash In', data:[14000,15000,14500,16000,17000,18000,17500,18500,19000,20000,20500,21000],
+         borderColor:C.green+'1)',backgroundColor:gIn,borderWidth:2.5,fill:true,tension:.4,pointRadius:2},
+        {label:'Cash Out',data:[13000,13500,14000,14500,15000,15500,16000,16500,17000,17500,18000,18500],
+         borderColor:C.muted+'1)',backgroundColor:gOut,borderWidth:2.5,fill:true,tension:.4,pointRadius:2},
+        {label:'Net',     data:[1000,1500,500,1500,2000,2500,1500,2000,2000,2500,2500,2500],
+         borderColor:C.accent+'1)',backgroundColor:'transparent',borderWidth:2,fill:false,tension:.4,pointRadius:2},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:true,
+      plugins:{legend:{position:'top',labels:{font:{family:MF,size:11},boxWidth:10}}},
+      scales:{
+        x:{grid:{color:C.border},ticks:{font:{family:MF,size:10}}},
+        y:{grid:{color:C.border},ticks:{font:{family:MF,size:10},callback:v=>'€'+v.toLocaleString()},beginAtZero:true},
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   REPORT GENERATORS
+═══════════════════════════════════════════════════════════ */
+const rHeader = () => `<div style="margin-bottom:14px;font-size:12px;line-height:1.9;color:var(--text2);">
+  <strong style="color:var(--text);">Éire Enterprises Ltd</strong> &nbsp;·&nbsp; VAT: IE1234567X &nbsp;·&nbsp; Generated: ${new Date().toLocaleDateString('en-IE')}
+</div>`;
+
+function genPLReport() {
+  return rHeader() + `<table><thead><tr><th>Account</th><th>Amount (€)</th></tr></thead><tbody>
+    <tr><td><strong>Revenue</strong></td><td class="td-mono">145,820</td></tr>
+    <tr><td style="padding-left:20px;">Product Sales (23% VAT)</td><td class="td-mono">98,600</td></tr>
+    <tr><td style="padding-left:20px;">Services (23% VAT)</td><td class="td-mono">47,220</td></tr>
+    <tr><td><strong>Cost of Goods Sold</strong></td><td class="td-mono">62,100</td></tr>
+    <tr style="font-weight:700;"><td style="border-top:1px solid var(--border2);">Gross Profit</td><td class="td-blue" style="border-top:1px solid var(--border2);">83,720</td></tr>
+    <tr><td><strong>Operating Expenses</strong></td><td class="td-mono">50,270</td></tr>
+    <tr><td style="padding-left:20px;">Salaries</td><td class="td-mono">28,000</td></tr>
+    <tr><td style="padding-left:20px;">Rent</td><td class="td-mono">18,000</td></tr>
+    <tr><td style="padding-left:20px;">Marketing</td><td class="td-mono">12,500</td></tr>
+    <tr><td style="padding-left:20px;">Utilities</td><td class="td-mono">10,500</td></tr>
+    <tr style="font-weight:700;"><td style="border-top:1px solid var(--border2);">Operating Income</td><td class="td-blue" style="border-top:1px solid var(--border2);">33,450</td></tr>
+    <tr><td>Interest Expense</td><td class="td-mono">1,000</td></tr>
+    <tr style="font-weight:700;font-size:14px;"><td style="border-top:2px solid var(--text);">Net Income</td><td class="td-blue" style="border-top:2px solid var(--text);font-size:15px;">32,450</td></tr>
+  </tbody></table>
+  <div style="margin-top:14px;font-size:11px;color:var(--muted);font-family:var(--mono);">
+    Gross Margin: 57.4% · Net Margin: 22.3% · YoY Growth: +28.0%
+  </div>`;
+}
+
+function genBSReport() {
+  return rHeader() + `<table><thead><tr><th>Assets</th><th>€</th><th>Liabilities & Equity</th><th>€</th></tr></thead><tbody>
+    <tr><td>Cash</td><td class="td-mono">52,670</td><td>Accounts Payable</td><td class="td-mono">24,500</td></tr>
+    <tr><td>Accounts Receivable</td><td class="td-mono">38,500</td><td>Short-term Debt</td><td class="td-mono">15,000</td></tr>
+    <tr><td>Inventory</td><td class="td-mono">22,750</td><td>VAT Payable</td><td class="td-mono">16,230</td></tr>
+    <tr><td>Equipment</td><td class="td-mono">48,500</td><td>Long-term Debt</td><td class="td-mono">40,000</td></tr>
+    <tr><td></td><td></td><td>Owner's Equity</td><td class="td-mono">66,690</td></tr>
+    <tr style="font-weight:700;"><td style="border-top:2px solid var(--text);">Total Assets</td><td class="td-blue" style="border-top:2px solid var(--text);">162,420</td><td style="border-top:2px solid var(--text);">Total Liabilities & Equity</td><td class="td-blue" style="border-top:2px solid var(--text);">162,420</td></tr>
+  </tbody></table>
+  <div style="margin-top:14px;font-size:11px;color:var(--muted);font-family:var(--mono);">Current Ratio: 2.04 · Debt/Equity: 0.60</div>`;
+}
+
+function genVATReport() {
+  return rHeader() + `<table><thead><tr><th>VAT Summary</th><th>Amount (€)</th></tr></thead><tbody>
+    <tr><td colspan="2"><strong>Output VAT (Sales)</strong></td></tr>
+    <tr><td style="padding-left:20px;">Standard 23%</td><td class="td-mono">3,450</td></tr>
+    <tr><td style="padding-left:20px;">Reduced 13.5%</td><td class="td-mono">675</td></tr>
+    <tr><td style="padding-left:20px;">Tourism 9%</td><td class="td-mono">180</td></tr>
+    <tr style="font-weight:600;"><td style="border-top:1px solid var(--border2);">Total Output VAT</td><td class="td-blue" style="border-top:1px solid var(--border2);">4,305</td></tr>
+    <tr><td colspan="2"><strong>Input VAT (Purchases)</strong></td></tr>
+    <tr><td style="padding-left:20px;">Standard 23%</td><td class="td-mono">1,840</td></tr>
+    <tr><td style="padding-left:20px;">Reduced 13.5%</td><td class="td-mono">270</td></tr>
+    <tr style="font-weight:600;"><td style="border-top:1px solid var(--border2);">Total Input VAT</td><td class="td-blue" style="border-top:1px solid var(--border2);">2,110</td></tr>
+    <tr style="font-weight:700;font-size:14px;"><td style="border-top:2px solid var(--text);">VAT Due to Revenue</td><td class="td-blue" style="border-top:2px solid var(--text);font-size:15px;">2,195</td></tr>
+  </tbody></table>
+  <div style="margin-top:12px;" class="info-box"><p><strong>Due:</strong> 23 January 2024 &nbsp;·&nbsp; <strong>Via:</strong> ROS &nbsp;·&nbsp; <strong>Basis:</strong> Cash Receipts</p></div>`;
+}
+
+function genRCTReport() {
+  return rHeader() + `<table><thead><tr><th>Contractor</th><th>RCT No.</th><th>Contract Value</th><th>Rate</th><th>RCT Amount</th></tr></thead><tbody>
+    <tr><td>O'Brien Construction Ltd</td><td class="td-mono">1234567X</td><td class="td-mono">€25,000</td><td class="td-mono">20%</td><td class="td-blue">€5,000</td></tr>
+    <tr><td>Murphy Building Services</td><td class="td-mono">2345678Y</td><td class="td-mono">€12,000</td><td class="td-mono">0%</td><td class="td-blue">€0</td></tr>
+    <tr><td>Ryan Electrical Ltd</td><td class="td-mono">3456789Z</td><td class="td-mono">€8,500</td><td class="td-mono">20%</td><td class="td-blue">€1,700</td></tr>
+    <tr style="font-weight:700;"><td style="border-top:2px solid var(--text);">Total (3 contractors)</td><td colspan="2" class="td-mono" style="border-top:2px solid var(--text);">€45,500</td><td style="border-top:2px solid var(--text);"></td><td class="td-blue" style="border-top:2px solid var(--text);">€6,700</td></tr>
+  </tbody></table>
+  <div style="margin-top:12px;" class="info-box"><p><strong>Due:</strong> 14 February 2024 &nbsp;·&nbsp; <strong>Via:</strong> ROS &nbsp;·&nbsp; <strong>Sector:</strong> Construction</p></div>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  initData();
+  loadRecentTransactions();
+  loadTransactions();
+  loadProfitLossData();
+  loadBalanceSheetData();
+  loadVATReturns();
+  loadCategories();
+  initDashboard();
+  showTab('dashboard');
+});
+</script>
+</body>
+</html>
