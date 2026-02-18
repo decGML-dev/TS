@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>New Employee Recruitment Request</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --bg-secondary:#f1f5f9;
+      --card:#ffffff;
+      --panel:#fafbfc;
+      --text:#0f172a;
+      --text-secondary:#334155;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --line-dark:#cbd5e1;
+      --accent:#6366f1;
+      --accent-dark:#4f46e5;
+      --accent-light:#818cf8;
+      --accent2:#8b5cf6;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --good:#10b981;
+      --shadow: 0 4px 12px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.04);
+      --shadow-lg: 0 8px 24px rgba(15,23,42,.12), 0 4px 10px rgba(15,23,42,.06);
+      --radius:18px;
+      --radius2:14px;
+      --font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(ellipse 1200px 800px at 20% -10%, rgba(99,102,241,.08), transparent 60%),
+        radial-gradient(ellipse 1000px 600px at 85% 15%, rgba(139,92,246,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg-secondary));
+      line-height: 1.6;
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 24px}
+    
+    header{
+      display:flex; 
+      justify-content:space-between; 
+      align-items:flex-start; 
+      gap:20px;
+      padding:24px; 
+      border:2px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius); 
+      box-shadow:var(--shadow);
+      margin-bottom: 24px;
+    }
+    header h1{
+      margin:0 0 8px; 
+      font-family: 'Fraunces', serif;
+      font-size:26px;
+      font-weight: 600;
+      letter-spacing:-.3px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p{
+      margin:0; 
+      color:var(--text-secondary); 
+      font-size:14px; 
+      line-height:1.6;
+      font-weight: 400;
+    }
+    .toolbar{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      justify-content:flex-end;
+    }
+    button{
+      cursor:pointer; 
+      user-select:none;
+      border:2px solid var(--line);
+      background: var(--bg);
+      color:var(--text);
+      padding:12px 20px;
+      border-radius:14px;
+      font-weight:700;
+      font-size:14px;
+      font-family: inherit;
+      transition:all .2s ease;
+    }
+    button:hover{
+      background:var(--bg-secondary); 
+      border-color:var(--line-dark);
+      box-shadow: 0 2px 8px rgba(15,23,42,.06);
+    }
+    button:active{transform:scale(0.98)}
+    
+    button.primary{
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); 
+      border-color:var(--accent);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99,102,241,.25);
+    }
+    button.primary:hover{
+      box-shadow: 0 6px 20px rgba(99,102,241,.35);
+      transform: translateY(-2px);
+    }
+    button.primary:active{
+      transform: translateY(0);
+    }
+    
+    button.danger{
+      background:rgba(239,68,68,.1); 
+      border-color:rgba(239,68,68,.3);
+      color: var(--bad);
+    }
+    button.danger:hover{
+      background:rgba(239,68,68,.15);
+      border-color:rgba(239,68,68,.4);
+    }
+
+    .grid{
+      display:grid; 
+      grid-template-columns: 1fr 360px; 
+      gap:24px; 
+      margin-top:0; 
+      align-items:start;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      border:2px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0;
+      padding:18px 20px;
+      border-bottom:2px solid var(--line);
+      font-size:16px;
+      font-weight: 700;
+      letter-spacing:.2px;
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      gap:16px;
+      background: var(--panel);
+    }
+    .pill{
+      font-size:12px; 
+      color:var(--text-secondary);
+      font-weight: 600;
+      border:2px solid var(--line);
+      border-radius:999px;
+      padding:6px 12px;
+      background: var(--card);
+      white-space:nowrap;
+    }
+    .body{padding:20px}
+
+    .section{
+      padding:20px;
+      border-top:2px solid var(--line);
+      background: var(--card);
+    }
+    .section:first-child{border-top:none}
+    .section h3{
+      margin:0 0 16px; 
+      font-size:15px; 
+      font-weight: 700;
+      letter-spacing:.15px; 
+      display:flex; 
+      align-items:center; 
+      gap:12px;
+      color: var(--text);
+    }
+    .tag{
+      font-size:11px; 
+      color:var(--accent-dark);
+      font-weight: 700;
+      border:2px solid var(--accent-light);
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(99,102,241,.08);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    .row{
+      display:grid; 
+      grid-template-columns:1fr 1fr; 
+      gap:16px; 
+      margin-top:12px;
+    }
+    @media (max-width:720px){ .row{grid-template-columns:1fr} }
+
+    .field{display:flex; flex-direction:column; gap:8px; min-width:0}
+    label{
+      font-size:13px; 
+      color:var(--text); 
+      line-height:1.3;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    
+    input[type="text"], 
+    input[type="number"], 
+    textarea, 
+    select{
+      width:100%;
+      padding:12px 14px;
+      border-radius:14px;
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      outline:none;
+      transition: all .25s ease;
+    }
+    textarea{min-height:110px; resize:vertical}
+    
+    input:focus, textarea:focus, select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(99,102,241,.15);
+      background: var(--card);
+    }
+    input:hover:not(:focus), textarea:hover:not(:focus), select:hover:not(:focus){
+      border-color:var(--line-dark);
+    }
+    
+    input::placeholder, textarea::placeholder{
+      color: var(--muted);
+      font-weight: 400;
+    }
+    
+    .req::after{
+      content:" *"; 
+      color:var(--warn); 
+      font-weight:900;
+    }
+    .err{
+      border-color: var(--bad) !important;
+      box-shadow:0 0 0 4px rgba(239,68,68,.15) !important;
+      background: rgba(239,68,68,.05) !important;
+    }
+
+    .hint{
+      color:var(--muted); 
+      font-size:12px; 
+      line-height:1.5; 
+      margin:10px 0 0;
+      font-weight: 400;
+    }
+    .notice{
+      border:2px dashed var(--line-dark);
+      border-radius:14px; 
+      padding:14px;
+      background:rgba(99,102,241,.04);
+      color:var(--text-secondary);
+      font-size:13px; 
+      line-height:1.6;
+      font-weight: 400;
+    }
+
+    .statusbar{
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      gap:16px;
+      padding:14px 20px; 
+      border-top:2px solid var(--line);
+      background: var(--panel);
+      color:var(--text-secondary);
+      font-size:13px;
+      font-weight: 500;
+    }
+    .status{
+      display:flex; 
+      align-items:center; 
+      gap:10px; 
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:12px; 
+      height:12px; 
+      border-radius:999px; 
+      background:var(--muted); 
+      box-shadow:0 0 0 4px rgba(100,116,139,.1);
+      transition: all .3s ease;
+    }
+    .dot.good{
+      background:var(--good); 
+      box-shadow:0 0 0 4px rgba(16,185,129,.15);
+    }
+    .dot.bad{
+      background:var(--bad); 
+      box-shadow:0 0 0 4px rgba(239,68,68,.15);
+    }
+
+    .preview{
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;
+      color:var(--text-secondary);
+      background: var(--bg-secondary);
+      border:2px solid var(--line);
+      border-radius:14px;
+      padding:14px;
+      max-height:520px;
+      overflow:auto;
+      line-height: 1.6;
+    }
+
+    .chips{
+      display:flex; 
+      gap:10px; 
+      flex-wrap:wrap; 
+      margin-top:12px;
+    }
+    .chip{
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text-secondary);
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight: 600;
+      cursor:pointer;
+      user-select:none;
+      transition:all .2s ease;
+    }
+    .chip:hover{
+      background:rgba(99,102,241,.08); 
+      border-color:var(--accent-light); 
+      color:var(--accent-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99,102,241,.12);
+    }
+    .chip:active{
+      transform: translateY(0);
+    }
+
+    @media print{
+      header, .toolbar, .statusbar, #sideCard{display:none !important}
+      body{background:#fff; color:#000}
+      .card{box-shadow:none; border-color:#ccc}
+      input, textarea, select{border:1px solid #999; background:#fff; color:#000}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Recruitment Request</h1>
+        <p>
+          Create a request to recruit a new employee. The form autosaves locally.
+          Use <strong>Export JSON</strong> to download the request packet.
+        </p>
+      </div>
+      <div class="toolbar">
+        <button class="primary" id="btnValidate">Validate</button>
+        <button id="btnExport">Export JSON</button>
+        <button id="btnPrint">Print</button>
+        <button class="danger" id="btnReset">Reset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN FORM -->
+      <div class="card">
+        <h2>
+          Request details
+          <span class="pill" id="completionPill">0% complete</span>
+        </h2>
+
+        <div class="section">
+          <h3>Role <span class="tag">Basics</span></h3>
+          <div class="row">
+            <div class="field">
+              <label class="req" for="jobTitle">Job title</label>
+              <input id="jobTitle" name="job.title" type="text" placeholder="e.g., Senior Account Manager" />
+            </div>
+            <div class="field">
+              <label for="department">Department / Team</label>
+              <input id="department" name="job.department" type="text" placeholder="e.g., Sales" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label class="req">Salary range (min)</label>
+              <input name="job.salary.min" type="number" min="0" step="0.01" placeholder="e.g., 45000" />
+            </div>
+            <div class="field">
+              <label class="req">Salary range (max)</label>
+              <input name="job.salary.max" type="number" min="0" step="0.01" placeholder="e.g., 60000" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="location">Location</label>
+              <input id="location" name="job.location" type="text" placeholder="e.g., Dublin / Hybrid / Remote" />
+            </div>
+            <div class="field">
+              <label for="employmentType">Employment type</label>
+              <select id="employmentType" name="job.employmentType">
+                <option value="">Select…</option>
+                <option>Permanent</option>
+                <option>Fixed-term</option>
+                <option>Contract</option>
+                <option>Internship</option>
+                <option>Part-time</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="hint">Tip: Keep the salary range realistic for the role level and market.</p>
+        </div>
+
+        <div class="section">
+          <h3>Job description <span class="tag">Overview</span></h3>
+          <div class="field">
+            <label class="req" for="jobDescription">Job description</label>
+            <textarea id="jobDescription" name="job.description" placeholder="Describe the role, impact, and reporting line…"></textarea>
+          </div>
+          <div class="chips" data-target="job.description">
+            <span class="chip">Reporting line + team context</span>
+            <span class="chip">Role mission (1–2 sentences)</span>
+            <span class="chip">Who you'll work with</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Key responsibilities <span class="tag">What they'll do</span></h3>
+          <div class="field">
+            <label class="req" for="keyResponsibilities">Key responsibilities</label>
+            <textarea id="keyResponsibilities" name="job.responsibilities" placeholder="Bullet-style is fine (one responsibility per line)…"></textarea>
+          </div>
+          <div class="chips" data-target="job.responsibilities">
+            <span class="chip">Own a measurable KPI</span>
+            <span class="chip">Stakeholder management</span>
+            <span class="chip">Process improvement</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Requirements <span class="tag">Must-have</span></h3>
+          <div class="field">
+            <label class="req" for="requirements">Requirements</label>
+            <textarea id="requirements" name="job.requirements" placeholder="Skills and experience required (one per line)…"></textarea>
+          </div>
+          <div class="chips" data-target="job.requirements">
+            <span class="chip">Years of experience</span>
+            <span class="chip">Tools / systems</span>
+            <span class="chip">Communication skills</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Qualifications <span class="tag">Education / certifications</span></h3>
+          <div class="field">
+            <label class="req" for="qualifications">Qualifications</label>
+            <textarea id="qualifications" name="job.qualifications" placeholder="Degrees, certifications, licenses (one per line)…"></textarea>
+          </div>
+          <div class="chips" data-target="job.qualifications">
+            <span class="chip">Degree / equivalent experience</span>
+            <span class="chip">Relevant certification</span>
+            <span class="chip">Regulatory licence (if needed)</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Benefits <span class="tag">Offer</span></h3>
+          <div class="field">
+            <label class="req" for="benefits">Benefits</label>
+            <textarea id="benefits" name="job.benefits" placeholder="What we offer (one per line)…"></textarea>
+          </div>
+          <div class="chips" data-target="job.benefits">
+            <span class="chip">Pension / retirement</span>
+            <span class="chip">Health insurance</span>
+            <span class="chip">Hybrid / remote</span>
+            <span class="chip">Learning budget</span>
+          </div>
+        </div>
+
+        <div class="statusbar">
+          <div class="status">
+            <span class="dot" id="statusDot"></span>
+            <span id="statusText">Not validated</span>
+          </div>
+          <span id="saveText">Saved: —</span>
+        </div>
+      </div>
+
+      <!-- SIDE: Preview / Summary -->
+      <div class="card" id="sideCard">
+        <h2>
+          Live preview
+          <span class="pill" id="wordCountPill">0 words</span>
+        </h2>
+        <div class="body">
+          <div class="notice">
+            This preview is generated from your inputs. Export JSON to send it to HR / Hiring Manager systems.
+          </div>
+          <div style="height:14px"></div>
+          <div class="preview" id="preview"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = "recruitment_request_v1";
+
+      const $ = (sel, root=document) => root.querySelector(sel);
+      const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+      const statusDot = $("#statusDot");
+      const statusText = $("#statusText");
+      const saveText = $("#saveText");
+      const preview = $("#preview");
+      const wordCountPill = $("#wordCountPill");
+      const completionPill = $("#completionPill");
+
+      const requiredNames = [
+        "job.title",
+        "job.salary.min",
+        "job.salary.max",
+        "job.description",
+        "job.responsibilities",
+        "job.requirements",
+        "job.qualifications",
+        "job.benefits"
+      ];
+
+      function setByName(name, value){
+        const els = document.getElementsByName(name);
+        if (!els || !els.length) return;
+        const el = els[0];
+        el.value = value ?? "";
+      }
+
+      function getByName(name){
+        const els = document.getElementsByName(name);
+        if (!els || !els.length) return "";
+        return (els[0].value ?? "");
+      }
+
+      function allNamedInputs(){
+        return $$("input[name], textarea[name], select[name]");
+      }
+
+      function buildData(){
+        const data = {};
+        for (const el of allNamedInputs()){
+          data[el.name] = getByName(el.name);
+        }
+        data["_meta.savedAt"] = new Date().toISOString();
+        return data;
+      }
+
+      function applyData(data){
+        if (!data) return;
+        Object.keys(data).forEach(k => {
+          if (k.startsWith("_meta.")) return;
+          setByName(k, data[k]);
+        });
+      }
+
+      function save(){
+        const data = buildData();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        saveText.textContent = "Saved: " + new Date().toLocaleString();
+      }
+
+      function load(){
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try{
+          const data = JSON.parse(raw);
+          applyData(data);
+          saveText.textContent = "Saved: " + (data["_meta.savedAt"] ? new Date(data["_meta.savedAt"]).toLocaleString() : "—");
+        }catch(e){
+          console.warn("Load failed", e);
+        }
+      }
+
+      function markError(el, on){
+        if (!el) return;
+        el.classList.toggle("err", !!on);
+      }
+
+      function setStatus(text, kind){
+        statusText.textContent = text;
+        statusDot.classList.remove("good","bad");
+        if (kind === "good") statusDot.classList.add("good");
+        if (kind === "bad") statusDot.classList.add("bad");
+      }
+
+      function validate(){
+        $$(".err").forEach(el => el.classList.remove("err"));
+        const errors = [];
+
+        // Required fields
+        requiredNames.forEach(n => {
+          const el = document.getElementsByName(n)[0];
+          const val = getByName(n).trim();
+          if (!val){
+            errors.push("Missing: " + n);
+            markError(el, true);
+          }
+        });
+
+        // Salary sanity
+        const min = parseFloat(getByName("job.salary.min"));
+        const max = parseFloat(getByName("job.salary.max"));
+        const elMin = document.getElementsByName("job.salary.min")[0];
+        const elMax = document.getElementsByName("job.salary.max")[0];
+
+        if (isFinite(min) && isFinite(max) && max < min){
+          errors.push("Salary max must be >= salary min");
+          markError(elMin, true);
+          markError(elMax, true);
+        }
+
+        if (errors.length){
+          setStatus("Validation failed (" + errors.length + ")", "bad");
+          const firstErr = $(".err");
+          if (firstErr) firstErr.scrollIntoView({behavior:"smooth", block:"center"});
+          return {ok:false, errors};
+        }else{
+          setStatus("Validated ✔ Ready to export/print", "good");
+          return {ok:true, errors:[]};
+        }
+      }
+
+      function wordCount(text){
+        const t = (text || "").trim();
+        if (!t) return 0;
+        return t.split(/\s+/).length;
+      }
+
+      function formatList(text){
+        const lines = (text || "").split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+        if (!lines.length) return "—";
+        return lines.map(l => "• " + l).join("\n");
+      }
+
+      function updatePreview(){
+        const title = getByName("job.title").trim() || "—";
+        const dept = getByName("job.department").trim();
+        const loc = getByName("job.location").trim();
+        const type = getByName("job.employmentType").trim();
+        const sMin = getByName("job.salary.min").trim();
+        const sMax = getByName("job.salary.max").trim();
+
+        const desc = getByName("job.description");
+        const resp = getByName("job.responsibilities");
+        const reqs = getByName("job.requirements");
+        const quals = getByName("job.qualifications");
+        const bens = getByName("job.benefits");
+
+        const bits = [];
+        bits.push("NEW ROLE REQUEST");
+        bits.push("=".repeat(16));
+        bits.push(`Job Title: ${title}`);
+        if (dept) bits.push(`Department/Team: ${dept}`);
+        if (loc) bits.push(`Location: ${loc}`);
+        if (type) bits.push(`Employment Type: ${type}`);
+        bits.push(`Salary Range: ${sMin || "—"} – ${sMax || "—"}`);
+        bits.push("");
+        bits.push("JOB DESCRIPTION");
+        bits.push(formatList(desc));
+        bits.push("");
+        bits.push("KEY RESPONSIBILITIES");
+        bits.push(formatList(resp));
+        bits.push("");
+        bits.push("REQUIREMENTS");
+        bits.push(formatList(reqs));
+        bits.push("");
+        bits.push("QUALIFICATIONS");
+        bits.push(formatList(quals));
+        bits.push("");
+        bits.push("BENEFITS");
+        bits.push(formatList(bens));
+
+        const out = bits.join("\n");
+        preview.textContent = out;
+
+        // word count pill
+        wordCountPill.textContent = wordCount(out) + " words";
+
+        // completion pill (simple required completion)
+        let filled = 0;
+        requiredNames.forEach(n => { if (getByName(n).trim()) filled++; });
+        const pct = Math.round((filled / requiredNames.length) * 100);
+        completionPill.textContent = pct + "% complete";
+      }
+
+      // Chips helper: append templates into the target textarea
+      function addToTextarea(targetName, text){
+        const el = document.getElementsByName(targetName)[0];
+        if (!el) return;
+        const current = (el.value || "").trimEnd();
+        const addLine = (current ? "\n" : "") + text;
+        el.value = current + addLine;
+        el.dispatchEvent(new Event("input", {bubbles:true}));
+        el.focus();
+      }
+
+      // Wire chips
+      $$(".chips").forEach(group => {
+        const target = group.getAttribute("data-target");
+        group.addEventListener("click", (e) => {
+          const chip = e.target.closest(".chip");
+          if (!chip) return;
+          const label = chip.textContent.trim();
+
+          // Small canned snippets per section
+          const snippets = {
+            "job.description": {
+              "Reporting line + team context": "Reports to: [Role]\nTeam: [Team name]\nCollaborates with: [Functions]",
+              "Role mission (1–2 sentences)": "Role mission: [Briefly explain the impact of this role in 1–2 sentences].",
+              "Who you'll work with": "You will work closely with: [Stakeholders/teams]."
+            },
+            "job.responsibilities": {
+              "Own a measurable KPI": "Own and deliver against [KPI/target] with regular reporting.",
+              "Stakeholder management": "Partner with cross-functional stakeholders to align priorities and execution.",
+              "Process improvement": "Identify and implement process improvements to increase efficiency and quality."
+            },
+            "job.requirements": {
+              "Years of experience": "[X]+ years of relevant experience in [domain].",
+              "Tools / systems": "Proficiency with [tools/systems] (e.g., Excel, CRM, Jira, SQL).",
+              "Communication skills": "Strong written and verbal communication; able to present to stakeholders."
+            },
+            "job.qualifications": {
+              "Degree / equivalent experience": "Bachelor's degree in [field] (or equivalent practical experience).",
+              "Relevant certification": "[Relevant certification] preferred (e.g., PMP, ACCA, CIPD).",
+              "Regulatory licence (if needed)": "Relevant licence/registration required (specify if applicable)."
+            },
+            "job.benefits": {
+              "Pension / retirement": "Pension contribution / retirement plan.",
+              "Health insurance": "Health insurance (and dependants where applicable).",
+              "Hybrid / remote": "Hybrid/remote work options (role-dependent).",
+              "Learning budget": "Learning & development budget and training support."
+            }
+          };
+
+          const snippet = (snippets[target] && snippets[target][label]) ? snippets[target][label] : label;
+          addToTextarea(target, snippet);
+        });
+      });
+
+      // Autosave + preview
+      document.addEventListener("input", (e) => {
+        const t = e.target;
+        if (!t || !(t.matches("input[name], textarea[name], select[name]"))) return;
+        save();
+        updatePreview();
+      });
+
+      // Buttons
+      $("#btnValidate").addEventListener("click", () => {
+        const res = validate();
+        save();
+        updatePreview();
+        if (!res.ok){
+          alert("Please fix the highlighted fields.\n\n" + res.errors.slice(0,10).join("\n") + (res.errors.length>10 ? "\n…" : ""));
+        }else{
+          alert("Validation passed. You can Export JSON or Print.");
+        }
+      });
+
+      $("#btnExport").addEventListener("click", () => {
+        const res = validate();
+        save();
+        updatePreview();
+
+        if (!res.ok){
+          // allow export anyway but warn
+          if (!confirm("Validation failed. Export anyway?")) return;
+        }
+
+        const data = buildData();
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "recruitment-request.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      $("#btnPrint").addEventListener("click", () => window.print());
+
+      $("#btnReset").addEventListener("click", () => {
+        if (!confirm("Reset the form and clear saved data?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        $$("input, textarea, select").forEach(el => el.value = "");
+        setStatus("Not validated", "neutral");
+        saveText.textContent = "Saved: —";
+        updatePreview();
+      });
+
+      // Init
+      load();
+      updatePreview();
+      setStatus("Not validated", "neutral");
+    })();
+  </script>
+</body>
+</html>

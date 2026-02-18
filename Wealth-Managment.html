@@ -1,0 +1,1191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ABC Financial — Request a Callback</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --bg-secondary:#f1f5f9;
+      --card:#ffffff;
+      --text:#0f172a;
+      --text-secondary:#334155;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --line-dark:#cbd5e1;
+      --focus:rgba(99,102,241,.2);
+      --accent:#6366f1;
+      --accent-dark:#4f46e5;
+      --accent-light:#818cf8;
+      --good:#10b981;
+      --good-light:#d1fae5;
+      --bad:#ef4444;
+      --bad-light:#fee2e2;
+      --warn:#f59e0b;
+      --warn-light:#fef3c7;
+      --shadow: 0 20px 50px rgba(15,23,42,.08), 0 8px 16px rgba(15,23,42,.04);
+      --shadow-lg: 0 25px 60px rgba(15,23,42,.12), 0 10px 20px rgba(15,23,42,.06);
+      --radius: 20px;
+      --transition: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    
+    body{
+      font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background:
+        radial-gradient(ellipse 1200px 800px at 20% -10%, rgba(99,102,241,.08), transparent 60%),
+        radial-gradient(ellipse 1000px 600px at 85% 15%, rgba(16,185,129,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg-secondary));
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 32px 20px;
+      line-height:1.6;
+      animation: fadeIn 0.6s var(--transition);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .wrap{
+      width: min(750px, 100%);
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      animation: slideUp 0.7s var(--transition);
+    }
+
+    @keyframes slideUp {
+      from { 
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 20px;
+      padding: 4px 8px;
+    }
+
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      animation: slideRight 0.8s var(--transition) 0.1s backwards;
+    }
+
+    @keyframes slideRight {
+      from { 
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .brand h1{
+      font-family: 'Fraunces', serif;
+      font-size: clamp(26px, 4.5vw, 36px);
+      letter-spacing:-.4px;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .brand p{
+      color:var(--text-secondary);
+      line-height:1.7;
+      font-size: 15px;
+      max-width: 58ch;
+      font-weight: 400;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 11px 18px;
+      border:2px solid var(--line);
+      border-radius: 999px;
+      background: var(--card);
+      box-shadow: 0 2px 8px rgba(15,23,42,.04);
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 600;
+      user-select:none;
+      white-space:nowrap;
+      animation: slideLeft 0.8s var(--transition) 0.2s backwards;
+    }
+
+    @keyframes slideLeft {
+      from { 
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .pill b{ 
+      color: var(--accent); 
+      font-weight: 700; 
+    }
+
+    .status-dot{
+      width: 8px;
+      height: 8px;
+      background: var(--good);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(16,185,129,.4);
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(16,185,129,.7);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(16,185,129,0);
+      }
+    }
+
+    .card{
+      background: var(--card);
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      animation: slideUp 0.8s var(--transition) 0.2s backwards;
+    }
+
+    .card-inner{
+      padding: 36px;
+    }
+
+    @media (max-width: 640px){
+      .card-inner{ padding: 28px 24px; }
+      header{ flex-direction: column; }
+      .pill{ align-self: flex-start; }
+    }
+
+    .panel h2{
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      letter-spacing:-.3px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .panel p{
+      color:var(--text-secondary);
+      line-height: 1.7;
+      font-size: 14px;
+      margin-bottom: 28px;
+      font-weight: 400;
+    }
+
+    form{
+      display:grid;
+      gap: 24px;
+    }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 640px){
+      .grid2{ grid-template-columns: 1fr; }
+    }
+
+    .field-group{
+      display:flex;
+      flex-direction:column;
+      gap: 8px;
+      position: relative;
+    }
+
+    label{
+      display:block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    .req::after{
+      content:" *";
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea{
+      width:100%;
+      padding: 15px 18px;
+      border-radius: 14px;
+      border: 2px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.25s var(--transition);
+      font-weight: 400;
+    }
+
+    textarea{ 
+      resize: vertical; 
+      min-height: 100px;
+      line-height: 1.6; 
+    }
+
+    input::placeholder, textarea::placeholder{ 
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    input:focus, textarea:focus{
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--focus), 0 2px 8px rgba(15,23,42,.08);
+      background: var(--card);
+    }
+
+    input:hover:not(:focus), textarea:hover:not(:focus){
+      border-color: var(--line-dark);
+    }
+
+    /* Validation states */
+    input.valid, textarea.valid{
+      border-color: var(--good);
+      background: var(--good-light);
+    }
+
+    input.invalid, textarea.invalid{
+      border-color: var(--bad);
+      background: var(--bad-light);
+    }
+
+    .field-error{
+      font-size: 12px;
+      color: var(--bad);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(-5px);
+      transition: all 0.25s var(--transition);
+    }
+
+    .field-error.show{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .field-error::before{
+      content: "⚠";
+      font-size: 14px;
+    }
+
+    .checks{
+      display:grid;
+      gap: 14px;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:flex-start;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: 16px;
+      border: 2px solid var(--line);
+      background: var(--card);
+      transition: all 0.25s var(--transition);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .check-row::before{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.3s var(--transition);
+    }
+
+    .check-row:hover{
+      border-color: var(--accent-light);
+      background: rgba(99,102,241,.03);
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(99,102,241,.08);
+    }
+
+    .check-row.checked{
+      border-color: var(--accent);
+      background: rgba(99,102,241,.05);
+    }
+
+    .check-row.checked::before{
+      transform: scaleY(1);
+    }
+
+    /* Service icons */
+    .service-icon{
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(99,102,241,.1) 0%, rgba(99,102,241,.05) 100%);
+      transition: all 0.25s var(--transition);
+      margin-top: 2px;
+    }
+
+    .check-row:hover .service-icon{
+      transform: scale(1.1) rotate(5deg);
+      background: linear-gradient(135deg, rgba(99,102,241,.2) 0%, rgba(99,102,241,.1) 100%);
+    }
+
+    .check-row.checked .service-icon{
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    }
+
+    .service-icon svg{
+      width: 24px;
+      height: 24px;
+      transition: all 0.25s var(--transition);
+    }
+
+    .check-row .service-icon svg path,
+    .check-row .service-icon svg circle,
+    .check-row .service-icon svg line,
+    .check-row .service-icon svg polyline{
+      stroke: var(--accent);
+      transition: stroke 0.25s var(--transition);
+    }
+
+    .check-row.checked .service-icon svg path,
+    .check-row.checked .service-icon svg circle,
+    .check-row.checked .service-icon svg line,
+    .check-row.checked .service-icon svg polyline{
+      stroke: white;
+    }
+
+    /* Custom checkbox */
+    .check-row input[type="checkbox"]{
+      appearance:none;
+      -webkit-appearance:none;
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      margin-top: 1px;
+      border-radius: 8px;
+      border: 2px solid var(--line-dark);
+      background: var(--bg);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+      cursor:pointer;
+      outline:none;
+      transition: all 0.25s var(--transition);
+    }
+
+    .check-row input[type="checkbox"]:hover{
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .check-row input[type="checkbox"]:focus{
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: var(--accent);
+    }
+
+    .check-row input[type="checkbox"]::after{
+      content:"✓";
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      transform: scale(0);
+      transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .check-row input[type="checkbox"]:checked{
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .check-row input[type="checkbox"]:checked::after{ 
+      transform: scale(1); 
+    }
+
+    .check-text{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      cursor:pointer;
+      user-select:none;
+      flex: 1;
+    }
+
+    .check-text b{
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: .1px;
+    }
+
+    .check-text span{
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 8px;
+    }
+
+    button{
+      border: none;
+      border-radius: 14px;
+      padding: 15px 28px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor:pointer;
+      transition: all 0.2s var(--transition);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before{
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    button:active::before{
+      width: 300px;
+      height: 300px;
+    }
+
+    .primary{
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99,102,241,.25), 0 2px 6px rgba(99,102,241,.15);
+    }
+
+    .primary:hover{ 
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99,102,241,.35), 0 4px 10px rgba(99,102,241,.2);
+    }
+
+    .primary:active{ 
+      transform: translateY(0);
+    }
+
+    .primary:disabled{
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .primary .spinner{
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .ghost{
+      background: var(--bg);
+      border: 2px solid var(--line);
+      color: var(--text);
+    }
+
+    .ghost:hover{ 
+      background: var(--bg-secondary);
+      border-color: var(--line-dark);
+      box-shadow: 0 2px 8px rgba(15,23,42,.06);
+    }
+
+    .ghost:active{ 
+      transform: scale(0.98);
+    }
+
+    .note{
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 16px;
+      padding: 16px 18px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 2px solid var(--line);
+      font-weight: 400;
+    }
+
+    .note code{
+      background: rgba(99,102,241,.1);
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-size: 12px;
+      color: var(--accent-dark);
+      font-family: 'SF Mono', Monaco, monospace;
+      font-weight: 600;
+    }
+
+    .msg{
+      margin-top: 20px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 2px solid;
+      font-size: 14px;
+      line-height: 1.6;
+      display: none;
+      animation: slideDown 0.3s var(--transition);
+      font-weight: 500;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .msg.show{ display: block; }
+
+    .msg.success{
+      border-color: var(--good);
+      background: var(--good-light);
+      color: #065f46;
+    }
+
+    .msg.error{
+      border-color: var(--bad);
+      background: var(--bad-light);
+      color: #991b1b;
+    }
+
+    footer{
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 8px;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    a{ 
+      color: var(--accent); 
+      text-decoration: none;
+      transition: color 0.2s;
+      font-weight: 600;
+    }
+
+    a:hover{ 
+      color: var(--accent-dark);
+      text-decoration: underline;
+    }
+
+    /* Smooth scroll */
+    html{
+      scroll-behavior: smooth;
+    }
+
+    /* Loading overlay */
+    .loading-overlay{
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(248,250,252,.9);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .loading-overlay.show{
+      display: flex;
+    }
+
+    .loader{
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader"></div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <h1>Request a Callback</h1>
+        <p>
+          Let us help you achieve your financial goals. Complete the form below and select the services you're interested in. We'll be in touch within 24 hours to schedule a personalized consultation.
+        </p>
+      </div>
+      <div class="pill">
+        <div class="status-dot"></div>
+        <span>Status:</span> <b>Demo Mode</b>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="panel">
+          <h2>Your Information</h2>
+          <p>Fields marked with <span style="color:var(--warn);font-weight:700">*</span> are required.</p>
+
+          <form id="callMeForm" novalidate>
+            <div class="grid2">
+              <div class="field-group">
+                <label class="req" for="name">Full Name</label>
+                <input 
+                  id="name" 
+                  name="name" 
+                  type="text" 
+                  autocomplete="name" 
+                  placeholder="Jane Doe" 
+                  required 
+                  aria-required="true"
+                  aria-describedby="name-error"
+                />
+                <div class="field-error" id="name-error" role="alert"></div>
+              </div>
+              <div class="field-group">
+                <label class="req" for="contact">Contact Number</label>
+                <input 
+                  id="contact" 
+                  name="contact" 
+                  type="tel" 
+                  autocomplete="tel" 
+                  placeholder="+353 1 234 5678" 
+                  required 
+                  aria-required="true"
+                  aria-describedby="contact-error"
+                />
+                <div class="field-error" id="contact-error" role="alert"></div>
+              </div>
+            </div>
+
+            <div class="grid2">
+              <div class="field-group">
+                <label class="req" for="email">Email Address</label>
+                <input 
+                  id="email" 
+                  name="email" 
+                  type="email" 
+                  autocomplete="email" 
+                  placeholder="jane@example.com" 
+                  required 
+                  aria-required="true"
+                  aria-describedby="email-error"
+                />
+                <div class="field-error" id="email-error" role="alert"></div>
+              </div>
+              <div class="field-group">
+                <label for="address">Address</label>
+                <input 
+                  id="address" 
+                  name="address" 
+                  type="text" 
+                  autocomplete="street-address" 
+                  placeholder="Street, City, County, Eircode" 
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="req">Services of Interest</label>
+              <p style="font-size:13px;color:var(--text-secondary);margin:8px 0 16px;font-weight:400;">Select all that apply to your financial needs</p>
+              <div class="checks" id="services" role="group" aria-label="Services selection">
+                
+                <!-- Pension Planning -->
+                <label class="check-row">
+                  <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M2 17L12 22L22 17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M2 12L12 17L22 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>Pension Planning</b>
+                    <span>Secure your retirement with tailored pension strategies and advice.</span>
+                  </span>
+                  <input type="checkbox" name="services" value="Pension Planning" aria-label="Pension Planning" />
+                </label>
+
+                <!-- Life Cover -->
+                <label class="check-row">
+                  <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9 12L11 14L15 10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>Life Cover & Protection</b>
+                    <span>Comprehensive protection planning for you and your loved ones.</span>
+                  </span>
+                  <input type="checkbox" name="services" value="Life Cover & Protection" aria-label="Life Cover & Protection" />
+                </label>
+
+                <!-- Mortgage -->
+                <label class="check-row">
+                  <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9 22V12H15V22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>Mortgage Advisory</b>
+                    <span>Expert guidance on mortgages, refinancing, and protection needs.</span>
+                  </span>
+                  <input type="checkbox" name="services" value="Mortgage Advisory" aria-label="Mortgage Advisory" />
+                </label>
+
+                <!-- Investments -->
+                <label class="check-row">
+                  <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>Investment Management</b>
+                    <span>Strategic investment planning aligned with your financial goals.</span>
+                  </span>
+                  <input type="checkbox" name="services" value="Investment Management" aria-label="Investment Management" />
+                </label>
+
+                <!-- Financial Review -->
+                <label class="check-row">
+                  <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M14 2V8H20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M16 13H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M16 17H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M10 9H9H8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>Comprehensive Financial Review</b>
+                    <span>A complete analysis of your financial position and opportunities.</span>
+                  </span>
+                  <input type="checkbox" name="services" value="Comprehensive Financial Review" aria-label="Comprehensive Financial Review" />
+                </label>
+              </div>
+              <div class="field-error" id="services-error" role="alert"></div>
+            </div>
+
+            <div>
+              <label class="req">Required Authorizations</label>
+              <div class="checks">
+                <label class="check-row">
+                  <div class="service-icon" style="background: linear-gradient(135deg, rgba(16,185,129,.1) 0%, rgba(16,185,129,.05) 100%);">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4741 21.8325 20.7293C21.7209 20.9845 21.5573 21.2136 21.3521 21.4018C21.1469 21.5901 20.9046 21.7335 20.6407 21.8227C20.3769 21.912 20.0974 21.9452 19.82 21.92C16.7428 21.5856 13.787 20.5341 11.19 18.85C8.77382 17.3146 6.72533 15.2661 5.18999 12.85C3.49997 10.2412 2.44824 7.27097 2.11999 4.17997C2.095 3.90344 2.12787 3.62474 2.21649 3.3616C2.30512 3.09846 2.44756 2.85666 2.63476 2.6516C2.82196 2.44653 3.0498 2.28268 3.30379 2.1705C3.55777 2.05831 3.83233 2.00024 4.10999 1.99997H7.10999C7.5953 1.9952 8.06579 2.16705 8.43376 2.48351C8.80173 2.79996 9.04207 3.23942 9.10999 3.71997C9.23662 4.68004 9.47144 5.6227 9.80999 6.52997C9.94454 6.8879 9.97366 7.27689 9.8939 7.65086C9.81415 8.02482 9.62886 8.36809 9.35999 8.63998L8.08999 9.90997C9.51355 12.4135 11.5864 14.4864 14.09 15.91L15.36 14.64C15.6319 14.3711 15.9751 14.1858 16.3491 14.1061C16.7231 14.0263 17.1121 14.0554 17.47 14.19C18.3773 14.5285 19.3199 14.7634 20.28 14.89C20.7658 14.9585 21.2094 15.2032 21.5265 15.5775C21.8437 15.9518 22.0122 16.4296 22 16.92Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>I authorize ABC Financial to contact me</b>
+                    <span>
+                      Regarding the requested services and any relevant products that may arise from a financial review.
+                    </span>
+                  </span>
+                  <input id="authContact" type="checkbox" required aria-required="true" aria-describedby="auth-contact-desc" />
+                </label>
+                <label class="check-row">
+                  <div class="service-icon" style="background: linear-gradient(135deg, rgba(16,185,129,.1) 0%, rgba(16,185,129,.05) 100%);">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M12 16V12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M12 8H12.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <span class="check-text">
+                    <b>I authorize ABC Financial to retain my data</b>
+                    <span>As required to provide these services in accordance with GDPR regulations.</span>
+                  </span>
+                  <input id="authRetain" type="checkbox" required aria-required="true" aria-describedby="auth-retain-desc" />
+                </label>
+              </div>
+              <div class="field-error" id="auth-error" role="alert"></div>
+            </div>
+
+            <div class="actions">
+              <button class="primary" type="submit" id="submitBtn" aria-label="Submit callback request">
+                <span id="submitText">Submit Request</span>
+                <span aria-hidden="true" id="submitIcon">→</span>
+              </button>
+              <button class="ghost" type="button" id="resetBtn" aria-label="Reset form">
+                Reset Form
+              </button>
+            </div>
+
+            <div class="note">
+              <strong>Privacy Notice:</strong> This is a demonstration interface with local validation only. No data is transmitted to external servers. In production, submissions are encrypted and processed securely via our API at <code>api.abcfinancial.ie/callbacks</code>.
+            </div>
+
+            <div id="message" class="msg" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div style="margin-bottom:8px;">
+        <span style="font-size:15px;">© <span id="year"></span> ABC Financial</span>
+        <span style="opacity:.5;"> · </span>
+        <a href="#" onclick="return false;">Privacy Policy</a>
+        <span style="opacity:.5;"> · </span>
+        <a href="#" onclick="return false;">Terms of Service</a>
+      </div>
+      <div style="opacity:.8;">
+        This page is a demonstration interface and does not constitute financial advice. All services subject to terms and conditions.
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      'use strict';
+
+      // DOM Elements
+      const $ = (id) => document.getElementById(id);
+      const $$ = (sel) => document.querySelectorAll(sel);
+
+      const form = $('callMeForm');
+      const submitBtn = $('submitBtn');
+      const submitText = $('submitText');
+      const submitIcon = $('submitIcon');
+      const resetBtn = $('resetBtn');
+      const messageBox = $('message');
+      const loadingOverlay = $('loadingOverlay');
+
+      // Validation patterns
+      const patterns = {
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        phone: /^[\d\s\+\-\(\)]{8,}$/,
+        name: /^[a-zA-Z\s\-\']{2,}$/
+      };
+
+      // Validation messages
+      const messages = {
+        name: 'Please enter your full name (at least 2 characters)',
+        email: 'Please enter a valid email address',
+        contact: 'Please enter a valid contact number',
+        services: 'Please select at least one service',
+        auth: 'Both authorization checkboxes must be checked'
+      };
+
+      // Initialize
+      function init() {
+        $('year').textContent = new Date().getFullYear();
+        setupEventListeners();
+        setupRealtimeValidation();
+      }
+
+      // Setup event listeners
+      function setupEventListeners() {
+        form.addEventListener('submit', handleSubmit);
+        resetBtn.addEventListener('click', handleReset);
+
+        // Checkbox animations
+        $$('.check-row input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', function() {
+            this.closest('.check-row').classList.toggle('checked', this.checked);
+          });
+        });
+      }
+
+      // Real-time validation
+      function setupRealtimeValidation() {
+        const nameInput = $('name');
+        const emailInput = $('email');
+        const contactInput = $('contact');
+
+        nameInput.addEventListener('blur', () => validateField('name'));
+        nameInput.addEventListener('input', () => clearFieldError('name'));
+
+        emailInput.addEventListener('blur', () => validateField('email'));
+        emailInput.addEventListener('input', () => clearFieldError('email'));
+
+        contactInput.addEventListener('blur', () => validateField('contact'));
+        contactInput.addEventListener('input', () => clearFieldError('contact'));
+      }
+
+      // Validate individual field
+      function validateField(fieldName) {
+        const input = $(fieldName);
+        const value = input.value.trim();
+        const errorEl = $(`${fieldName}-error`);
+
+        let isValid = true;
+        let errorMsg = '';
+
+        if (!value && input.required) {
+          isValid = false;
+          errorMsg = messages[fieldName];
+        } else if (value && patterns[fieldName] && !patterns[fieldName].test(value)) {
+          isValid = false;
+          errorMsg = messages[fieldName];
+        }
+
+        if (isValid) {
+          input.classList.remove('invalid');
+          input.classList.add('valid');
+          errorEl.textContent = '';
+          errorEl.classList.remove('show');
+        } else {
+          input.classList.remove('valid');
+          input.classList.add('invalid');
+          errorEl.textContent = errorMsg;
+          errorEl.classList.add('show');
+        }
+
+        return isValid;
+      }
+
+      // Clear field error
+      function clearFieldError(fieldName) {
+        const input = $(fieldName);
+        const errorEl = $(`${fieldName}-error`);
+        
+        input.classList.remove('invalid', 'valid');
+        errorEl.textContent = '';
+        errorEl.classList.remove('show');
+      }
+
+      // Validate form
+      function validateForm() {
+        let isValid = true;
+
+        // Validate name
+        if (!validateField('name')) isValid = false;
+
+        // Validate email
+        if (!validateField('email')) isValid = false;
+
+        // Validate contact
+        if (!validateField('contact')) isValid = false;
+
+        // Validate services
+        const servicesChecked = $$('input[name="services"]:checked').length > 0;
+        const servicesError = $('services-error');
+        if (!servicesChecked) {
+          servicesError.textContent = messages.services;
+          servicesError.classList.add('show');
+          isValid = false;
+        } else {
+          servicesError.textContent = '';
+          servicesError.classList.remove('show');
+        }
+
+        // Validate authorizations
+        const authContact = $('authContact').checked;
+        const authRetain = $('authRetain').checked;
+        const authError = $('auth-error');
+        
+        if (!authContact || !authRetain) {
+          authError.textContent = messages.auth;
+          authError.classList.add('show');
+          isValid = false;
+        } else {
+          authError.textContent = '';
+          authError.classList.remove('show');
+        }
+
+        return isValid;
+      }
+
+      // Show message
+      function showMessage(text, type) {
+        messageBox.textContent = text;
+        messageBox.className = `msg ${type} show`;
+        messageBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      // Hide message
+      function hideMessage() {
+        messageBox.classList.remove('show');
+      }
+
+      // Simulate API call
+      async function fakeSend(data) {
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Simulate 90% success rate
+        if (Math.random() > 0.1) {
+          return { success: true, id: 'CB-' + Date.now() };
+        } else {
+          throw new Error('Network error: Unable to submit callback request');
+        }
+      }
+
+      // Handle form submission
+      async function handleSubmit(e) {
+        e.preventDefault();
+        hideMessage();
+
+        if (!validateForm()) {
+          showMessage('Please correct the errors above before submitting.', 'error');
+          return;
+        }
+
+        // Collect form data
+        const formData = {
+          name: $('name').value.trim(),
+          email: $('email').value.trim(),
+          contact: $('contact').value.trim(),
+          address: $('address').value.trim() || null,
+          services: Array.from($$('input[name="services"]:checked')).map(cb => cb.value),
+          authorizations: {
+            contact: $('authContact').checked,
+            dataRetention: $('authRetain').checked
+          },
+          timestamp: new Date().toISOString(),
+          source: 'web_form',
+          locale: 'en-IE'
+        };
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitText.textContent = 'Submitting...';
+        submitIcon.innerHTML = '<div class="spinner"></div>';
+        loadingOverlay.classList.add('show');
+
+        try {
+          const result = await fakeSend(formData);
+          
+          // Success
+          showMessage(`✓ Thank you! Your callback request (${result.id}) has been submitted successfully. We'll be in touch within 24 hours.`, 'success');
+          
+          // Reset form after delay
+          setTimeout(() => {
+            form.reset();
+            clearAllValidation();
+          }, 3000);
+
+        } catch (error) {
+          showMessage(`✗ ${error.message}. Please try again or contact us directly.`, 'error');
+        } finally {
+          // Reset button state
+          submitBtn.disabled = false;
+          submitText.textContent = 'Submit Request';
+          submitIcon.textContent = '→';
+          loadingOverlay.classList.remove('show');
+        }
+      }
+
+      // Clear all validation
+      function clearAllValidation() {
+        $$('input, textarea').forEach(input => {
+          input.classList.remove('valid', 'invalid');
+        });
+        $$('.field-error').forEach(error => {
+          error.textContent = '';
+          error.classList.remove('show');
+        });
+        $$('.check-row').forEach(row => {
+          row.classList.remove('checked');
+        });
+      }
+
+      // Handle reset
+      function handleReset() {
+        if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+          form.reset();
+          clearAllValidation();
+          hideMessage();
+          
+          showMessage('Form has been reset.', 'success');
+          setTimeout(hideMessage, 2000);
+        }
+      }
+
+      // Initialize on load
+      init();
+    })();
+  </script>
+</body>
+</html>

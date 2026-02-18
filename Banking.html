@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Finance Application</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #1abc9c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --border: #dee2e6;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            font-size: 3.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-right: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            background: white;
+            border-radius: 20px;
+            padding: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 20px 30px;
+            border: none;
+            background: transparent;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .tab-button i {
+            font-size: 1.5rem;
+        }
+
+        .tab-button:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--secondary);
+        }
+
+        .tab-button.active {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-button.completed::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.9rem;
+            background: var(--success);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Quote Container */
+        .quote-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--border);
+        }
+
+        .section-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-right: 20px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-header-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .section-header-text p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        /* Finance Options */
+        .finance-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .finance-option {
+            border: 3px solid var(--border);
+            border-radius: 18px;
+            padding: 35px 25px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .finance-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: left 0.4s;
+            z-index: 0;
+            opacity: 0.05;
+        }
+
+        .finance-option:hover::before {
+            left: 0;
+        }
+
+        .finance-option > * {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .finance-option:hover {
+            border-color: transparent;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+        }
+        
+        .finance-option.selected {
+            border-color: transparent;
+            background: linear-gradient(white, white) padding-box,
+                        var(--gradient-1) border-box;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .finance-option-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .finance-option-icon {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .finance-option h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .finance-option p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Quotation Container */
+        .quotation-container {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            border-radius: 18px;
+            padding: 35px;
+            margin-top: 40px;
+            display: none;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .quotation-container.active {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .quotation-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .quotation-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            margin-right: 18px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .quotation-header h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        /* Form Styles */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+        
+        .form-group {
+            flex: 1 0 100%;
+            padding: 0 15px;
+            margin-bottom: 25px;
+        }
+        
+        @media (min-width: 768px) {
+            .form-group.half {
+                flex: 0 0 50%;
+            }
+            .form-group.third {
+                flex: 0 0 33.333%;
+            }
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        label i {
+            margin-right: 8px;
+            color: var(--secondary);
+            width: 20px;
+            text-align: center;
+        }
+        
+        .required::after {
+            content: " *";
+            color: var(--danger);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        input:read-only {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
+        }
+
+        /* Chart and Summary */
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            height: 450px;
+            margin-top: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .repayment-summary {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .summary-item i {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* LTV Indicator */
+        .ltv-indicator {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .ltv-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .ltv-header span:first-child {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .ltv-header span:first-child i {
+            margin-right: 8px;
+            color: var(--secondary);
+        }
+
+        .ltv-header span:last-child {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.4rem;
+        }
+
+        .ltv-bar {
+            width: 100%;
+            height: 40px;
+            background-color: #e9ecef;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .ltv-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 18px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Bank Selection */
+        .bank-selection-wrapper {
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            margin-top: 35px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .bank-selection-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .bank-selection-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            background: var(--gradient-3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.6rem;
+            margin-right: 15px;
+            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .bank-selection-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .bank-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .bank-option {
+            border: 3px solid var(--border);
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .bank-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-3);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+            border-radius: 15px 0 0 15px;
+        }
+        
+        .bank-option:hover {
+            border-color: var(--secondary);
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+        }
+
+        .bank-option:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .bank-option.selected {
+            border-color: transparent;
+            background: linear-gradient(white, white) padding-box,
+                        var(--gradient-3) border-box;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.25);
+        }
+
+        .bank-option.selected::before {
+            transform: scaleY(1);
+        }
+        
+        .bank-logo {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-right: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .bank-info h4 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .bank-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Apply Now Section */
+        .apply-now-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 35px;
+            border-top: 3px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .apply-now-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 22px 60px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .apply-now-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .apply-now-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .apply-now-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(102, 126, 234, 0.5);
+        }
+
+        .apply-now-btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .apply-now-btn i {
+            margin-left: 15px;
+            font-size: 1.6rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .apply-now-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .apply-now-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Application Form Styles */
+        .application-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            margin-bottom: 30px;
+        }
+
+        /* Quote Summary Card */
+        .quote-summary {
+            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
+            border-radius: 18px;
+            padding: 35px;
+            margin-bottom: 40px;
+            border: 2px solid rgba(67, 233, 123, 0.3);
+        }
+
+        .quote-summary-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(67, 233, 123, 0.2);
+        }
+
+        .quote-summary-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: var(--gradient-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            margin-right: 18px;
+            box-shadow: 0 8px 20px rgba(67, 233, 123, 0.3);
+        }
+
+        .quote-summary-header h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .quote-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .quote-detail-item {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote-detail-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-4);
+        }
+
+        .quote-detail-label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .quote-detail-label i {
+            margin-right: 6px;
+        }
+
+        .quote-detail-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Person Entry */
+        .person-entry {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 6px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .person-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .person-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .person-title i {
+            margin-right: 12px;
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+        
+        .remove-person {
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+            font-weight: 600;
+        }
+
+        .remove-person:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(245, 87, 108, 0.4);
+        }
+
+        .remove-person i {
+            margin-right: 6px;
+        }
+        
+        .add-person-btn {
+            background: var(--gradient-4);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 25px auto 0;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(67, 233, 123, 0.3);
+            font-weight: 700;
+        }
+        
+        .add-person-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(67, 233, 123, 0.4);
+        }
+        
+        .add-person-btn i {
+            margin-right: 12px;
+            font-size: 1.3rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .checkbox-group:hover {
+            border-color: var(--secondary);
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            margin-right: 15px;
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        /* Document Upload */
+        .document-upload {
+            border: 3px dashed var(--border);
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #fafbfc, #f8f9fa);
+            position: relative;
+        }
+        
+        .document-upload:hover {
+            border-color: var(--secondary);
+            background: linear-gradient(135deg, #f0f7ff, #e6f3ff);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.15);
+        }
+        
+        .document-upload-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .document-upload h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .document-upload p {
+            color: #666;
+            margin-bottom: 18px;
+            font-size: 1rem;
+        }
+        
+        .file-input {
+            margin-top: 18px;
+        }
+        
+        /* Declaration Section */
+        .declaration-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 18px;
+            padding: 35px;
+        }
+        
+        .declaration-item {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .declaration-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .declaration-text {
+            margin-bottom: 18px;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .declaration-text strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .declaration-text i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 3px solid var(--border);
+        }
+        
+        .submit-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 22px 70px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 45px rgba(102, 126, 234, 0.5);
+        }
+        
+        .submit-btn i {
+            margin-right: 15px;
+            font-size: 1.6rem;
+        }
+        
+        /* Validation */
+        .validation-error {
+            color: var(--danger);
+            font-size: 0.9rem;
+            margin-top: 8px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .validation-error i {
+            margin-right: 5px;
+        }
+        
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: var(--danger);
+            background-color: #fff5f5;
+        }
+        
+        .form-group.error .validation-error,
+        .declaration-item.error .validation-error {
+            display: block;
+        }
+
+        /* Confirmation Modal */
+        .confirmation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 20px;
+            padding: 60px;
+            max-width: 650px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-icon {
+            font-size: 6rem;
+            color: var(--success);
+            margin-bottom: 30px;
+            animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0) rotate(-180deg); }
+            to { transform: scale(1) rotate(0); }
+        }
+        
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        
+        .modal-content p {
+            margin-bottom: 25px;
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .modal-close {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .modal-close:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+            font-size: 0.95rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        footer i {
+            margin-right: 8px;
+            color: var(--success);
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-handshake-angle logo-icon"></i>
+                <h1>Business Finance Portal</h1>
+            </div>
+            <p class="subtitle">Get your personalized finance quote and complete your application in minutes. Choose from term loans, hire purchase, commercial mortgages, and more.</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" data-tab="quote-tab">
+                <i class="fas fa-calculator"></i>
+                <span>Get Quote</span>
+            </button>
+            <button class="tab-button" data-tab="application-tab" id="applicationTabBtn">
+                <i class="fas fa-file-contract"></i>
+                <span>Complete Application</span>
+            </button>
+        </div>
+
+        <!-- Tab 1: Quote & Calculator -->
+        <div id="quote-tab" class="tab-content active">
+            <div class="quote-container">
+                <div class="section-header">
+                    <div class="section-icon">
+                        <i class="fas fa-hand-pointer"></i>
+                    </div>
+                    <div class="section-header-text">
+                        <h2>Select Your Finance Type</h2>
+                        <p>Choose the financing solution that best fits your business needs</p>
+                    </div>
+                </div>
+                
+                <div class="finance-options">
+                    <div class="finance-option" data-type="term-loan">
+                        <div class="finance-option-icon-wrapper">
+                            <i class="fas fa-coins finance-option-icon"></i>
+                        </div>
+                        <h3>Term Loan</h3>
+                        <p>Fixed lump sum with scheduled repayments over an agreed period. Ideal for business expansion.</p>
+                    </div>
+                    
+                    <div class="finance-option" data-type="hire-purchase">
+                        <div class="finance-option-icon-wrapper">
+                            <i class="fas fa-truck-loading finance-option-icon"></i>
+                        </div>
+                        <h3>Hire Purchase</h3>
+                        <p>Spread the cost of assets with flexible monthly payments. Own equipment at the end of term.</p>
+                    </div>
+                    
+                    <div class="finance-option" data-type="mortgage">
+                        <div class="finance-option-icon-wrapper">
+                            <i class="fas fa-building finance-option-icon"></i>
+                        </div>
+                        <h3>Commercial Mortgage</h3>
+                        <p>Long-term financing secured against business property. Competitive rates for property purchase.</p>
+                    </div>
+                    
+                    <div class="finance-option" data-type="overdraft">
+                        <div class="finance-option-icon-wrapper">
+                            <i class="fas fa-wallet finance-option-icon"></i>
+                        </div>
+                        <h3>Overdraft Facility</h3>
+                        <p>Flexible credit line for managing cash flow needs. Access funds when you need them.</p>
+                    </div>
+                </div>
+
+                <div id="quotationSection" class="quotation-container">
+                    <div class="quotation-header">
+                        <div class="quotation-icon">
+                            <i class="fas fa-calculator" id="quotationIcon"></i>
+                        </div>
+                        <h3 id="quotationTitle">Finance Calculator</h3>
+                    </div>
+                    
+                    <div class="form-row">
+                        <!-- Hire Purchase Fields -->
+                        <div class="form-group third hp-field">
+                            <label for="purchasePrice"><i class="fas fa-tag"></i> Purchase Price (€)</label>
+                            <input type="number" id="purchasePrice" name="purchasePrice" min="1000" step="100" placeholder="e.g. 20000">
+                        </div>
+                        <div class="form-group third hp-field">
+                            <label for="depositAmount"><i class="fas fa-piggy-bank"></i> Deposit (€)</label>
+                            <input type="number" id="depositAmount" name="depositAmount" min="0" step="100" placeholder="e.g. 2000">
+                        </div>
+
+                        <!-- Mortgage Fields -->
+                        <div class="form-group third mortgage-field">
+                            <label for="propertyValue"><i class="fas fa-home"></i> Property Value (€)</label>
+                            <input type="number" id="propertyValue" name="propertyValue" min="50000" step="1000" placeholder="e.g. 500000">
+                        </div>
+                        <div class="form-group third mortgage-field">
+                            <label for="downPayment"><i class="fas fa-hand-holding-usd"></i> Down Payment (€)</label>
+                            <input type="number" id="downPayment" name="downPayment" min="0" step="1000" placeholder="e.g. 100000">
+                        </div>
+
+                        <!-- Common Fields -->
+                        <div class="form-group third">
+                            <label for="loanAmount"><i class="fas fa-money-bill-wave"></i> Loan Amount (€)</label>
+                            <input type="number" id="loanAmount" name="loanAmount" required min="1000" step="100" placeholder="e.g. 15000">
+                            <small class="hp-field mortgage-field" style="color: #666; font-size: 0.85rem; display: none;">(Auto-calculated)</small>
+                        </div>
+                        
+                        <div class="form-group third">
+                            <label for="interestRate"><i class="fas fa-percent"></i> Interest Rate (%)</label>
+                            <input type="number" id="interestRate" name="interestRate" required min="0.01" max="20" step="0.01" placeholder="Max 20%">
+                        </div>
+                        
+                        <div class="form-group third">
+                            <label for="loanTerm"><i class="fas fa-calendar-alt"></i> <span class="term-label">Term (Months)</span></label>
+                            <input type="number" id="loanTerm" name="loanTerm" required min="1" max="360" step="1" value="12">
+                        </div>
+                    </div>
+
+                    <!-- LTV Indicator (Mortgage only) -->
+                    <div class="ltv-indicator mortgage-field" style="display: none;">
+                        <div class="ltv-header">
+                            <span><i class="fas fa-chart-pie"></i> Loan-to-Value Ratio (LTV)</span>
+                            <span id="ltvPercentage">0%</span>
+                        </div>
+                        <div class="ltv-bar">
+                            <div class="ltv-fill" id="ltvFill" style="width: 0%;">
+                                <span id="ltvText"></span>
+                            </div>
+                        </div>
+                        <small style="color: #666; font-size: 0.9rem; margin-top: 12px; display: block;">
+                            <i class="fas fa-info-circle"></i> Lower LTV typically results in better interest rates and terms
+                        </small>
+                    </div>
+
+                    <div class="repayment-summary">
+                        <div class="summary-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <div class="summary-label">Monthly Payment</div>
+                            <div class="summary-value" id="monthlyRepaymentDisplay">€0.00</div>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="summary-label">Total Interest</div>
+                            <div class="summary-value" id="totalInterestDisplay">€0.00</div>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-receipt"></i>
+                            <div class="summary-label">Total Payable</div>
+                            <div class="summary-value" id="totalPayableDisplay">€0.00</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="repaymentChart"></canvas>
+                    </div>
+
+                    <!-- Bank Selection -->
+                    <div class="bank-selection-wrapper">
+                        <div class="bank-selection-header">
+                            <div class="bank-selection-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h3>Choose Your Preferred Bank(s)</h3>
+                        </div>
+                        <p style="color: #666; font-size: 1rem; margin-bottom: 25px;">
+                            <i class="fas fa-info-circle" style="color: var(--secondary);"></i> Select one or more banks to submit your application to. We'll help you get the best rates.
+                        </p>
+                        
+                        <div class="bank-options">
+                            <div class="bank-option" data-bank="AIB">
+                                <div class="bank-logo">AIB</div>
+                                <div class="bank-info">
+                                    <h4>Allied Irish Banks</h4>
+                                    <p>Competitive rates for SMEs</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bank-option" data-bank="BOI">
+                                <div class="bank-logo">BOI</div>
+                                <div class="bank-info">
+                                    <h4>Bank of Ireland</h4>
+                                    <p>Flexible business solutions</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bank-option" data-bank="PTSB">
+                                <div class="bank-logo">PTSB</div>
+                                <div class="bank-info">
+                                    <h4>Permanent TSB</h4>
+                                    <p>Fast approval process</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bank-option" data-bank="FinCo">
+                                <div class="bank-logo">FC</div>
+                                <div class="bank-info">
+                                    <h4>Finance Corporation</h4>
+                                    <p>Specialist business lender</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="validation-error" id="banksError">
+                            <i class="fas fa-exclamation-triangle"></i> Please select at least one bank
+                        </div>
+
+                        <div class="apply-now-section">
+                            <button type="button" id="applyNowBtn" class="apply-now-btn">
+                                <span>Apply Now</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="financeType" name="financeType">
+                <input type="hidden" id="selectedBanks" name="selectedBanks">
+                <div class="validation-error" id="financeTypeError" style="text-align: center; margin-top: 25px;">
+                    <i class="fas fa-exclamation-triangle"></i> Please select a finance type above to continue
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Application Form -->
+        <div id="application-tab" class="tab-content">
+            <!-- Quote Summary -->
+            <div class="quote-summary" id="quoteSummary">
+                <div class="quote-summary-header">
+                    <div class="quote-summary-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Your Finance Quote Summary</h3>
+                </div>
+                <div class="quote-details" id="quoteDetailsContainer">
+                    <!-- Quote details will be inserted here -->
+                </div>
+            </div>
+
+            <form id="financeForm" class="application-container">
+                <!-- Business Information -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="section-header-text">
+                            <h2>Business Information</h2>
+                            <p>Tell us about your business to help process your application</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="businessName" class="required"><i class="fas fa-briefcase"></i> Business Name</label>
+                            <input type="text" id="businessName" name="businessName" required placeholder="Enter your registered business name">
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter your business name</div>
+                        </div>
+                        
+                        <div class="form-group half">
+                            <label for="businessAddress" class="required"><i class="fas fa-map-marker-alt"></i> Business Address</label>
+                            <input type="text" id="businessAddress" name="businessAddress" required placeholder="Enter your business address">
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter your business address</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="companyNumber" class="required"><i class="fas fa-id-card"></i> Company Number</label>
+                            <input type="text" id="companyNumber" name="companyNumber" required placeholder="e.g. 123456">
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter your company registration number</div>
+                        </div>
+                        
+                        <div class="form-group half">
+                            <label for="taxNumber" class="required"><i class="fas fa-receipt"></i> Tax Number</label>
+                            <input type="text" id="taxNumber" name="taxNumber" required placeholder="e.g. IE1234567T">
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter your tax registration number</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Directors & Owners -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="section-header-text">
+                            <h2>Directors & Beneficial Owners</h2>
+                            <p>Details for all directors and beneficial owners with 20%+ shareholding</p>
+                        </div>
+                    </div>
+                    
+                    <div id="peopleContainer">
+                        <div class="person-entry">
+                            <div class="person-header">
+                                <div class="person-title">
+                                    <i class="fas fa-user-circle"></i>
+                                    Person #1
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group half">
+                                    <label for="person1Name" class="required"><i class="fas fa-signature"></i> Full Name</label>
+                                    <input type="text" id="person1Name" name="people[0][name]" required placeholder="Enter full legal name">
+                                    <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter the person's name</div>
+                                </div>
+                                
+                                <div class="form-group half">
+                                    <label for="person1Address" class="required"><i class="fas fa-home"></i> Address</label>
+                                    <input type="text" id="person1Address" name="people[0][address]" required placeholder="Enter residential address">
+                                    <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter the person's address</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label><i class="fas fa-user-tag"></i> Role in Company</label>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="person1Director" name="people[0][director]" value="true">
+                                        <label for="person1Director"><i class="fas fa-user-tie"></i> Director</label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="person1Shareholder" name="people[0][shareholder]" value="true">
+                                        <label for="person1Shareholder"><i class="fas fa-chart-pie"></i> Shareholder (20%+ ownership)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="addPersonBtn" class="add-person-btn">
+                        <i class="fas fa-user-plus"></i>
+                        Add Another Person
+                    </button>
+                </div>
+                
+                <!-- Documents -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="section-header-text">
+                            <h2>Required Documents</h2>
+                            <p>Upload supporting documents (PDF format preferred)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="document-upload">
+                        <div class="document-upload-icon">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h3>Financial Statements</h3>
+                        <p>Your latest audited financial statements</p>
+                        <input type="file" id="financialStatements" name="financialStatements" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    </div>
+                    
+                    <div class="document-upload">
+                        <div class="document-upload-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3>Balance Sheet</h3>
+                        <p>Most recent balance sheet showing assets and liabilities</p>
+                        <input type="file" id="balanceSheet" name="balanceSheet" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    </div>
+                    
+                    <div class="document-upload">
+                        <div class="document-upload-icon">
+                            <i class="fas fa-chart-area"></i>
+                        </div>
+                        <h3>Profit & Loss Statement</h3>
+                        <p>Latest P&L statement for the current financial year</p>
+                        <input type="file" id="profitLoss" name="profitLoss" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    </div>
+                    
+                    <div class="document-upload">
+                        <div class="document-upload-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Management Accounts</h3>
+                        <p>Current year management accounts</p>
+                        <input type="file" id="managementAccounts" name="managementAccounts" class="file-input" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                    </div>
+                    
+                    <div class="document-upload">
+                        <div class="document-upload-icon">
+                            <i class="fas fa-stamp"></i>
+                        </div>
+                        <h3>Tax Clearance Certificate</h3>
+                        <p>Valid tax clearance certificate from Revenue</p>
+                        <input type="file" id="taxCertificate" name="taxCertificate" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+                    </div>
+                </div>
+                
+                <!-- Declarations -->
+                <div class="form-section">
+                    <div class="declaration-section">
+                        <div class="section-header" style="border: none; padding-bottom: 0;">
+                            <div class="section-icon">
+                                <i class="fas fa-pen-fancy"></i>
+                            </div>
+                            <div class="section-header-text">
+                                <h2>Declarations</h2>
+                                <p>Please read and agree to the following declarations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="declaration-item">
+                            <div class="declaration-text">
+                                <strong><i class="fas fa-check-circle"></i> Information Accuracy:</strong> I confirm that the information provided in this application is true, accurate and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of my application and could have legal consequences.
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="declarationAccuracy" name="declarationAccuracy" required>
+                                <label for="declarationAccuracy" class="required">I confirm the information provided is correct and accurate</label>
+                            </div>
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> You must confirm the information is accurate</div>
+                        </div>
+                        
+                        <div class="declaration-item">
+                            <div class="declaration-text">
+                                <strong><i class="fas fa-search-dollar"></i> Credit Check Authorization:</strong> I authorize the selected financial institutions to perform credit checks and obtain credit reports from credit reference agencies in relation to this application. I understand that these checks will be recorded on my credit file.
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="declarationCreditCheck" name="declarationCreditCheck" required>
+                                <label for="declarationCreditCheck" class="required">I authorize the selected banks to perform credit checks</label>
+                            </div>
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> You must authorize credit checks</div>
+                        </div>
+                        
+                        <div class="declaration-item">
+                            <div class="declaration-text">
+                                <strong><i class="fas fa-shield-alt"></i> Data Storage Authorization:</strong> I consent to the storage and processing of my personal and business information for the purpose of processing this finance application. I understand that my data will be handled in accordance with GDPR and data protection regulations.
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="declarationDataStorage" name="declarationDataStorage" required>
+                                <label for="declarationDataStorage" class="required">I authorize the storage and processing of my information</label>
+                            </div>
+                            <div class="validation-error"><i class="fas fa-times-circle"></i> You must authorize data storage</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <footer>
+            <p><i class="fas fa-shield-alt"></i> Your information is secure and confidential | <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a></p>
+            <p style="margin-top: 10px;">Business Finance Portal &copy; 2024 | All data processed in accordance with GDPR</p>
+        </footer>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="confirmation-modal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Application Submitted Successfully!</h2>
+            <p>Your business finance application has been received and is now being processed. You will receive a confirmation email shortly with your application reference number and next steps.</p>
+            <p><strong>Application Reference:</strong> <span id="referenceNumber">BF-2024-58741</span></p>
+            <button type="button" id="modalCloseBtn" class="modal-close">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM elements
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const financeOptions = document.querySelectorAll('.finance-option');
+        const financeTypeInput = document.getElementById('financeType');
+        const bankOptions = document.querySelectorAll('.bank-option');
+        const selectedBanksInput = document.getElementById('selectedBanks');
+        const applyNowBtn = document.getElementById('applyNowBtn');
+        const applicationTabBtn = document.getElementById('applicationTabBtn');
+        const financeForm = document.getElementById('financeForm');
+        const peopleContainer = document.getElementById('peopleContainer');
+        const addPersonBtn = document.getElementById('addPersonBtn');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const quoteDetailsContainer = document.getElementById('quoteDetailsContainer');
+        
+        // Quotation Elements
+        const quotationSection = document.getElementById('quotationSection');
+        const quotationTitle = document.getElementById('quotationTitle');
+        const quotationIcon = document.getElementById('quotationIcon');
+        const hpFields = document.querySelectorAll('.hp-field');
+        const mortgageFields = document.querySelectorAll('.mortgage-field');
+        const purchasePriceInput = document.getElementById('purchasePrice');
+        const depositInput = document.getElementById('depositAmount');
+        const propertyValueInput = document.getElementById('propertyValue');
+        const downPaymentInput = document.getElementById('downPayment');
+        const loanAmountInput = document.getElementById('loanAmount');
+        const interestRateInput = document.getElementById('interestRate');
+        const loanTermInput = document.getElementById('loanTerm');
+        
+        // Chart Elements
+        const ctx = document.getElementById('repaymentChart').getContext('2d');
+        let repaymentChart;
+        
+        // State
+        let selectedFinanceType = '';
+        let selectedBanks = [];
+        let personCount = 1;
+        let quoteData = {};
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    
+                    // Don't allow switching to application tab if no quote data
+                    if (targetTab === 'application-tab' && !selectedFinanceType) {
+                        alert('Please complete the quotation section first by selecting a finance type and banks.');
+                        return;
+                    }
+                    
+                    switchTab(targetTab);
+                });
+            });
+
+            // Finance type selection
+            financeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    financeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    selectedFinanceType = this.getAttribute('data-type');
+                    financeTypeInput.value = selectedFinanceType;
+                    
+                    document.getElementById('financeTypeError').style.display = 'none';
+                    handleQuotationUI(selectedFinanceType);
+                });
+            });
+
+            // Calculation listeners
+            const calcInputs = [purchasePriceInput, depositInput, propertyValueInput, downPaymentInput, loanAmountInput, interestRateInput, loanTermInput];
+            calcInputs.forEach(input => {
+                input.addEventListener('input', calculateRepayments);
+            });
+            
+            // Bank selection
+            bankOptions.forEach(bank => {
+                bank.addEventListener('click', function() {
+                    const bankValue = this.getAttribute('data-bank');
+                    
+                    if (this.classList.contains('selected')) {
+                        this.classList.remove('selected');
+                        selectedBanks = selectedBanks.filter(b => b !== bankValue);
+                    } else {
+                        this.classList.add('selected');
+                        selectedBanks.push(bankValue);
+                    }
+                    
+                    selectedBanksInput.value = selectedBanks.join(',');
+                    document.getElementById('banksError').style.display = 'none';
+                });
+            });
+
+            // Apply Now button
+            applyNowBtn.addEventListener('click', function() {
+                if (!selectedFinanceType) {
+                    document.getElementById('financeTypeError').style.display = 'block';
+                    quotationSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    return;
+                }
+
+                if (selectedBanks.length === 0) {
+                    document.getElementById('banksError').style.display = 'block';
+                    document.querySelector('.bank-selection-wrapper').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    return;
+                }
+
+                // Store quote data
+                quoteData = {
+                    financeType: selectedFinanceType,
+                    selectedBanks: selectedBanks,
+                    loanAmount: loanAmountInput.value,
+                    interestRate: interestRateInput.value,
+                    loanTerm: loanTermInput.value,
+                    monthlyRepayment: document.getElementById('monthlyRepaymentDisplay').textContent,
+                    totalInterest: document.getElementById('totalInterestDisplay').textContent,
+                    totalPayable: document.getElementById('totalPayableDisplay').textContent,
+                    purchasePrice: selectedFinanceType === 'hire-purchase' ? purchasePriceInput.value : null,
+                    deposit: selectedFinanceType === 'hire-purchase' ? depositInput.value : null,
+                    propertyValue: selectedFinanceType === 'mortgage' ? propertyValueInput.value : null,
+                    downPayment: selectedFinanceType === 'mortgage' ? downPaymentInput.value : null,
+                    ltv: selectedFinanceType === 'mortgage' ? document.getElementById('ltvPercentage').textContent : null
+                };
+
+                // Mark quote tab as completed
+                document.querySelector('[data-tab="quote-tab"]').classList.add('completed');
+
+                // Switch to application tab
+                switchTab('application-tab');
+                displayQuoteSummary(quoteData);
+            });
+
+            // Add person button
+            addPersonBtn.addEventListener('click', addPerson);
+            
+            // Form submission
+            financeForm.addEventListener('submit', handleSubmit);
+            
+            // Modal close button
+            modalCloseBtn.addEventListener('click', function() {
+                confirmationModal.style.display = 'none';
+                // Reset form and return to quote tab
+                resetForm();
+                switchTab('quote-tab');
+            });
+        });
+
+        function switchTab(targetTab) {
+            // Update tab buttons
+            tabButtons.forEach(btn => {
+                if (btn.getAttribute('data-tab') === targetTab) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Update tab contents
+            tabContents.forEach(content => {
+                if (content.id === targetTab) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleQuotationUI(type) {
+            if (repaymentChart) {
+                repaymentChart.destroy();
+                repaymentChart = null;
+            }
+
+            selectedBanks = [];
+            selectedBanksInput.value = '';
+            bankOptions.forEach(bank => bank.classList.remove('selected'));
+
+            if (type === 'term-loan' || type === 'hire-purchase' || type === 'mortgage') {
+                quotationSection.classList.add('active');
+                interestRateInput.value = 5.50;
+
+                if (type === 'hire-purchase') {
+                    quotationTitle.textContent = "Hire Purchase Calculator";
+                    quotationIcon.className = "fas fa-truck-loading";
+                    hpFields.forEach(el => el.style.display = 'block');
+                    mortgageFields.forEach(el => el.style.display = 'none');
+                    loanAmountInput.readOnly = true;
+                    document.querySelector('.term-label').textContent = 'Term (Months)';
+                    loanTermInput.max = 120;
+                    loanTermInput.value = 12;
+                    purchasePriceInput.value = 20000;
+                    depositInput.value = 2000;
+                    calculateLoanAmountFromHP();
+                } else if (type === 'mortgage') {
+                    quotationTitle.textContent = "Mortgage Calculator";
+                    quotationIcon.className = "fas fa-building";
+                    mortgageFields.forEach(el => el.style.display = 'block');
+                    hpFields.forEach(el => el.style.display = 'none');
+                    loanAmountInput.readOnly = true;
+                    document.querySelector('.term-label').textContent = 'Term (Years)';
+                    loanTermInput.max = 30;
+                    loanTermInput.value = 20;
+                    propertyValueInput.value = 500000;
+                    downPaymentInput.value = 100000;
+                    calculateLoanAmountFromMortgage();
+                } else {
+                    quotationTitle.textContent = "Term Loan Calculator";
+                    quotationIcon.className = "fas fa-coins";
+                    hpFields.forEach(el => el.style.display = 'none');
+                    mortgageFields.forEach(el => el.style.display = 'none');
+                    loanAmountInput.readOnly = false;
+                    document.querySelector('.term-label').textContent = 'Term (Months)';
+                    loanTermInput.max = 120;
+                    loanTermInput.value = 12;
+                    loanAmountInput.value = 10000;
+                }
+                
+                calculateRepayments();
+            } else {
+                quotationSection.classList.remove('active');
+            }
+        }
+
+        function calculateLoanAmountFromHP() {
+            const price = parseFloat(purchasePriceInput.value) || 0;
+            const deposit = parseFloat(depositInput.value) || 0;
+            const loan = Math.max(0, price - deposit);
+            loanAmountInput.value = loan;
+            return loan;
+        }
+
+        function calculateLoanAmountFromMortgage() {
+            const propertyVal = parseFloat(propertyValueInput.value) || 0;
+            const downPay = parseFloat(downPaymentInput.value) || 0;
+            const loan = Math.max(0, propertyVal - downPay);
+            loanAmountInput.value = loan;
+            
+            if (propertyVal > 0) {
+                const ltv = (loan / propertyVal) * 100;
+                document.getElementById('ltvPercentage').textContent = ltv.toFixed(1) + '%';
+                document.getElementById('ltvFill').style.width = Math.min(ltv, 100) + '%';
+                document.getElementById('ltvText').textContent = ltv.toFixed(0) + '%';
+            }
+            
+            return loan;
+        }
+
+        function calculateRepayments() {
+            if (parseFloat(interestRateInput.value) > 20) {
+                interestRateInput.value = 20;
+            }
+
+            if (selectedFinanceType === 'hire-purchase') {
+                calculateLoanAmountFromHP();
+            } else if (selectedFinanceType === 'mortgage') {
+                calculateLoanAmountFromMortgage();
+            }
+
+            const principal = parseFloat(loanAmountInput.value) || 0;
+            const annualRate = parseFloat(interestRateInput.value) || 0;
+            let termMonths = parseInt(loanTermInput.value) || 12;
+            
+            if (selectedFinanceType === 'mortgage') {
+                termMonths = termMonths * 12;
+            }
+
+            if (principal <= 0 || annualRate <= 0 || termMonths <= 0) return;
+
+            const monthlyRate = (annualRate / 100) / 12;
+            const monthlyPayment = principal * ((monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1));
+            const totalPayable = monthlyPayment * termMonths;
+            const totalInterest = totalPayable - principal;
+
+            document.getElementById('monthlyRepaymentDisplay').textContent = '€' + monthlyPayment.toFixed(2);
+            document.getElementById('totalInterestDisplay').textContent = '€' + totalInterest.toFixed(2);
+            document.getElementById('totalPayableDisplay').textContent = '€' + totalPayable.toFixed(2);
+
+            generateChartData(principal, monthlyRate, monthlyPayment, termMonths);
+        }
+
+        function generateChartData(principal, monthlyRate, monthlyPayment, termMonths) {
+            const labels = [];
+            const interestData = [];
+            const capitalData = [];
+            let balance = principal;
+            
+            const isMortgage = selectedFinanceType === 'mortgage';
+            const showYearly = isMortgage && termMonths > 24;
+            const step = showYearly ? 12 : 1;
+
+            for (let i = step; i <= termMonths; i += step) {
+                labels.push(showYearly ? 'Year ' + (i / 12) : 'Month ' + i);
+                
+                let periodInterest = 0;
+                let periodCapital = 0;
+                
+                for (let j = 0; j < step && (i - step + j) < termMonths; j++) {
+                    const interestPart = balance * monthlyRate;
+                    const capitalPart = monthlyPayment - interestPart;
+                    periodInterest += interestPart;
+                    periodCapital += capitalPart;
+                    balance -= capitalPart;
+                }
+                
+                interestData.push(periodInterest);
+                capitalData.push(periodCapital);
+            }
+
+            renderChart(labels, interestData, capitalData);
+        }
+
+        function renderChart(labels, interestData, capitalData) {
+            if (repaymentChart) {
+                repaymentChart.data.labels = labels;
+                repaymentChart.data.datasets[0].data = capitalData;
+                repaymentChart.data.datasets[1].data = interestData;
+                repaymentChart.update();
+            } else {
+                repaymentChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Capital Repayment',
+                                data: capitalData,
+                                backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                            },
+                            {
+                                label: 'Interest Repayment',
+                                data: interestData,
+                                backgroundColor: 'rgba(118, 75, 162, 0.8)',
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true },
+                            y: { 
+                                stacked: true,
+                                title: { display: true, text: 'Amount (€)' }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) label += ': ';
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function displayQuoteSummary(data) {
+            let html = '';
+            
+            const financeTypeNames = {
+                'term-loan': 'Term Loan',
+                'hire-purchase': 'Hire Purchase',
+                'mortgage': 'Commercial Mortgage',
+                'overdraft': 'Overdraft Facility'
+            };
+            
+            html += `
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-tag"></i> Finance Type</div>
+                    <div class="quote-detail-value">${financeTypeNames[data.financeType] || data.financeType}</div>
+                </div>
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-euro-sign"></i> Loan Amount</div>
+                    <div class="quote-detail-value">€${parseFloat(data.loanAmount).toLocaleString()}</div>
+                </div>
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-percent"></i> Interest Rate</div>
+                    <div class="quote-detail-value">${data.interestRate}%</div>
+                </div>
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-calendar"></i> Term</div>
+                    <div class="quote-detail-value">${data.loanTerm} ${data.financeType === 'mortgage' ? 'Years' : 'Months'}</div>
+                </div>
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-calendar-check"></i> Monthly Payment</div>
+                    <div class="quote-detail-value">${data.monthlyRepayment}</div>
+                </div>
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-receipt"></i> Total Payable</div>
+                    <div class="quote-detail-value">${data.totalPayable}</div>
+                </div>
+                <div class="quote-detail-item">
+                    <div class="quote-detail-label"><i class="fas fa-university"></i> Selected Banks</div>
+                    <div class="quote-detail-value" style="font-size: 1.1rem;">${data.selectedBanks.join(', ')}</div>
+                </div>
+            `;
+
+            if (data.financeType === 'mortgage' && data.ltv) {
+                html += `
+                    <div class="quote-detail-item">
+                        <div class="quote-detail-label"><i class="fas fa-chart-pie"></i> LTV Ratio</div>
+                        <div class="quote-detail-value">${data.ltv}</div>
+                    </div>
+                `;
+            }
+
+            quoteDetailsContainer.innerHTML = html;
+        }
+
+        function addPerson() {
+            personCount++;
+            
+            const personEntry = document.createElement('div');
+            personEntry.className = 'person-entry';
+            personEntry.innerHTML = `
+                <div class="person-header">
+                    <div class="person-title">
+                        <i class="fas fa-user-circle"></i>
+                        Person #${personCount}
+                    </div>
+                    <button type="button" class="remove-person"><i class="fas fa-times"></i> Remove</button>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="person${personCount}Name" class="required"><i class="fas fa-signature"></i> Full Name</label>
+                        <input type="text" id="person${personCount}Name" name="people[${personCount-1}][name]" required placeholder="Enter full legal name">
+                        <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter the person's name</div>
+                    </div>
+                    
+                    <div class="form-group half">
+                        <label for="person${personCount}Address" class="required"><i class="fas fa-home"></i> Address</label>
+                        <input type="text" id="person${personCount}Address" name="people[${personCount-1}][address]" required placeholder="Enter residential address">
+                        <div class="validation-error"><i class="fas fa-times-circle"></i> Please enter the person's address</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-user-tag"></i> Role in Company</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="person${personCount}Director" name="people[${personCount-1}][director]" value="true">
+                            <label for="person${personCount}Director"><i class="fas fa-user-tie"></i> Director</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="person${personCount}Shareholder" name="people[${personCount-1}][shareholder]" value="true">
+                            <label for="person${personCount}Shareholder"><i class="fas fa-chart-pie"></i> Shareholder (20%+ ownership)</label>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            peopleContainer.appendChild(personEntry);
+            
+            const removeBtn = personEntry.querySelector('.remove-person');
+            removeBtn.addEventListener('click', function() {
+                personEntry.remove();
+            });
+            
+            personEntry.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (validateForm()) {
+                const refNumber = 'BF-' + new Date().getFullYear() + '-' + Math.floor(10000 + Math.random() * 90000);
+                document.getElementById('referenceNumber').textContent = refNumber;
+                
+                confirmationModal.style.display = 'flex';
+                
+                const formData = new FormData(financeForm);
+                const data = { quoteData };
+                
+                for (let [key, value] of formData.entries()) {
+                    if (key.includes('[') && key.includes(']')) {
+                        const match = key.match(/(\w+)\[(\d+)\]\[(\w+)\]/);
+                        if (match) {
+                            const arrayName = match[1];
+                            const index = match[2];
+                            const property = match[3];
+                            
+                            if (!data[arrayName]) data[arrayName] = [];
+                            if (!data[arrayName][index]) data[arrayName][index] = {};
+                            
+                            data[arrayName][index][property] = value;
+                        }
+                    } else {
+                        data[key] = value;
+                    }
+                }
+                
+                console.log('Complete Application Data:', data);
+            }
+        }
+
+        function validateForm() {
+            let isValid = true;
+            
+            const businessFields = ['businessName', 'businessAddress', 'companyNumber', 'taxNumber'];
+            businessFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const formGroup = field.closest('.form-group');
+                
+                if (!field.value.trim()) {
+                    formGroup.classList.add('error');
+                    isValid = false;
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            });
+            
+            const personNames = document.querySelectorAll('input[name^="people"][name$="[name]"]');
+            const personAddresses = document.querySelectorAll('input[name^="people"][name$="[address]"]');
+            
+            for (let i = 0; i < personNames.length; i++) {
+                const nameField = personNames[i];
+                const addressField = personAddresses[i];
+                const nameGroup = nameField.closest('.form-group');
+                const addressGroup = addressField.closest('.form-group');
+                
+                if (!nameField.value.trim()) {
+                    nameGroup.classList.add('error');
+                    isValid = false;
+                } else {
+                    nameGroup.classList.remove('error');
+                }
+
+                if (!addressField.value.trim()) {
+                    addressGroup.classList.add('error');
+                    isValid = false;
+                } else {
+                    addressGroup.classList.remove('error');
+                }
+            }
+            
+            const declarations = ['declarationAccuracy', 'declarationCreditCheck', 'declarationDataStorage'];
+            declarations.forEach(declarationId => {
+                const checkbox = document.getElementById(declarationId);
+                const formGroup = checkbox.closest('.declaration-item');
+                
+                if (!checkbox.checked) {
+                    formGroup.classList.add('error');
+                    isValid = false;
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            });
+            
+            if (!isValid) {
+                const firstError = document.querySelector('.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+            
+            return isValid;
+        }
+
+        function resetForm() {
+            financeForm.reset();
+            financeOptions.forEach(opt => opt.classList.remove('selected'));
+            bankOptions.forEach(bank => bank.classList.remove('selected'));
+            selectedFinanceType = '';
+            selectedBanks = [];
+            financeTypeInput.value = '';
+            selectedBanksInput.value = '';
+            quotationSection.classList.remove('active');
+            personCount = 1;
+            const peopleEntries = document.querySelectorAll('.person-entry');
+            for (let i = 1; i < peopleEntries.length; i++) {
+                peopleEntries[i].remove();
+            }
+            document.querySelector('[data-tab="quote-tab"]').classList.remove('completed');
+            
+            // Clear all error states
+            document.querySelectorAll('.form-group.error, .declaration-item.error').forEach(el => {
+                el.classList.remove('error');
+            });
+        }
+    </script>
+</body>
+</html>

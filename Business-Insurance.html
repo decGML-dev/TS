@@ -1,0 +1,1848 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Business Insurance Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --bg-secondary:#f1f5f9;
+      --card:#ffffff;
+      --panel:#fafbfc;
+      --text:#0f172a;
+      --text-secondary:#334155;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --line-dark:#cbd5e1;
+      --accent:#6366f1;
+      --accent-dark:#4f46e5;
+      --accent-light:#818cf8;
+      --accent2:#8b5cf6;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --good:#10b981;
+      --shadow: 0 4px 12px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.04);
+      --shadow-lg: 0 8px 24px rgba(15,23,42,.12), 0 4px 10px rgba(15,23,42,.06);
+      --radius:18px;
+      --font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; 
+      font-family:var(--font); 
+      color:var(--text);
+      background:
+        radial-gradient(ellipse 1200px 800px at 20% -10%, rgba(99,102,241,.08), transparent 60%),
+        radial-gradient(ellipse 1000px 600px at 85% 15%, rgba(139,92,246,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg-secondary));
+      line-height: 1.6;
+    }
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 24px}
+    
+    header{
+      display:flex; 
+      justify-content:space-between; 
+      gap:20px; 
+      align-items:flex-start;
+      padding:24px; 
+      border:2px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius); 
+      box-shadow:var(--shadow);
+      margin-bottom: 24px;
+    }
+    header h1{
+      margin:0 0 8px; 
+      font-family: 'Fraunces', serif;
+      font-size:26px;
+      font-weight: 600;
+      letter-spacing: -.3px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header .sub{
+      margin:0; 
+      color:var(--text-secondary); 
+      font-size:14px; 
+      line-height:1.6;
+      font-weight: 400;
+    }
+    .toolbar{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      justify-content:flex-end;
+    }
+    
+    button{
+      cursor:pointer; 
+      user-select:none;
+      border:2px solid var(--line); 
+      background: var(--bg); 
+      color:var(--text);
+      padding:12px 20px; 
+      border-radius:14px; 
+      font-weight:700; 
+      font-size:14px;
+      font-family: inherit;
+      transition:all .2s ease;
+    }
+    button:hover{
+      background:var(--bg-secondary); 
+      border-color:var(--line-dark);
+      box-shadow: 0 2px 8px rgba(15,23,42,.06);
+    }
+    button:active{transform:scale(0.98)}
+    
+    button.primary{
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%); 
+      border-color:var(--accent);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99,102,241,.25);
+    }
+    button.primary:hover{
+      box-shadow: 0 6px 20px rgba(99,102,241,.35);
+      transform: translateY(-2px);
+    }
+    button.primary:active{
+      transform: translateY(0);
+    }
+    
+    button.danger{
+      background:rgba(239,68,68,.1); 
+      border-color:rgba(239,68,68,.3);
+      color: var(--bad);
+    }
+    button.danger:hover{
+      background:rgba(239,68,68,.15);
+      border-color:rgba(239,68,68,.4);
+    }
+
+    .grid{
+      margin-top:0; 
+      display:grid; 
+      grid-template-columns:380px 1fr; 
+      gap:24px; 
+      align-items:start;
+    }
+    @media (max-width:980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      border:2px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius); 
+      box-shadow:var(--shadow); 
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0; 
+      font-size:16px; 
+      font-weight: 700;
+      letter-spacing:.2px;
+      padding:18px 20px; 
+      border-bottom:2px solid var(--line);
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      gap:16px;
+      background: var(--panel);
+    }
+    .pill{
+      font-size:12px; 
+      color:var(--text-secondary);
+      font-weight: 600;
+      border:2px solid var(--line); 
+      border-radius:999px;
+      padding:6px 12px; 
+      background: var(--card); 
+      white-space:nowrap;
+    }
+    .body{padding:20px}
+
+    .products{display:grid; gap:12px}
+    .product{
+      border:2px solid var(--line); 
+      border-radius:16px; 
+      padding:16px;
+      background: var(--card);
+      display:flex; 
+      gap:14px; 
+      align-items:flex-start;
+      transition:all .25s ease;
+      cursor: pointer;
+    }
+    .product:hover{
+      border-color:var(--accent-light); 
+      background:rgba(99,102,241,.03);
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(99,102,241,.08);
+    }
+    .product input{
+      margin-top:3px; 
+      transform:scale(1.3); 
+      accent-color:var(--accent);
+      cursor: pointer;
+    }
+    .product .title{
+      margin:0 0 6px; 
+      font-weight:700; 
+      font-size:14px;
+      color: var(--text);
+    }
+    .product .desc{
+      margin:0; 
+      color:var(--text-secondary); 
+      font-size:13px; 
+      line-height:1.5;
+      font-weight: 400;
+    }
+
+    .notice{
+      border:2px dashed var(--line-dark);
+      border-radius:14px; 
+      padding:14px;
+      background:rgba(99,102,241,.04);
+      color:var(--text-secondary); 
+      font-size:13px; 
+      line-height:1.6;
+      font-weight: 400;
+    }
+
+    .section{
+      padding:20px;
+      border-top:2px solid var(--line);
+      background: var(--card);
+    }
+    .section:first-child{border-top:none}
+    .section h3{
+      margin:0 0 16px; 
+      font-size:15px; 
+      font-weight: 700;
+      letter-spacing:.15px;
+      display:flex; 
+      align-items:center; 
+      gap:12px;
+      color: var(--text);
+    }
+    .tag{
+      font-size:11px; 
+      color:var(--accent-dark);
+      font-weight: 700;
+      border:2px solid var(--accent-light); 
+      padding:4px 10px; 
+      border-radius:999px;
+      background:rgba(99,102,241,.08);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    .row{
+      display:grid; 
+      grid-template-columns:1fr 1fr; 
+      gap:16px; 
+      margin-top:12px;
+    }
+    @media (max-width:720px){.row{grid-template-columns:1fr}}
+
+    .field{display:flex; flex-direction:column; gap:8px; min-width:0}
+    label{
+      font-size:13px; 
+      color:var(--text); 
+      line-height:1.3;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    
+    input[type="text"], 
+    input[type="number"], 
+    input[type="date"], 
+    input[type="email"], 
+    textarea, 
+    select{
+      width:100%; 
+      padding:12px 14px;
+      border-radius:14px; 
+      border:2px solid var(--line);
+      background: var(--card); 
+      color:var(--text); 
+      outline:none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      transition: all .25s ease;
+    }
+    textarea{min-height:92px; resize:vertical}
+    
+    input:focus, textarea:focus, select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(99,102,241,.15);
+      background: var(--card);
+    }
+    input:hover:not(:focus), textarea:hover:not(:focus), select:hover:not(:focus){
+      border-color:var(--line-dark);
+    }
+    
+    input::placeholder, textarea::placeholder{
+      color: var(--muted);
+      font-weight: 400;
+    }
+    
+    .yesno{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      align-items:center;
+      padding:12px 14px; 
+      border-radius:14px;
+      border:2px solid var(--line);
+      background: var(--card);
+      transition: all .25s ease;
+    }
+    .yesno:hover{
+      border-color:var(--line-dark);
+    }
+    .yesno label{
+      margin:0; 
+      color:var(--text); 
+      font-size:14px; 
+      font-weight: 600;
+      text-transform: none;
+      letter-spacing: normal;
+      display:flex; 
+      align-items:center; 
+      gap:8px; 
+      cursor:pointer;
+    }
+    .yesno input{
+      accent-color:var(--accent);
+      transform: scale(1.2);
+      cursor: pointer;
+    }
+    .inline-help{
+      color:var(--muted); 
+      font-size:12px; 
+      line-height:1.5; 
+      margin:6px 0 0;
+      font-weight: 400;
+    }
+
+    .table{
+      overflow:auto; 
+      border:2px solid var(--line);
+      border-radius:14px; 
+      background: var(--panel); 
+      margin-top:12px;
+    }
+    table{
+      width:100%; 
+      border-collapse:collapse; 
+      min-width:900px;
+    }
+    th,td{
+      border-bottom:1px solid var(--line); 
+      padding:12px; 
+      font-size:13px; 
+      vertical-align:top;
+    }
+    th{
+      position:sticky; 
+      top:0; 
+      z-index:1; 
+      background: var(--bg-secondary); 
+      text-align:left;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      font-size: 12px;
+    }
+    td input, td textarea, td select{
+      background: var(--card); 
+      border-color:var(--line);
+      border-radius:12px; 
+      padding:10px 12px; 
+      font-size:13px;
+    }
+    td textarea{min-height:54px}
+
+    /* Top-level product tabs */
+    .ptabs{
+      display:flex; 
+      gap:10px; 
+      flex-wrap:wrap;
+      padding:16px 16px 0;
+      border-bottom:2px solid var(--line);
+      background: var(--panel);
+    }
+    .ptab{
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text-secondary);
+      padding:11px 16px; 
+      border-radius:14px;
+      font-weight:700; 
+      font-size:13px; 
+      letter-spacing:.15px;
+      transition: all .25s ease;
+      cursor: pointer;
+    }
+    .ptab:hover{
+      border-color:var(--line-dark);
+      background: var(--bg-secondary);
+    }
+    .ptab[aria-selected="true"]{
+      color: white;
+      border-color:var(--accent);
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      box-shadow: 0 2px 8px rgba(99,102,241,.25);
+    }
+    .ppanel{display:none}
+    .ppanel.active{display:block}
+
+    /* PI inner tabs */
+    .tabs{
+      display:flex; 
+      gap:10px; 
+      flex-wrap:wrap;
+      padding:16px 16px 0;
+      border-bottom:2px solid var(--line);
+      background: var(--panel);
+    }
+    .tab{
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text-secondary);
+      padding:11px 16px; 
+      border-radius:14px;
+      font-weight:700; 
+      font-size:13px; 
+      letter-spacing:.15px;
+      transition: all .25s ease;
+      cursor: pointer;
+    }
+    .tab:hover{
+      border-color:var(--line-dark);
+      background: var(--bg-secondary);
+    }
+    .tab[aria-selected="true"]{
+      color: white;
+      border-color:var(--accent);
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      box-shadow: 0 2px 8px rgba(99,102,241,.25);
+    }
+    .tabpanel{display:none}
+    .tabpanel.active{display:block}
+
+    .hidden{display:none !important}
+
+    /* Thick authorization box */
+    .thick-box{
+      border:4px solid var(--accent);
+      border-radius:16px; 
+      padding:18px;
+      background:rgba(99,102,241,.05);
+      margin-top:16px;
+    }
+    .thick-box .cb{
+      display:flex; 
+      gap:14px; 
+      align-items:flex-start;
+    }
+    .thick-box input{
+      margin-top:4px; 
+      transform:scale(1.5); 
+      accent-color:var(--accent);
+      cursor: pointer;
+    }
+    .thick-box p{
+      margin:0; 
+      color:var(--text); 
+      font-size:14px; 
+      line-height:1.6; 
+      font-weight:600;
+    }
+
+    .statusbar{
+      display:flex; 
+      align-items:center; 
+      justify-content:space-between; 
+      gap:16px;
+      padding:14px 20px; 
+      border-top:2px solid var(--line);
+      color:var(--text-secondary); 
+      font-size:13px; 
+      background: var(--panel);
+      font-weight: 500;
+    }
+    .status{
+      display:flex; 
+      align-items:center; 
+      gap:10px; 
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:12px; 
+      height:12px; 
+      border-radius:999px; 
+      background:var(--muted); 
+      box-shadow:0 0 0 4px rgba(100,116,139,.1);
+      transition: all .3s ease;
+    }
+    .dot.good{
+      background:var(--good); 
+      box-shadow:0 0 0 4px rgba(16,185,129,.15);
+    }
+    .dot.bad{
+      background:var(--bad); 
+      box-shadow:0 0 0 4px rgba(239,68,68,.15);
+    }
+    .req::after{
+      content:" *"; 
+      color:var(--warn); 
+      font-weight:900;
+    }
+    .err{
+      border-color:var(--bad)!important; 
+      box-shadow:0 0 0 4px rgba(239,68,68,.15)!important;
+      background: rgba(239,68,68,.05)!important;
+    }
+
+    @media print{
+      body{background:#fff; color:#000}
+      header, .toolbar, .products, .notice, .statusbar{display:none !important}
+      .card{box-shadow:none; border-color:#ccc}
+      input, textarea, select{border:1px solid #999; background:#fff; color:#000}
+      .ptabs,.tabs{display:none !important}
+      .ppanel,.tabpanel{display:block !important}
+      .thick-box{border-color:#000; background:#fff}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Business Insurance Application</h1>
+        <p class="sub">Select products on the left. Tabs appear for the products you select.</p>
+      </div>
+      <div class="toolbar">
+        <button class="primary" id="btnValidate">Validate</button>
+        <button id="btnPrint">Print</button>
+        <button class="danger" id="btnReset">Reset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <h2>
+          Product selection
+          <span class="pill" id="selectedCount">0 selected</span>
+        </h2>
+        <div class="body">
+          <div class="products" id="products">
+            <div class="product">
+              <input type="checkbox" id="p_vehicle" name="products.vehicle" />
+              <div><p class="title">Vehicle</p><p class="desc">Single business vehicle cover request.</p></div>
+            </div>
+            <div class="product">
+              <input type="checkbox" id="p_fleet" name="products.fleet" />
+              <div><p class="title">Fleet</p><p class="desc">Multiple vehicles under one policy.</p></div>
+            </div>
+            <div class="product">
+              <input type="checkbox" id="p_property" name="products.property" />
+              <div><p class="title">Property Insurance</p><p class="desc">Buildings, contents, stock and premises.</p></div>
+            </div>
+            <div class="product">
+              <input type="checkbox" id="p_business" name="products.business" />
+              <div><p class="title">Business Insurance</p><p class="desc">Liability / interruption / package.</p></div>
+            </div>
+            <div class="product">
+              <input type="checkbox" id="p_pi" name="products.professionalIndemnity" />
+              <div><p class="title">Professional Indemnity</p><p class="desc">Tabbed proposal form.</p></div>
+            </div>
+            <div class="product">
+              <input type="checkbox" id="p_directors" name="products.directors" />
+              <div><p class="title">Directors Insurance</p><p class="desc">Directors & Officers cover request.</p></div>
+            </div>
+          </div>
+
+          <div class="thick-box" style="margin-top:18px;">
+            <div class="cb">
+              <input type="checkbox" id="authConsent" name="authorisation.consent" />
+              <p>
+                I authorise ABC Financial to contact me in relation to the requested product/Service and any such
+                Product/Service that may arise from a financial Review. I authorise ABC Financial to retain data as
+                requires to provide this service.
+              </p>
+            </div>
+            <p class="inline-help" style="margin-top:10px;">This authorisation is required to submit.</p>
+          </div>
+
+          <div class="notice" style="margin-top:14px;">
+            Autosaves as you type to your browser's local storage. Use Print to save as PDF.
+          </div>
+        </div>
+
+        <div class="statusbar">
+          <div class="status">
+            <span class="dot" id="statusDot"></span>
+            <span id="statusText">Not validated</span>
+          </div>
+          <span id="saveText">Saved: —</span>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <h2>
+          Application details
+          <span class="pill" id="activePanelPill">General</span>
+        </h2>
+
+        <!-- Top-level product tabs (dynamic) -->
+        <div class="ptabs" id="productTabs" role="tablist" aria-label="Product Tabs">
+          <!-- injected -->
+        </div>
+
+        <!-- Panels -->
+        <div class="ppanel active" id="panel_general" data-panel="general">
+          <div class="section">
+            <h3>Applicant details <span class="tag">All products</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req" for="applicantName">Applicant full name</label>
+                <input id="applicantName" name="applicant.name" type="text" placeholder="Jane Doe" />
+              </div>
+              <div class="field">
+                <label class="req" for="companyName">Business / Trading name</label>
+                <input id="companyName" name="applicant.businessName" type="text" placeholder="ABC Financial Ltd" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req" for="email">Email</label>
+                <input id="email" name="applicant.email" type="email" placeholder="name@company.com" />
+              </div>
+              <div class="field">
+                <label class="req" for="phone">Phone</label>
+                <input id="phone" name="applicant.phone" type="text" placeholder="+353 ..." />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="preferredContact">Preferred contact method</label>
+                <select id="preferredContact" name="applicant.preferredContact">
+                  <option value="">Select…</option>
+                  <option>Email</option>
+                  <option>Phone</option>
+                </select>
+                <p class="inline-help">Used for all selected products.</p>
+              </div>
+              <div class="field">
+                <label for="notes">Notes / special requirements</label>
+                <textarea id="notes" name="applicant.notes" placeholder="Anything you want us to consider..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Common risk details <span class="tag">Optional</span></h3>
+            <div class="row">
+              <div class="field">
+                <label for="riskAddress">Risk address (if relevant)</label>
+                <textarea id="riskAddress" name="other.riskAddress" placeholder="Property location(s), vehicle garaging address, etc."></textarea>
+              </div>
+              <div class="field">
+                <label for="coverStart">Preferred cover start date</label>
+                <input id="coverStart" name="other.preferredStartDate" type="date" />
+                <label for="sumInsured" style="margin-top:12px;">Indicative sum insured / limit (optional)</label>
+                <input id="sumInsured" name="other.indicativeSumInsured" type="text" placeholder="e.g., €1,000,000" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VEHICLE -->
+        <div class="ppanel" id="panel_vehicle" data-panel="vehicle">
+          <div class="section">
+            <h3>Vehicle details <span class="tag">Vehicle</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Registration</label>
+                <input name="vehicle.registration" type="text" placeholder="e.g., 201-D-12345" />
+              </div>
+              <div class="field">
+                <label class="req">Make / Model</label>
+                <input name="vehicle.makeModel" type="text" placeholder="e.g., Ford Transit" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Year</label>
+                <input name="vehicle.year" type="number" min="1900" max="2100" />
+              </div>
+              <div class="field">
+                <label>Estimated value (€)</label>
+                <input name="vehicle.value" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Use</label>
+                <select name="vehicle.use">
+                  <option value="">Select…</option>
+                  <option>Social, Domestic & Pleasure</option>
+                  <option>Social, Domestic & Pleasure + Commuting</option>
+                  <option>Business Use (excluding commercial carriage)</option>
+                  <option>Commercial Carriage / Hire & Reward</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="req">Overnight parking</label>
+                <select name="vehicle.parking">
+                  <option value="">Select…</option>
+                  <option>Garage</option>
+                  <option>Driveway</option>
+                  <option>Gated yard</option>
+                  <option>Street</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Drivers & claims <span class="tag">Vehicle</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Primary driver name</label>
+                <input name="vehicle.driver.primaryName" type="text" />
+              </div>
+              <div class="field">
+                <label>Licence type / held since</label>
+                <input name="vehicle.driver.licenceDetails" type="text" placeholder="e.g., Full / 2010" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Any claims or convictions (last 5 years)?</label>
+                <div class="yesno">
+                  <label><input type="radio" name="vehicle.claims.any" value="Yes"> Yes</label>
+                  <label><input type="radio" name="vehicle.claims.any" value="No"> No</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Details (if Yes)</label>
+                <textarea name="vehicle.claims.details" placeholder="Dates, amounts, circumstances, outcome…"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FLEET -->
+        <div class="ppanel" id="panel_fleet" data-panel="fleet">
+          <div class="section">
+            <h3>Fleet overview <span class="tag">Fleet</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Number of vehicles</label>
+                <input name="fleet.vehicleCount" type="number" min="1" />
+              </div>
+              <div class="field">
+                <label class="req">Primary business use</label>
+                <input name="fleet.primaryUse" type="text" placeholder="e.g., deliveries, sales, service vans" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Radius of operation</label>
+                <select name="fleet.radius">
+                  <option value="">Select…</option>
+                  <option>Local (≤ 25km)</option>
+                  <option>Regional (≤ 100km)</option>
+                  <option>National</option>
+                  <option>UK / EU</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Garaging / yard security</label>
+                <input name="fleet.security" type="text" placeholder="e.g., gated yard, CCTV, alarm" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Fleet schedule <span class="tag">Fleet</span></h3>
+            <div class="notice">Add key vehicles. If you need more rows, duplicate in code or extend with "Add row".</div>
+            <div class="table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Registration</th>
+                    <th>Make / Model</th>
+                    <th>Year</th>
+                    <th>Value (€)</th>
+                    <th>Use / Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input name="fleet.schedule.0.reg" type="text"></td>
+                    <td><input name="fleet.schedule.0.makeModel" type="text"></td>
+                    <td><input name="fleet.schedule.0.year" type="number" min="1900" max="2100"></td>
+                    <td><input name="fleet.schedule.0.value" type="number" min="0" step="0.01"></td>
+                    <td><textarea name="fleet.schedule.0.notes"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td><input name="fleet.schedule.1.reg" type="text"></td>
+                    <td><input name="fleet.schedule.1.makeModel" type="text"></td>
+                    <td><input name="fleet.schedule.1.year" type="number" min="1900" max="2100"></td>
+                    <td><input name="fleet.schedule.1.value" type="number" min="0" step="0.01"></td>
+                    <td><textarea name="fleet.schedule.1.notes"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td><input name="fleet.schedule.2.reg" type="text"></td>
+                    <td><input name="fleet.schedule.2.makeModel" type="text"></td>
+                    <td><input name="fleet.schedule.2.year" type="number" min="1900" max="2100"></td>
+                    <td><input name="fleet.schedule.2.value" type="number" min="0" step="0.01"></td>
+                    <td><textarea name="fleet.schedule.2.notes"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label class="req">Any fleet claims (last 5 years)?</label>
+                <div class="yesno">
+                  <label><input type="radio" name="fleet.claims.any" value="Yes"> Yes</label>
+                  <label><input type="radio" name="fleet.claims.any" value="No"> No</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Details (if Yes)</label>
+                <textarea name="fleet.claims.details"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROPERTY -->
+        <div class="ppanel" id="panel_property" data-panel="property">
+          <div class="section">
+            <h3>Premises & sums insured <span class="tag">Property</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Property address(es)</label>
+                <textarea name="property.addresses" placeholder="List each location (one per line)"></textarea>
+              </div>
+              <div class="field">
+                <label class="req">Occupancy / use</label>
+                <input name="property.occupancy" type="text" placeholder="e.g., office, retail, warehouse, mixed" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Buildings sum insured (€)</label>
+                <input name="property.sums.buildings" type="number" min="0" step="0.01" />
+              </div>
+              <div class="field">
+                <label>Contents sum insured (€)</label>
+                <input name="property.sums.contents" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Stock sum insured (€)</label>
+                <input name="property.sums.stock" type="number" min="0" step="0.01" />
+              </div>
+              <div class="field">
+                <label>Business interruption (gross profit) (€)</label>
+                <input name="property.sums.bi" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Construction & protections <span class="tag">Property</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Construction type</label>
+                <select name="property.construction">
+                  <option value="">Select…</option>
+                  <option>Standard (brick / block / concrete)</option>
+                  <option>Timber frame</option>
+                  <option>Composite / cladding</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Year built / last major refurbishment</label>
+                <input name="property.yearBuiltOrRefurb" type="text" placeholder="e.g., 1998 / refurbished 2019" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Security</label>
+                <input name="property.security" type="text" placeholder="e.g., alarm, CCTV, shutters, monitored" />
+              </div>
+              <div class="field">
+                <label>Fire protections</label>
+                <input name="property.fireProtection" type="text" placeholder="e.g., extinguishers, sprinklers, detectors" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Any property claims (last 5 years)?</label>
+                <div class="yesno">
+                  <label><input type="radio" name="property.claims.any" value="Yes"> Yes</label>
+                  <label><input type="radio" name="property.claims.any" value="No"> No</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Details (if Yes)</label>
+                <textarea name="property.claims.details"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUSINESS -->
+        <div class="ppanel" id="panel_business" data-panel="business">
+          <div class="section">
+            <h3>Business overview <span class="tag">Business</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Nature of business</label>
+                <input name="business.nature" type="text" placeholder="What do you do?" />
+              </div>
+              <div class="field">
+                <label class="req">Annual turnover (€)</label>
+                <input name="business.turnover" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Employees (count)</label>
+                <input name="business.employees" type="number" min="0" />
+              </div>
+              <div class="field">
+                <label>Payroll (€) (optional)</label>
+                <input name="business.payroll" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Liability & limits <span class="tag">Business</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Public liability limit requested (€)</label>
+                <select name="business.liability.publicLimit">
+                  <option value="">Select…</option>
+                  <option>€1,000,000</option>
+                  <option>€2,600,000</option>
+                  <option>€5,000,000</option>
+                  <option>€10,000,000</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Employers liability limit requested (€)</label>
+                <select name="business.liability.employersLimit">
+                  <option value="">Select…</option>
+                  <option>€5,000,000</option>
+                  <option>€10,000,000</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Products liability included?</label>
+                <div class="yesno">
+                  <label><input type="radio" name="business.liability.productsIncluded" value="Yes"> Yes</label>
+                  <label><input type="radio" name="business.liability.productsIncluded" value="No"> No</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Describe products / services & any special hazards</label>
+                <textarea name="business.liability.hazards"></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Any liability claims (last 5 years)?</label>
+                <div class="yesno">
+                  <label><input type="radio" name="business.claims.any" value="Yes"> Yes</label>
+                  <label><input type="radio" name="business.claims.any" value="No"> No</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Details (if Yes)</label>
+                <textarea name="business.claims.details"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Business interruption <span class="tag">Business</span></h3>
+            <div class="row">
+              <div class="field">
+                <label>Indemnity period</label>
+                <select name="business.bi.indemnityPeriod">
+                  <option value="">Select…</option>
+                  <option>3 months</option>
+                  <option>6 months</option>
+                  <option>12 months</option>
+                  <option>24 months</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Gross profit / revenue to insure (€)</label>
+                <input name="business.bi.grossProfit" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DIRECTORS -->
+        <div class="ppanel" id="panel_directors" data-panel="directors">
+          <div class="section">
+            <h3>Company & directors <span class="tag">Directors</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Company legal name</label>
+                <input name="directors.companyName" type="text" />
+              </div>
+              <div class="field">
+                <label>Company registration number</label>
+                <input name="directors.cro" type="text" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Industry / activities</label>
+                <input name="directors.industry" type="text" />
+              </div>
+              <div class="field">
+                <label class="req">Requested D&O limit (€)</label>
+                <select name="directors.limit">
+                  <option value="">Select…</option>
+                  <option>€1,000,000</option>
+                  <option>€2,500,000</option>
+                  <option>€5,000,000</option>
+                  <option>€10,000,000</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Financials & history <span class="tag">Directors</span></h3>
+            <div class="row">
+              <div class="field">
+                <label>Annual turnover (€)</label>
+                <input name="directors.financials.turnover" type="number" min="0" step="0.01" />
+              </div>
+              <div class="field">
+                <label>Net assets (€) (optional)</label>
+                <input name="directors.financials.netAssets" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Any D&O claims / investigations (ever / last 5 years)?</label>
+                <div class="yesno">
+                  <label><input type="radio" name="directors.claims.any" value="Yes"> Yes</label>
+                  <label><input type="radio" name="directors.claims.any" value="No"> No</label>
+                </div>
+              </div>
+              <div class="field">
+                <label>Details (if Yes)</label>
+                <textarea name="directors.claims.details"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Director list <span class="tag">Directors</span></h3>
+            <div class="table">
+              <table style="min-width:800px">
+                <thead>
+                  <tr>
+                    <th>Name</th><th>Role</th><th>Appointed date</th><th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input name="directors.people.0.name" type="text"></td>
+                    <td><input name="directors.people.0.role" type="text"></td>
+                    <td><input name="directors.people.0.appointed" type="date"></td>
+                    <td><textarea name="directors.people.0.notes"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td><input name="directors.people.1.name" type="text"></td>
+                    <td><input name="directors.people.1.role" type="text"></td>
+                    <td><input name="directors.people.1.appointed" type="date"></td>
+                    <td><textarea name="directors.people.1.notes"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td><input name="directors.people.2.name" type="text"></td>
+                    <td><input name="directors.people.2.role" type="text"></td>
+                    <td><input name="directors.people.2.appointed" type="date"></td>
+                    <td><textarea name="directors.people.2.notes"></textarea></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFESSIONAL INDEMNITY (kept tabbed inside) -->
+        <div class="ppanel" id="panel_pi" data-panel="pi">
+          <div class="tabs" role="tablist" aria-label="Professional Indemnity Tabs">
+            <button class="tab" role="tab" aria-selected="true" data-tab="pi-proposer">Proposer</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="pi-staff-revenue">Staff & Revenue</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="pi-binding">Binding Authority</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="pi-claims-limit">Claims & Limit</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="pi-declarations">Declarations</button>
+            <button class="tab" role="tab" aria-selected="false" data-tab="pi-fsq">Financial Services Questionnaire</button>
+          </div>
+
+          <!-- PI TAB 1 -->
+          <div class="tabpanel active" id="pi-proposer">
+            <div class="section">
+              <h3>1–4. Proposer & firm structure <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field">
+                  <label class="req">1(a) Proposer (Firm/Individual incl. trading name)</label>
+                  <input name="pi.proposer.name" type="text" />
+                </div>
+                <div class="field">
+                  <label>1(b) Date of commencement of business</label>
+                  <input name="pi.proposer.businessCommencementDate" type="date" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label class="req">2(a) Address (include all branches)</label>
+                  <textarea name="pi.proposer.address"></textarea>
+                </div>
+                <div class="field">
+                  <label class="req">2(b) Full-time principal at each address?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.proposer.fullTimeAttendanceEachAddress" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.proposer.fullTimeAttendanceEachAddress" value="No"> No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label class="req">3(a) CBI authorisation number</label>
+                  <input name="pi.proposer.cbiAuthorisationNumber" type="text" />
+                </div>
+                <div class="field">
+                  <label>3(b) Memberships</label>
+                  <div class="yesno" style="justify-content:space-between;">
+                    <label><input type="checkbox" name="pi.proposer.memberships.brokersIreland"> Brokers Ireland</label>
+                    <label><input type="checkbox" name="pi.proposer.memberships.bld"> BLD</label>
+                    <label><input type="checkbox" name="pi.proposer.memberships.bfi"> BFI</label>
+                    <label style="flex:1; min-width:220px;">
+                      <input type="checkbox" name="pi.proposer.memberships.other.enabled"> Other
+                      <input style="margin-left:6px; width:100%;" type="text" name="pi.proposer.memberships.other.name" placeholder="Specify…" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label class="req">4(a) Reconstituted/merged/acquired/name change?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.structure.reconstitutedOrNameChanged" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.structure.reconstitutedOrNameChanged" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Details (if Yes)</label>
+                  <textarea name="pi.structure.reconstitutedDetails"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label class="req">4(b) Cover required for predecessor?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.structure.coverForPredecessorRequired" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.structure.coverForPredecessorRequired" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Predecessor details</label>
+                  <textarea name="pi.structure.predecessorDetails"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>5–7. Location & interests <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field">
+                  <label class="req">5. All business conducted from offices in ROI?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.location.allBusinessInROI" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.location.allBusinessInROI" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>If "No", details</label>
+                  <textarea name="pi.location.nonROIDetails"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label>6. Principals – qualifications & experience (notes)</label>
+                  <textarea name="pi.people.qualificationsExperience"></textarea>
+                </div>
+                <div class="field">
+                  <label class="req">7. Any financial interest in other firm/company?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.interests.financialInterestOtherFirms" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.interests.financialInterestOtherFirms" value="No"> No</label>
+                  </div>
+                  <label style="margin-top:12px;">If "Yes", details</label>
+                  <textarea name="pi.interests.details"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PI TAB 2 -->
+          <div class="tabpanel" id="pi-staff-revenue">
+            <div class="section">
+              <h3>8. Staff <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field"><label>Full-time (excl. partners)</label><input name="pi.staff.fullTime" type="number" min="0" /></div>
+                <div class="field"><label>Part-time (excl. partners)</label><input name="pi.staff.partTime" type="number" min="0" /></div>
+              </div>
+              <div class="row">
+                <div class="field"><label>Qualified</label><input name="pi.staff.qualified" type="number" min="0" /></div>
+                <div class="field"><label>Unqualified</label><input name="pi.staff.unqualified" type="number" min="0" /></div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label class="req">Self-employed persons used?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.staff.selfEmployedUsed" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.staff.selfEmployedUsed" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field"><label>Details</label><textarea name="pi.staff.selfEmployedDetails"></textarea></div>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>9. Revenue (Commission & Fees) <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field"><label>Year End (last complete FY)</label><input name="pi.revenue.lastYearEndDate" type="date" /></div>
+                <div class="field"><label>Year End (current estimate)</label><input name="pi.revenue.currentYearEndDate" type="date" /></div>
+              </div>
+
+              <div class="table">
+                <table>
+                  <thead>
+                    <tr><th>Revenue category</th><th>Last FY (€)</th><th>Current est. (€)</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Life / Pensions / Investment</td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.last.lifePensionsInvestment"></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.lifePensionsInvestment"></td>
+                    </tr>
+                    <tr><td>General Personal Lines</td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.last.generalPersonalLines"></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.generalPersonalLines"></td>
+                    </tr>
+                    <tr><td>General Commercial Lines</td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.last.generalCommercialLines"></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.generalCommercialLines"></td>
+                    </tr>
+                    <tr><td>Unregulated activities</td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.last.unregulatedActivities"></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.unregulatedActivities"></td>
+                    </tr>
+                    <tr><td>Insurance Product Info (no placement)</td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.last.insuranceProductInfo"></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.insuranceProductInfo"></td>
+                    </tr>
+                    <tr><td>Other (specify)</td>
+                      <td>
+                        <input type="text" name="pi.revenue.other.label" placeholder="Label">
+                        <input type="number" min="0" step="0.01" name="pi.revenue.last.otherAmount" placeholder="€">
+                      </td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.otherAmount" placeholder="€"></td>
+                    </tr>
+                    <tr><td><strong>Total</strong></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.last.total" placeholder="Optional"></td>
+                      <td><input type="number" min="0" step="0.01" name="pi.revenue.current.total" placeholder="Optional"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="row">
+                <div class="field">
+                  <label class="req">Any one client/group &gt; 20% of revenue (past FY)?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.revenue.clientOver20Percent" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.revenue.clientOver20Percent" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Largest client revenue (€)</label>
+                  <input name="pi.revenue.largestClientRevenue" type="number" min="0" step="0.01" />
+                  <label style="margin-top:12px;">If "Yes", details</label>
+                  <textarea name="pi.revenue.clientOver20Details"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PI TAB 3 -->
+          <div class="tabpanel" id="pi-binding">
+            <div class="section">
+              <h3>10–12. Binding authority & controls <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field">
+                  <label class="req">Binding authority facilities (incl. EDI)?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.bindingAuthority.operates" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.bindingAuthority.operates" value="No"> No</label>
+                  </div>
+                </div>
+                <div class="field"><label>Notes</label><textarea name="pi.bindingAuthority.notes"></textarea></div>
+              </div>
+
+              <div class="table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="width:220px;">Nature</th><th>Class</th><th>Insurer</th><th>Max limits</th><th>Income</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>A</strong> Non-discretionary</td>
+                      <td><input name="pi.bindingAuthority.table.A.classOfInsurance" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.A.insurer" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.A.maxLimits" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.A.totalIncome" type="text"></td>
+                    </tr>
+                    <tr>
+                      <td><strong>B</strong> Limited deviation</td>
+                      <td><input name="pi.bindingAuthority.table.B.classOfInsurance" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.B.insurer" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.B.maxLimits" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.B.totalIncome" type="text"></td>
+                    </tr>
+                    <tr>
+                      <td><strong>C</strong> Deviation allowed</td>
+                      <td><input name="pi.bindingAuthority.table.C.classOfInsurance" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.C.insurer" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.C.maxLimits" type="text"></td>
+                      <td><input name="pi.bindingAuthority.table.C.totalIncome" type="text"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="row">
+                <div class="field">
+                  <label>Cashbook reconciled frequency</label>
+                  <input name="pi.controls.cashBookReconciliationFrequency" type="text" placeholder="Weekly / Monthly" />
+                </div>
+                <div class="field">
+                  <label class="req">Any employee can sign cheques alone?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.controls.employeeSingleSignatureAllowed" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.controls.employeeSingleSignatureAllowed" value="No"> No</label>
+                  </div>
+                  <label style="margin-top:12px;">If Yes, amount (€)</label>
+                  <input name="pi.controls.employeeSingleSignatureAmount" type="number" min="0" step="0.01" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PI TAB 4 -->
+          <div class="tabpanel" id="pi-claims-limit">
+            <div class="section">
+              <h3>13–15. Claims & limit <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field">
+                  <label class="req">Any previous PI insurer declined / special terms / cancelled / withdraw claim?</label>
+                  <textarea name="pi.history.details" placeholder="If any Yes, provide full details…"></textarea>
+                </div>
+                <div class="field">
+                  <label class="req">Any claims / circumstances / fraud loss (and notified)?</label>
+                  <textarea name="pi.claims.details" placeholder="Provide details and steps taken…"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="field">
+                  <label class="req">Limit of Indemnity required</label>
+                  <select name="pi.limit.requiredOption" id="pi_limit_option">
+                    <option value="">Select…</option>
+                    <option value="1.5m">€1.5m any one claim</option>
+                    <option value="2.6m">€2.6m any one claim</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>If "Other", specify (€m)</label>
+                  <input name="pi.limit.otherAmountMillions" id="pi_limit_other" type="text" placeholder="e.g., 5" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PI TAB 5 -->
+          <div class="tabpanel" id="pi-declarations">
+            <div class="section">
+              <h3>Declaration <span class="tag">PI</span></h3>
+              <div class="notice">Capture the completion details.</div>
+              <div class="row">
+                <div class="field"><label>Dated</label><input name="pi.declaration.date" type="date" /></div>
+                <div class="field"><label>Completed by (Name)</label><input name="pi.declaration.completedByName" type="text" /></div>
+              </div>
+              <div class="row">
+                <div class="field"><label>Position</label><input name="pi.declaration.position" type="text" /></div>
+                <div class="field"><label>Authorised status attachment notes</label><textarea name="pi.declaration.authorisedStatusAttachmentNotes"></textarea></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PI TAB 6 -->
+          <div class="tabpanel" id="pi-fsq">
+            <div class="section">
+              <h3>Financial Services Questionnaire <span class="tag">PI</span></h3>
+              <div class="row">
+                <div class="field">
+                  <label>FSQ dated</label>
+                  <input name="pi.fsq.declaration.date" type="date" />
+                  <label style="margin-top:12px;">Completed by (Name)</label>
+                  <input name="pi.fsq.declaration.completedByName" type="text" />
+                  <label style="margin-top:12px;">Position</label>
+                  <input name="pi.fsq.declaration.position" type="text" />
+                </div>
+                <div class="field">
+                  <label class="req">Previously provided advice/work that would now require regulation but no longer does?</label>
+                  <div class="yesno">
+                    <label><input type="radio" name="pi.fsq.q4.previouslyUnregulatedButNowWouldRequire" value="Yes"> Yes</label>
+                    <label><input type="radio" name="pi.fsq.q4.previouslyUnregulatedButNowWouldRequire" value="No"> No</label>
+                  </div>
+                  <label style="margin-top:12px;">If Yes: details</label>
+                  <textarea name="pi.fsq.q4.nature"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /panel_pi -->
+
+      </div><!-- /card -->
+    </div><!-- /grid -->
+  </div>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = "biz_insurance_app_v2";
+
+      const $ = (sel, root=document) => root.querySelector(sel);
+      const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+      const statusDot = $("#statusDot");
+      const statusText = $("#statusText");
+      const saveText = $("#saveText");
+      const selectedCount = $("#selectedCount");
+      const activePanelPill = $("#activePanelPill");
+
+      const productsRoot = $("#products");
+      const tabsRoot = $("#productTabs");
+
+      const PRODUCT_DEFS = [
+        { key:"general", label:"General", always:true, panel:"#panel_general" },
+        { key:"vehicle", label:"Vehicle", checkbox:"#p_vehicle", panel:"#panel_vehicle" },
+        { key:"fleet", label:"Fleet", checkbox:"#p_fleet", panel:"#panel_fleet" },
+        { key:"property", label:"Property", checkbox:"#p_property", panel:"#panel_property" },
+        { key:"business", label:"Business", checkbox:"#p_business", panel:"#panel_business" },
+        { key:"pi", label:"Professional Indemnity", checkbox:"#p_pi", panel:"#panel_pi" },
+        { key:"directors", label:"Directors", checkbox:"#p_directors", panel:"#panel_directors" },
+      ];
+
+      // ---------- Name helpers ----------
+      function setByName(name, value){
+        const els = document.getElementsByName(name);
+        if (!els || !els.length) return;
+        const type = (els[0].type || "").toLowerCase();
+
+        if (type === "radio"){
+          els.forEach(el => el.checked = (String(value) === el.value));
+          return;
+        }
+        if (type === "checkbox"){
+          if (els.length === 1) els[0].checked = !!value;
+          else {
+            const arr = Array.isArray(value) ? value.map(String) : [];
+            els.forEach(el => el.checked = arr.includes(el.value));
+          }
+          return;
+        }
+        els[0].value = value ?? "";
+      }
+
+      function getByName(name){
+        const els = document.getElementsByName(name);
+        if (!els || !els.length) return undefined;
+        const type = (els[0].type || "").toLowerCase();
+
+        if (type === "radio"){
+          const checked = els.find(el => el.checked);
+          return checked ? checked.value : "";
+        }
+        if (type === "checkbox"){
+          if (els.length === 1) return els[0].checked;
+          return els.filter(el => el.checked).map(el => el.value);
+        }
+        return els[0].value;
+      }
+
+      function allNamedInputs(){
+        return $$("input[name], textarea[name], select[name]");
+      }
+
+      function buildData(){
+        const data = {};
+        for (const el of allNamedInputs()){
+          data[el.name] = getByName(el.name);
+        }
+        data["_meta.selectedProducts"] = getSelectedProducts();
+        data["_meta.savedAt"] = new Date().toISOString();
+        data["_meta.activePanel"] = getActivePanelKey();
+        return data;
+      }
+
+      function applyData(data){
+        if (!data) return;
+        Object.keys(data).forEach(k => {
+          if (k.startsWith("_meta.")) return;
+          setByName(k, data[k]);
+        });
+      }
+
+      function save(){
+        const data = buildData();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        saveText.textContent = "Saved: " + new Date().toLocaleString();
+      }
+
+      function load(){
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try{
+          const data = JSON.parse(raw);
+          applyData(data);
+          saveText.textContent = "Saved: " + (data["_meta.savedAt"] ? new Date(data["_meta.savedAt"]).toLocaleString() : "—");
+        }catch(e){
+          console.warn("Load failed", e);
+        }
+      }
+
+      // ---------- Selection & top tabs ----------
+      function getSelectedProducts(){
+        const map = {
+          vehicle: $("#p_vehicle").checked,
+          fleet: $("#p_fleet").checked,
+          property: $("#p_property").checked,
+          business: $("#p_business").checked,
+          pi: $("#p_pi").checked,
+          directors: $("#p_directors").checked
+        };
+        return Object.keys(map).filter(k => map[k]);
+      }
+
+      function updateSelectedCount(){
+        const sel = getSelectedProducts();
+        selectedCount.textContent = sel.length + " selected";
+      }
+
+      function clearPanels(){
+        $$(".ppanel").forEach(p => p.classList.remove("active"));
+      }
+
+      function getActivePanelKey(){
+        const active = $(".ppanel.active");
+        return active ? (active.getAttribute("data-panel") || "general") : "general";
+      }
+
+      function activatePanel(key){
+        // activate panel
+        clearPanels();
+        const panel = $(`.ppanel[data-panel="${key}"]`);
+        if (panel) panel.classList.add("active");
+
+        // set pill
+        const def = PRODUCT_DEFS.find(d => d.key === key);
+        activePanelPill.textContent = def ? def.label : "General";
+
+        // set tab aria-selected
+        $$(".ptab", tabsRoot).forEach(btn => btn.setAttribute("aria-selected", String(btn.dataset.key === key)));
+
+        save();
+      }
+
+      function buildProductTabs(){
+        const selected = new Set(getSelectedProducts());
+        tabsRoot.innerHTML = "";
+
+        const visibleDefs = PRODUCT_DEFS.filter(d => d.always || selected.has(d.key));
+        visibleDefs.forEach((d) => {
+          const btn = document.createElement("button");
+          btn.className = "ptab";
+          btn.type = "button";
+          btn.role = "tab";
+          btn.dataset.key = d.key;
+          btn.textContent = d.label;
+          btn.setAttribute("aria-selected", "false");
+          btn.addEventListener("click", () => activatePanel(d.key));
+          tabsRoot.appendChild(btn);
+        });
+
+        // If current active panel is no longer selected, fall back to general
+        const activeKey = getActivePanelKey();
+        const stillValid = visibleDefs.some(v => v.key === activeKey);
+        activatePanel(stillValid ? activeKey : "general");
+      }
+
+      // ---------- PI inner tabs ----------
+      const piTabs = $$(".tab");
+      const piPanels = $$(".tabpanel");
+      function activatePITab(id){
+        piTabs.forEach(t => t.setAttribute("aria-selected", String(t.dataset.tab === id)));
+        piPanels.forEach(p => p.classList.toggle("active", p.id === id));
+        save();
+      }
+      piTabs.forEach(t => t.addEventListener("click", () => activatePITab(t.dataset.tab)));
+
+      // ---------- Autosave ----------
+      document.addEventListener("input", (e) => {
+        const t = e.target;
+        if (!t || !(t.matches("input[name], textarea[name], select[name]"))) return;
+
+        if (t.name === "pi.proposer.memberships.other.enabled" && t.type === "checkbox"){
+          const otherName = document.getElementsByName("pi.proposer.memberships.other.name")[0];
+          if (otherName && !t.checked) otherName.value = "";
+        }
+        save();
+      });
+
+      // Selection changes
+      productsRoot.addEventListener("change", (e) => {
+        if (!e.target.matches("input[type=checkbox]")) return;
+        updateSelectedCount();
+        buildProductTabs();
+        save();
+      });
+
+      // ---------- Buttons ----------
+      $("#btnPrint").addEventListener("click", () => window.print());
+
+      $("#btnReset").addEventListener("click", () => {
+        if (!confirm("Reset the form and clear saved data?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        $$("input, textarea, select").forEach(el => {
+          if (el.type === "checkbox" || el.type === "radio") el.checked = false;
+          else el.value = "";
+        });
+        setStatus("Not validated", "neutral");
+        saveText.textContent = "Saved: —";
+        activatePITab("pi-proposer");
+        updateSelectedCount();
+        buildProductTabs();
+      });
+
+      // ---------- Validation ----------
+      function setStatus(text, kind){
+        statusText.textContent = text;
+        statusDot.classList.remove("good","bad");
+        if (kind === "good") statusDot.classList.add("good");
+        if (kind === "bad") statusDot.classList.add("bad");
+      }
+
+      function markError(el, on){
+        if (!el) return;
+        el.classList.toggle("err", !!on);
+        if ((el.type === "radio" || el.type === "checkbox") && el.closest(".yesno")){
+          el.closest(".yesno").classList.toggle("err", !!on);
+        }
+      }
+
+      function validate(){
+        $$(".err").forEach(el => el.classList.remove("err"));
+        const errors = [];
+
+        // Base required
+        const baseReq = ["applicant.name","applicant.businessName","applicant.email","applicant.phone"];
+        baseReq.forEach(n => {
+          const el = document.getElementsByName(n)[0];
+          const val = getByName(n);
+          if (!val || String(val).trim()===""){
+            errors.push("Missing: " + n);
+            markError(el,true);
+          }
+        });
+
+        // At least one product
+        const selected = getSelectedProducts();
+        if (selected.length === 0){
+          errors.push("Select at least one product.");
+          productsRoot.style.outline = "3px solid rgba(239,68,68,.35)";
+          productsRoot.style.borderRadius = "14px";
+        } else {
+          productsRoot.style.outline = "";
+        }
+
+        // Consent
+        const consent = $("#authConsent");
+        if (!consent.checked){
+          errors.push("Authorisation must be checked.");
+          markError(consent,true);
+        }
+
+        // Per-product minimal required checks
+        function requireIfSelected(productKey, fields){
+          const isSel = (productKey === "pi") ? $("#p_pi").checked :
+                        (productKey === "vehicle") ? $("#p_vehicle").checked :
+                        (productKey === "fleet") ? $("#p_fleet").checked :
+                        (productKey === "property") ? $("#p_property").checked :
+                        (productKey === "business") ? $("#p_business").checked :
+                        (productKey === "directors") ? $("#p_directors").checked : false;
+          if (!isSel) return;
+
+          fields.forEach(n => {
+            const els = document.getElementsByName(n);
+            const el = els && els[0] ? els[0] : null;
+            const val = getByName(n);
+            if (!val || String(val).trim()===""){
+              errors.push(`Missing (${productKey}): ${n}`);
+              if (el) markError(el,true);
+              if (els && els.length && (els[0].type === "radio")) markError(els[0], true);
+            }
+          });
+        }
+
+        requireIfSelected("vehicle", ["vehicle.registration","vehicle.makeModel","vehicle.use","vehicle.parking","vehicle.driver.primaryName","vehicle.claims.any"]);
+        requireIfSelected("fleet", ["fleet.vehicleCount","fleet.primaryUse","fleet.claims.any"]);
+        requireIfSelected("property", ["property.addresses","property.occupancy","property.sums.buildings","property.construction","property.security","property.claims.any"]);
+        requireIfSelected("business", ["business.nature","business.turnover","business.employees","business.liability.publicLimit","business.claims.any"]);
+        requireIfSelected("directors", ["directors.companyName","directors.industry","directors.limit","directors.claims.any"]);
+
+        // PI minimal
+        requireIfSelected("pi", ["pi.proposer.name","pi.proposer.address","pi.proposer.fullTimeAttendanceEachAddress","pi.proposer.cbiAuthorisationNumber","pi.location.allBusinessInROI","pi.limit.requiredOption"]);
+
+        // PI: if other limit selected, require other
+        if ($("#p_pi").checked && getByName("pi.limit.requiredOption")==="other"){
+          const other = getByName("pi.limit.otherAmountMillions");
+          const el = document.getElementsByName("pi.limit.otherAmountMillions")[0];
+          if (!other || String(other).trim()===""){
+            errors.push("Missing (pi): pi.limit.otherAmountMillions");
+            markError(el,true);
+          }
+        }
+
+        // PI: auto-calc totals if blank
+        if ($("#p_pi").checked){
+          const lastFields = [
+            "pi.revenue.last.lifePensionsInvestment",
+            "pi.revenue.last.generalPersonalLines",
+            "pi.revenue.last.generalCommercialLines",
+            "pi.revenue.last.unregulatedActivities",
+            "pi.revenue.last.insuranceProductInfo",
+            "pi.revenue.last.otherAmount"
+          ];
+          const curFields = [
+            "pi.revenue.current.lifePensionsInvestment",
+            "pi.revenue.current.generalPersonalLines",
+            "pi.revenue.current.generalCommercialLines",
+            "pi.revenue.current.unregulatedActivities",
+            "pi.revenue.current.insuranceProductInfo",
+            "pi.revenue.current.otherAmount"
+          ];
+          const sum = (fields) => fields.reduce((acc,n)=>{
+            const v = parseFloat(getByName(n));
+            return acc + (isFinite(v)?v:0);
+          },0);
+          const lastTotal = sum(lastFields);
+          const curTotal = sum(curFields);
+          const lastTotalEl = document.getElementsByName("pi.revenue.last.total")[0];
+          const curTotalEl = document.getElementsByName("pi.revenue.current.total")[0];
+          if (lastTotalEl && (!lastTotalEl.value || String(lastTotalEl.value).trim()==="")) lastTotalEl.value = lastTotal.toFixed(2);
+          if (curTotalEl && (!curTotalEl.value || String(curTotalEl.value).trim()==="")) curTotalEl.value = curTotal.toFixed(2);
+        }
+
+        if (errors.length){
+          setStatus("Validation failed (" + errors.length + ")", "bad");
+          const firstErr = $(".err");
+          if (firstErr) firstErr.scrollIntoView({behavior:"smooth", block:"center"});
+          return {ok:false, errors};
+        } else {
+          setStatus("Validated ✔ Ready to submit/print", "good");
+          return {ok:true, errors:[]};
+        }
+      }
+
+      $("#btnValidate").addEventListener("click", () => {
+        const res = validate();
+        save();
+        if (!res.ok){
+          alert("Please fix the highlighted fields.\n\n" + res.errors.slice(0,12).join("\n") + (res.errors.length>12 ? "\n…" : ""));
+          // Jump user to the relevant top-level panel if possible:
+          const active = $(".ppanel.active");
+          if (!active){
+            activatePanel("general");
+          }
+        } else {
+          alert("Validation passed. You can Print to save as PDF.");
+        }
+      });
+
+      // ---------- Init ----------
+      load();
+      updateSelectedCount();
+      buildProductTabs();
+
+      // restore active panel if saved and still available
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw){
+          const data = JSON.parse(raw);
+          const key = data["_meta.activePanel"] || "general";
+          const selected = new Set(getSelectedProducts());
+          const allowed = PRODUCT_DEFS.filter(d => d.always || selected.has(d.key)).some(d => d.key === key);
+          activatePanel(allowed ? key : "general");
+        }
+      }catch(_){}
+
+      activatePITab("pi-proposer");
+      setStatus("Not validated", "neutral");
+    })();
+  </script>
+</body>
+</html>
