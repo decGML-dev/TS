@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnboardPro — Employee Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --primary:#4361ee;--primary-dk:#3a56d4;--primary-lt:rgba(67,97,238,.1);
+  --success:#10b981;--danger:#f72585;--warning:#f59e0b;
+  --sidebar:#1a2035;--sidebar2:#111827;
+  --bg:#f1f5f9;--surface:#fff;--surface2:#f8fafc;
+  --border:#e2e8f0;--border2:#c8d4e8;
+  --text:#1e293b;--text2:#475569;--muted:#94a3b8;
+  --font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+  --radius:10px;--radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 12px rgba(0,0,0,.05);
+  --shadow-lg:0 4px 24px rgba(0,0,0,.12);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;display:flex;min-height:100vh;font-size:14px;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:240px;min-width:240px;background:var(--sidebar);color:#fff;padding:20px 12px;display:flex;flex-direction:column;box-shadow:2px 0 16px rgba(0,0,0,.18);z-index:10;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.08);}
+.logo-icon{background:var(--primary);width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:15px;flex-shrink:0;box-shadow:0 4px 10px rgba(67,97,238,.4);}
+.logo h1{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.3);font-family:var(--mono);letter-spacing:.5px;text-transform:uppercase;margin-top:1px;}
+.step-list{list-style:none;flex:1;}
+.step-item{padding:9px 10px;margin-bottom:2px;border-radius:8px;display:flex;align-items:center;gap:10px;cursor:default;transition:all .17s;color:rgba(255,255,255,.4);font-size:12.5px;font-weight:500;border:1px solid transparent;}
+.step-item.active{background:rgba(67,97,238,.22);color:#fff;border-color:rgba(67,97,238,.4);font-weight:600;}
+.step-item.completed{color:rgba(255,255,255,.6);}
+.step-icon{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
+.step-item.active .step-icon{background:var(--primary);}
+.step-item.completed .step-icon{background:var(--success);color:#fff;}
+.sidebar-footer{padding-top:14px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.3);display:flex;flex-direction:column;gap:5px;}
+.sidebar-footer i{margin-right:6px;}
+
+/* ── MAIN ── */
+.main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+.topbar h1{font-size:1.3rem;font-weight:700;letter-spacing:-.03em;}
+.status-badge{background:var(--primary);color:#fff;padding:5px 14px;border-radius:99px;font-size:12px;font-weight:700;font-family:var(--mono);}
+.progress-container{height:4px;background:var(--border);position:sticky;top:56px;z-index:49;}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--primary),#4cc9f0);transition:width .5s ease;}
+.page-body{flex:1;padding:22px 24px;overflow-y:auto;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--border);padding:22px;margin-bottom:18px;animation:fadeIn .35s ease;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.card-header h2{font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+.card-header h2 i{color:var(--primary);}
+.step-indicator{font-size:11px;color:var(--muted);background:var(--surface2);padding:4px 10px;border-radius:99px;font-family:var(--mono);border:1px solid var(--border);}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:14px;}
+.form-label{display:block;margin-bottom:5px;font-weight:600;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;}
+.form-control{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:var(--font);color:var(--text);background:var(--surface2);transition:border-color .17s,box-shadow .17s;}
+.form-control:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-lt);background:var(--surface);}
+.form-row{display:grid;gap:12px;}
+.form-row.cols-2{grid-template-columns:1fr 1fr;}
+.form-row.cols-3{grid-template-columns:1fr 1fr 1fr;}
+textarea.form-control{resize:vertical;min-height:70px;}
+.input-prefix{display:flex;align-items:center;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);overflow:hidden;}
+.input-prefix span{padding:8px 10px;background:var(--border);color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;border-right:1px solid var(--border2);}
+.input-prefix .form-control{border:none;background:transparent;}
+.input-prefix .form-control:focus{box-shadow:none;}
+.input-prefix:focus-within{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-lt);}
+
+/* ── SECTION HEADERS ── */
+.section-header{display:flex;align-items:center;gap:8px;margin:20px 0 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+.section-header::before{content:'';flex:none;display:inline-block;width:3px;height:14px;background:var(--primary);border-radius:2px;}
+.section-header::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── OPTIONAL CLAUSE TOGGLES ── */
+.clause-toggle{border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;overflow:hidden;transition:border-color .17s;}
+.clause-toggle.active{border-color:var(--primary);}
+.clause-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--surface2);transition:background .17s;user-select:none;}
+.clause-header:hover{background:var(--border);}
+.clause-toggle.active .clause-header{background:var(--primary-lt);}
+.clause-label{flex:1;font-size:13px;font-weight:600;color:var(--text);}
+.clause-desc{font-size:11px;color:var(--muted);margin-top:1px;}
+.toggle-switch{position:relative;width:38px;height:20px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--border2);border-radius:99px;transition:.2s;cursor:pointer;}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;}
+.toggle-switch input:checked + .toggle-slider{background:var(--primary);}
+.toggle-switch input:checked + .toggle-slider::before{transform:translateX(18px);}
+.clause-body{padding:14px;border-top:1px solid var(--border);display:none;background:var(--surface);}
+.clause-toggle.active .clause-body{display:block;}
+.clause-note{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:10px;padding:6px 10px;background:rgba(251,191,36,.08);border-left:3px solid var(--warning);border-radius:0 4px 4px 0;}
+.radio-group{display:flex;flex-direction:column;gap:6px;}
+.radio-option{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;background:var(--surface2);}
+.radio-option:hover{border-color:var(--primary);}
+.radio-option input{margin-top:2px;accent-color:var(--primary);flex-shrink:0;}
+.radio-option label{cursor:pointer;font-size:12.5px;}
+.radio-option.selected{border-color:var(--primary);background:var(--primary-lt);}
+.radio-subopts{margin-top:8px;padding-left:4px;}
+
+/* ── CONTRACT BUILDER LAYOUT ── */
+#view-2{padding:0;}
+.builder-layout{display:flex;height:calc(100vh - 116px);overflow:hidden;}
+.builder-left{width:420px;min-width:420px;overflow-y:auto;padding:20px;border-right:1px solid var(--border);background:var(--surface);}
+.builder-right{flex:1;overflow-y:auto;background:var(--surface2);display:flex;flex-direction:column;}
+.preview-topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;gap:10px;flex-shrink:0;}
+.preview-topbar h3{font-size:13px;font-weight:700;color:var(--text);}
+.preview-content{flex:1;padding:28px 36px;font-family:Georgia,serif;font-size:13.5px;line-height:1.8;color:#222;}
+.preview-content h1{font-size:18px;font-weight:700;margin-bottom:4px;text-align:center;}
+.preview-content h2{font-size:14px;font-weight:700;margin:18px 0 6px;text-decoration:underline;}
+.preview-content p{margin-bottom:8px;}
+.preview-content .placeholder{background:rgba(251,191,36,.25);border-bottom:1.5px dashed var(--warning);padding:0 2px;color:#92400e;font-family:var(--mono);font-size:12px;border-radius:2px;}
+.preview-content .optional-block{background:rgba(67,97,238,.04);border-left:3px solid var(--primary);padding:6px 10px;margin:4px 0;border-radius:0 4px 4px 0;}
+.preview-content .optional-block p{margin:4px 0;}
+.preview-content .sig-block{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+.preview-content .sig-line{border-bottom:1px solid #333;margin-bottom:4px;height:40px;}
+.preview-content ol,
+.preview-content ul{padding-left:20px;margin:6px 0;}
+.preview-content li{margin-bottom:4px;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border:1px solid var(--border);border-radius:var(--radius-sm);font-weight:600;cursor:pointer;font-size:13px;font-family:var(--font);transition:all .17s;background:var(--surface2);color:var(--text2);line-height:1;}
+.btn:hover{background:var(--bg);border-color:var(--border2);}
+.btn-primary{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(67,97,238,.28);}
+.btn-primary:hover{background:var(--primary-dk);border-color:var(--primary-dk);box-shadow:0 4px 14px rgba(67,97,238,.38);transform:translateY(-1px);color:#fff;}
+.btn-success{background:var(--success);color:#fff;border-color:var(--success);}
+.btn-success:hover{background:#0ea271;transform:translateY(-1px);color:#fff;}
+.btn-danger{background:var(--danger);color:#fff;border-color:var(--danger);}
+.btn-danger:hover{background:#e11575;transform:translateY(-1px);color:#fff;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-ghost{background:transparent;border-color:transparent;color:var(--muted);}
+.btn-ghost:hover{background:var(--surface2);color:var(--text2);border-color:var(--border);}
+.btn-group{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+/* ── LOG ── */
+.system-log-container{margin-top:20px;}
+.system-log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.system-log-header h3{font-size:13px;font-weight:700;}
+.system-log{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;font-family:var(--mono);font-size:12px;height:180px;overflow-y:auto;box-shadow:inset 0 2px 8px rgba(0,0,0,.3);}
+.log-entry{margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid #1e293b;display:flex;gap:10px;}
+.log-time{color:#475569;min-width:65px;flex-shrink:0;}
+.log-success{color:#34d399;}.log-warning{color:#fbbf24;}.log-error{color:#f87171;}.log-info{color:#60a5fa;}
+
+/* ── TASK ITEMS ── */
+.task-list{margin:14px 0;}
+.task-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:6px;background:var(--surface2);border:1px solid var(--border);font-size:13px;}
+.task-check{color:var(--success);font-size:16px;}
+
+/* ── COMPLETION ── */
+.completion-screen{text-align:center;padding:40px 20px;}
+.completion-icon{font-size:56px;color:var(--success);margin-bottom:16px;}
+.completion-screen h2{font-size:1.8rem;font-weight:700;margin-bottom:10px;}
+.next-steps-box{background:#f0fdf4;padding:18px;border-radius:var(--radius);margin:18px 0;text-align:left;border:1px solid #a7f3d0;}
+.next-steps-box h3{color:#065f46;margin-bottom:10px;font-size:14px;}
+.next-steps-box li{margin-bottom:6px;list-style:none;display:flex;align-items:center;gap:8px;font-size:13px;color:#065f46;}
+
+/* ── INFOBOX ── */
+.info-box{font-size:12.5px;padding:10px 14px;border-radius:var(--radius-sm);border-left:3px solid var(--primary);background:var(--primary-lt);color:var(--text2);margin:10px 0;}
+.warn-box{border-color:var(--warning);background:rgba(245,158,11,.08);}
+
+/* ── MISC ── */
+.hidden{display:none!important;}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;font-family:var(--mono);}
+.pill-ok{background:rgba(16,185,129,.1);color:var(--success);}
+.pill-warn{background:rgba(245,158,11,.1);color:var(--warning);}
+.divider{height:1px;background:var(--border);margin:16px 0;}
+
+/* ── STEP 3 PORTAL ── */
+.email-card{background:var(--surface2);padding:14px;border-left:4px solid var(--primary);border-radius:0 8px 8px 0;margin:12px 0;font-size:13px;}
+.email-card strong{color:var(--text);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.1);}100%{transform:scale(1);}}
+.pulse{animation:pulse .5s ease;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){.builder-left{width:340px;min-width:340px;}}
+@media(max-width:900px){.builder-layout{flex-direction:column;height:auto;}.builder-left{width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);}.builder-right{min-height:400px;}}
+@media(max-width:700px){.sidebar{display:none;}.form-row.cols-2,.form-row.cols-3{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon"><i class="fas fa-users"></i></div>
+    <div><h1>OnboardPro</h1><div class="logo-sub">HR Automation</div></div>
+  </div>
+  <ul class="step-list" id="step-list">
+    <li class="step-item active" data-step="1"><div class="step-icon">1</div><div class="step-text">Candidate Details</div></li>
+    <li class="step-item" data-step="2"><div class="step-icon">2</div><div class="step-text">Create Contract</div></li>
+    <li class="step-item" data-step="3"><div class="step-icon">3</div><div class="step-text">Candidate Decision</div></li>
+    <li class="step-item" data-step="4"><div class="step-icon">4</div><div class="step-text">Personal Data</div></li>
+    <li class="step-item" data-step="5"><div class="step-icon">5</div><div class="step-text">References</div></li>
+    <li class="step-item" data-step="6"><div class="step-icon">6</div><div class="step-text">HR Review</div></li>
+    <li class="step-item" data-step="7"><div class="step-icon">7</div><div class="step-text">Provisioning</div></li>
+    <li class="step-item" data-step="8"><div class="step-icon">8</div><div class="step-text">Complete</div></li>
+  </ul>
+  <div class="sidebar-footer">
+    <div><i class="fas fa-shield-alt"></i> Secure Portal</div>
+    <div><i class="fas fa-lock"></i> GDPR Compliant</div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main-content">
+  <div class="topbar">
+    <h1>Employee Onboarding Automation</h1>
+    <div class="status-badge" id="status-badge">Step 1 of 8</div>
+  </div>
+  <div class="progress-container"><div class="progress-bar" id="progress-bar" style="width:0%;"></div></div>
+
+  <div class="page-body" id="page-body">
+
+    <!-- STEP 1: Candidate Details -->
+    <div id="view-1" class="card">
+      <div class="card-header">
+        <h2><i class="fas fa-user-plus"></i> Input Candidate Details</h2>
+        <div class="step-indicator">Step 1 of 8</div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Full Name *</label><input class="form-control" type="text" id="c-name" placeholder="e.g. Jane Murphy"></div>
+        <div class="form-group"><label class="form-label">Email Address *</label><input class="form-control" type="email" id="c-email" placeholder="jane@example.com"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Home Address</label><input class="form-control" type="text" id="c-address" placeholder="123 Main Street, Dublin 2, Ireland"></div>
+      <div class="form-group"><label class="form-label">Phone Number</label><input class="form-control" type="tel" id="c-phone" placeholder="+353 87 123 4567"></div>
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="app.saveCandidateDetails()"><i class="fas fa-arrow-right"></i> Continue to Contract Builder</button>
+      </div>
+      <div class="system-log-container">
+        <div class="system-log-header"><h3><i class="fas fa-terminal"></i> System Log</h3><span style="font-size:11px;color:var(--muted);">Real-time</span></div>
+        <div class="system-log" id="sys-log"><div class="log-entry"><span class="log-time">--:--:--</span><span class="log-info">ℹ️ System initialised. Ready to begin onboarding.</span></div></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Contract Builder (full-height split panel, hidden by default) -->
+    <div id="view-2" class="card hidden" style="padding:0;overflow:hidden;margin-bottom:0;">
+      <div class="builder-layout">
+        <!-- LEFT: Form Panel -->
+        <div class="builder-left" id="contract-form-panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <h2 style="font-size:1rem;font-weight:700;display:flex;align-items:center;gap:7px;"><i class="fas fa-file-signature" style="color:var(--primary);"></i> Contract Builder</h2>
+            <span class="step-indicator">Step 2 of 8</span>
+          </div>
+          <div class="info-box">Fields highlighted <span style="background:rgba(251,191,36,.25);padding:0 4px;border-radius:2px;font-family:var(--mono);font-size:11px;">like this</span> in the preview update live as you type.</div>
+
+          <!-- COMPANY & PARTIES -->
+          <div class="section-header">Company & Parties</div>
+          <div class="form-group"><label class="form-label">Company Name *</label><input class="form-control" id="co-name" placeholder="Acme Ireland Ltd" oninput="app.buildPreview()"></div>
+          <div class="form-group"><label class="form-label">Registered Address *</label><input class="form-control" id="co-address" placeholder="1 Grand Canal Dock, Dublin 2" oninput="app.buildPreview()"></div>
+
+          <!-- JOB -->
+          <div class="section-header">Role</div>
+          <div class="form-group"><label class="form-label">Job Title *</label><input class="form-control" id="job-title" placeholder="Software Engineer" oninput="app.buildPreview()"></div>
+          <div class="form-group"><label class="form-label">Job Duties / Description</label><textarea class="form-control" id="job-duties" rows="3" placeholder="Describe main responsibilities..." oninput="app.buildPreview()"></textarea></div>
+
+          <!-- COMMENCEMENT -->
+          <div class="section-header">Employment Dates</div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Commencement Date *</label><input class="form-control" type="date" id="start-date" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Probation Period</label>
+              <div class="input-prefix"><span>Months</span><input class="form-control" type="number" id="probation" value="3" min="1" max="24" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Continuous Employment -->
+          <div class="clause-toggle" id="ct-continuous">
+            <div class="clause-header" onclick="app.toggleClause('ct-continuous')">
+              <div><div class="clause-label">Continuous Employment (prior service)</div><div class="clause-desc">Include if prior employer service counts</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-continuous" onchange="app.toggleClause('ct-continuous');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body"><div class="clause-note">Red optional clause — include only when prior service counts toward continuity.</div>
+              <div class="form-group"><label class="form-label">Continuous Service Start Date</label><input class="form-control" type="date" id="cont-date" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- HOURS OF WORK -->
+          <div class="section-header">Hours of Work</div>
+          <div class="radio-group">
+            <label class="radio-option" id="ro-hours-simple" onclick="app.selectRadio('hours-mode','simple')">
+              <input type="radio" name="hours-mode" value="simple" checked onchange="app.buildPreview()">
+              <div><div style="font-weight:600;font-size:12.5px;">Simplified (e.g. Mon–Fri 9am–5pm)</div><div style="font-size:11px;color:var(--muted);">One block for all days</div></div>
+            </label>
+            <label class="radio-option" id="ro-hours-detail" onclick="app.selectRadio('hours-mode','detail')">
+              <input type="radio" name="hours-mode" value="detail" onchange="app.buildPreview()">
+              <div><div style="font-weight:600;font-size:12.5px;">Day-by-Day Schedule</div><div style="font-size:11px;color:var(--muted);">Specify start/end for each working day</div></div>
+            </label>
+          </div>
+          <div id="hours-simple-inputs" style="margin-top:10px;">
+            <div class="form-row cols-2">
+              <div class="form-group"><label class="form-label">Start Time</label><input class="form-control" type="time" id="hours-start" value="09:00" oninput="app.buildPreview()"></div>
+              <div class="form-group"><label class="form-label">End Time</label><input class="form-control" type="time" id="hours-end" value="17:00" oninput="app.buildPreview()"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Working Days</label><input class="form-control" id="hours-days" value="Monday to Friday" oninput="app.buildPreview()"></div>
+          </div>
+          <div id="hours-detail-inputs" class="hidden" style="margin-top:10px;">
+            <div id="day-schedule">
+              <!-- Generated dynamically -->
+            </div>
+          </div>
+          <div class="form-row cols-2" style="margin-top:8px;">
+            <div class="form-group"><label class="form-label">Total Hrs/Week</label><input class="form-control" type="number" id="hours-total" value="39" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Lunch Break</label><input class="form-control" id="lunch-break" value="30 minutes" oninput="app.buildPreview()"></div>
+          </div>
+
+          <!-- OPTIONAL: 48-hour waiver -->
+          <div class="clause-toggle" id="ct-48hr">
+            <div class="clause-header" onclick="app.toggleClause('ct-48hr')">
+              <div><div class="clause-label">48-Hour Working Time Waiver</div><div class="clause-desc">Employee agrees to exceed 48hr limit</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-48hr" onchange="app.toggleClause('ct-48hr');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body"><div class="clause-note">Include only if employee agrees to opt out of the 48hr limit (Organisation of Working Time Act 1997).</div>
+              <div class="form-group"><label class="form-label">Notice to Cancel Waiver (months)</label><input class="form-control" type="number" id="waiver-notice" value="3" min="1" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- PLACE OF WORK -->
+          <div class="section-header">Place of Work</div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Normal Place of Work</label><input class="form-control" id="work-place" placeholder="Dublin City Centre office" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Work Area (mobility)</label><input class="form-control" id="work-area" placeholder="Greater Dublin Area" oninput="app.buildPreview()"></div>
+          </div>
+
+          <!-- PAYMENT -->
+          <div class="section-header">Pay & Compensation</div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Salary/Rate (€)</label><input class="form-control" type="number" id="pay-amount" placeholder="50000" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Pay Period</label>
+              <select class="form-control" id="pay-period" onchange="app.buildPreview()">
+                <option value="per annum">Per Annum</option>
+                <option value="per month">Per Month</option>
+                <option value="per week">Per Week</option>
+                <option value="per hour">Per Hour</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row cols-3">
+            <div class="form-group"><label class="form-label">Payment Freq.</label>
+              <select class="form-control" id="pay-freq" onchange="app.buildPreview()">
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="bi-weekly">Bi-Weekly</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Method</label>
+              <select class="form-control" id="pay-method" onchange="app.buildPreview()">
+                <option value="bank transfer">Bank Transfer</option>
+                <option value="cheque">Cheque</option>
+                <option value="cash">Cash</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Payment Day</label><input class="form-control" id="pay-day" placeholder="Last Friday" oninput="app.buildPreview()"></div>
+          </div>
+
+          <!-- OPTIONAL: Overtime -->
+          <div class="clause-toggle" id="ct-overtime">
+            <div class="clause-header" onclick="app.toggleClause('ct-overtime')">
+              <div><div class="clause-label">Overtime Provisions</div><div class="clause-desc">Define overtime threshold & pay rate</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-overtime" onchange="app.toggleClause('ct-overtime');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="form-label">OT Threshold (hrs/week)</label><input class="form-control" type="number" id="ot-threshold" value="39" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Authorised By</label><input class="form-control" id="ot-person" placeholder="Line Manager" oninput="app.buildPreview()"></div>
+              </div>
+              <div class="form-group"><label class="form-label">Overtime Rate</label>
+                <div class="radio-group" id="ot-rate-group">
+                  <label class="radio-option" onclick="app.selectRadio('ot-rate','basic')"><input type="radio" name="ot-rate" value="basic" checked onchange="app.buildPreview()"><span>Basic rate</span></label>
+                  <label class="radio-option" onclick="app.selectRadio('ot-rate','custom')"><input type="radio" name="ot-rate" value="custom" onchange="app.buildPreview()"><span>Custom rate</span></label>
+                  <label class="radio-option" onclick="app.selectRadio('ot-rate','toil')"><input type="radio" name="ot-rate" value="toil" onchange="app.buildPreview()"><span>Time off in lieu (TOIL)</span></label>
+                </div>
+              </div>
+              <div class="form-group hidden" id="ot-custom-input"><label class="form-label">Custom OT Rate Details</label><input class="form-control" id="ot-rate-detail" placeholder="e.g. 1.5x for first 4hrs, 2x thereafter" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Pension -->
+          <div class="clause-toggle" id="ct-pension">
+            <div class="clause-header" onclick="app.toggleClause('ct-pension')">
+              <div><div class="clause-label">Pension Arrangements</div><div class="clause-desc">Occupational scheme, PRSA or contribution</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-pension" onchange="app.toggleClause('ct-pension');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-group"><label class="form-label">Pension Type</label>
+                <div class="radio-group">
+                  <label class="radio-option" onclick="app.selectRadio('pension-type','occupational')"><input type="radio" name="pension-type" value="occupational" checked onchange="app.buildPreview()"><span>Occupational pension scheme</span></label>
+                  <label class="radio-option" onclick="app.selectRadio('pension-type','prsa')"><input type="radio" name="pension-type" value="prsa" onchange="app.buildPreview()"><span>PRSA access (no company scheme)</span></label>
+                  <label class="radio-option" onclick="app.selectRadio('pension-type','contribution')"><input type="radio" name="pension-type" value="contribution" onchange="app.buildPreview()"><span>Employer contribution to personal pension</span></label>
+                </div>
+              </div>
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="form-label">Qualifying Period</label><input class="form-control" id="pension-period" placeholder="3 months" oninput="app.buildPreview()"></div>
+                <div class="form-group pension-contrib-field hidden"><label class="form-label">Employer Contribution %</label><input class="form-control" type="number" id="pension-pct" value="5" min="1" max="100" oninput="app.buildPreview()"></div>
+              </div>
+              <div class="form-group pension-prsa-field hidden"><label class="form-label">PRSA Information Provider</label><input class="form-control" id="prsa-provider" placeholder="PRSA provider name" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Benefits -->
+          <div class="clause-toggle" id="ct-benefits">
+            <div class="clause-header" onclick="app.toggleClause('ct-benefits')">
+              <div><div class="clause-label">Company Benefits</div><div class="clause-desc">Health insurance, bonuses, etc.</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-benefits" onchange="app.toggleClause('ct-benefits');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="form-label">Qualifying Period</label><input class="form-control" id="benefits-period" placeholder="3 months" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Benefits Details</label><input class="form-control" id="benefits-detail" placeholder="Health insurance, pension, laptop" oninput="app.buildPreview()"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Company Car -->
+          <div class="clause-toggle" id="ct-car">
+            <div class="clause-header" onclick="app.toggleClause('ct-car')">
+              <div><div class="clause-label">Company Car / Car Allowance</div><div class="clause-desc">Vehicle benefit or monthly allowance</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-car" onchange="app.toggleClause('ct-car');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="radio-group" style="margin-bottom:10px;">
+                <label class="radio-option" onclick="app.selectRadio('car-type','provided')"><input type="radio" name="car-type" value="provided" checked onchange="app.buildPreview()"><span>Company car provided</span></label>
+                <label class="radio-option" onclick="app.selectRadio('car-type','allowance')"><input type="radio" name="car-type" value="allowance" onchange="app.buildPreview()"><span>Monthly car allowance</span></label>
+              </div>
+              <div class="form-group car-allowance-field hidden"><label class="form-label">Monthly Allowance (€)</label><input class="form-control" type="number" id="car-amount" placeholder="500" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Health Insurance -->
+          <div class="clause-toggle" id="ct-health">
+            <div class="clause-header" onclick="app.toggleClause('ct-health')">
+              <div><div class="clause-label">Health Insurance</div><div class="clause-desc">Company-provided health cover</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-health" onchange="app.toggleClause('ct-health');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="form-label">Insurance Provider</label><input class="form-control" id="health-provider" placeholder="Laya Healthcare" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Plan Name</label><input class="form-control" id="health-plan" placeholder="Essential Plus" oninput="app.buildPreview()"></div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Coverage</label>
+                <select class="form-control" id="health-coverage" onchange="app.buildPreview()">
+                  <option value="employee only">Employee only</option>
+                  <option value="employee and spouse">Employee and spouse/partner</option>
+                  <option value="employee and family">Employee and family</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- HOLIDAYS -->
+          <div class="section-header">Holidays</div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Annual Leave (days)</label><input class="form-control" type="number" id="holiday-days" value="20" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Holiday Inclusion</label>
+              <select class="form-control" id="holiday-type" onchange="app.buildPreview()">
+                <option value="in addition">In addition to public holidays</option>
+                <option value="inclusive">Inclusive of public holidays</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Holiday Year Start</label><input class="form-control" id="holiday-year" value="1 January" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Holiday Notice (weeks)</label><input class="form-control" type="number" id="holiday-notice" value="2" oninput="app.buildPreview()"></div>
+          </div>
+
+          <!-- OPTIONAL: Holiday Pay Calculation -->
+          <div class="clause-toggle" id="ct-holiday-pay">
+            <div class="clause-header" onclick="app.toggleClause('ct-holiday-pay')">
+              <div><div class="clause-label">Holiday Pay Calculation Method</div><div class="clause-desc">Specify how daily holiday pay is calculated</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-holiday-pay" onchange="app.toggleClause('ct-holiday-pay');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="radio-group">
+                <label class="radio-option" onclick="app.selectRadio('hpay-type','weekly')"><input type="radio" name="hpay-type" value="weekly" checked onchange="app.buildPreview()"><span>Weekly pay ÷ 5 (or days worked)</span></label>
+                <label class="radio-option" onclick="app.selectRadio('hpay-type','monthly')"><input type="radio" name="hpay-type" value="monthly" onchange="app.buildPreview()"><span>Monthly pay ÷ 22 (or days worked)</span></label>
+                <label class="radio-option" onclick="app.selectRadio('hpay-type','annual')"><input type="radio" name="hpay-type" value="annual" onchange="app.buildPreview()"><span>Annual salary ÷ 253</span></label>
+                <label class="radio-option" onclick="app.selectRadio('hpay-type','hourly')"><input type="radio" name="hpay-type" value="hourly" onchange="app.buildPreview()"><span>Hourly rate × hours per day</span></label>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Shutdown Period -->
+          <div class="clause-toggle" id="ct-shutdown">
+            <div class="clause-header" onclick="app.toggleClause('ct-shutdown')">
+              <div><div class="clause-label">Company Shutdown Period</div><div class="clause-desc">e.g. Christmas or summer closedown</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-shutdown" onchange="app.toggleClause('ct-shutdown');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="form-label">Shutdown Period</label><input class="form-control" id="shutdown-period" placeholder="Christmas" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Days to Reserve</label><input class="form-control" type="number" id="shutdown-days" value="3" oninput="app.buildPreview()"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SICK LEAVE -->
+          <div class="section-header">Sickness & Absence</div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Report Absence To</label><input class="form-control" id="sick-person" placeholder="Direct Manager" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Report By (time)</label><input class="form-control" type="time" id="sick-time" value="09:00" oninput="app.buildPreview()"></div>
+          </div>
+
+          <!-- OPTIONAL: Company Sick Pay -->
+          <div class="clause-toggle" id="ct-sickpay">
+            <div class="clause-header" onclick="app.toggleClause('ct-sickpay')">
+              <div><div class="clause-label">Company Sick Pay</div><div class="clause-desc">Enhance beyond statutory sick pay</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-sickpay" onchange="app.toggleClause('ct-sickpay');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="form-label">Paid Sick Days</label><input class="form-control" type="number" id="sick-days" value="10" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Pay Details</label><input class="form-control" id="sick-pay-detail" placeholder="Full pay for first 10 days" oninput="app.buildPreview()"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONFIDENTIALITY & IP -->
+          <div class="section-header">Confidentiality & IP</div>
+          <div class="form-group"><label class="form-label">Post-Employment Confidentiality Period (years)</label><input class="form-control" type="number" id="conf-years" value="2" min="1" oninput="app.buildPreview()"></div>
+
+          <!-- TERMINATION -->
+          <div class="section-header">Notice & Termination</div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="form-label">Notice by Employee</label><input class="form-control" id="notice-employee" placeholder="4 weeks" oninput="app.buildPreview()"></div>
+            <div class="form-group"><label class="form-label">Notice by Employer</label><input class="form-control" id="notice-employer" placeholder="4 weeks (or statutory min.)" oninput="app.buildPreview()"></div>
+          </div>
+
+          <!-- OPTIONAL: Garden Leave -->
+          <div class="clause-toggle" id="ct-garden">
+            <div class="clause-header" onclick="app.toggleClause('ct-garden')">
+              <div><div class="clause-label">Garden Leave Clause</div><div class="clause-desc">Employer may place on garden leave during notice</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-garden" onchange="app.toggleClause('ct-garden');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body"><div class="clause-note">Standard garden leave clause will be inserted. No additional inputs required.</div></div>
+          </div>
+
+          <!-- POST-TERMINATION RESTRICTIONS -->
+          <div class="section-header">Post-Termination Restrictions</div>
+          <div class="info-box">All restrictions below are optional. Only include those relevant to this role.</div>
+
+          <div class="clause-toggle" id="ct-ptr-nonsolicitation">
+            <div class="clause-header" onclick="app.toggleClause('ct-ptr-nonsolicitation')">
+              <div><div class="clause-label">Non-Solicitation of Customers</div><div class="clause-desc">Cannot solicit customers after leaving</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-ptr-nsol" onchange="app.toggleClause('ct-ptr-nonsolicitation');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-group"><label class="form-label">Restriction Period (months)</label><input class="form-control" type="number" id="ptr-nsol-months" value="6" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <div class="clause-toggle" id="ct-ptr-noncompete">
+            <div class="clause-header" onclick="app.toggleClause('ct-ptr-noncompete')">
+              <div><div class="clause-label">Non-Compete (area restriction)</div><div class="clause-desc">Cannot compete in specified area</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-ptr-nc" onchange="app.toggleClause('ct-ptr-noncompete');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-row cols-3">
+                <div class="form-group"><label class="form-label">Months</label><input class="form-control" type="number" id="ptr-nc-months" value="6" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Area</label><input class="form-control" id="ptr-nc-area" placeholder="Republic of Ireland" oninput="app.buildPreview()"></div>
+                <div class="form-group"><label class="form-label">Radius (miles)</label><input class="form-control" type="number" id="ptr-nc-miles" value="25" oninput="app.buildPreview()"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="clause-toggle" id="ct-ptr-nonpoach">
+            <div class="clause-header" onclick="app.toggleClause('ct-ptr-nonpoach')">
+              <div><div class="clause-label">Non-Poaching of Employees</div><div class="clause-desc">Cannot hire away staff after leaving</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-ptr-np" onchange="app.toggleClause('ct-ptr-nonpoach');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-group"><label class="form-label">Restriction Period (months)</label><input class="form-control" type="number" id="ptr-np-months" value="6" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <div class="clause-toggle" id="ct-ptr-noninduce">
+            <div class="clause-header" onclick="app.toggleClause('ct-ptr-noninduce')">
+              <div><div class="clause-label">Non-Inducement of Customer Breach</div><div class="clause-desc">Cannot encourage customers to break contracts</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-ptr-ni" onchange="app.toggleClause('ct-ptr-noninduce');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-group"><label class="form-label">Restriction Period (months)</label><input class="form-control" type="number" id="ptr-ni-months" value="6" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Gratuities -->
+          <div class="clause-toggle" id="ct-gratuities">
+            <div class="clause-header" onclick="app.toggleClause('ct-gratuities')">
+              <div><div class="clause-label">Gratuities Policy</div><div class="clause-desc">Must report gifts from customers/suppliers</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-gratuities" onchange="app.toggleClause('ct-gratuities');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-group"><label class="form-label">Report Gratuities To</label><input class="form-control" id="gratuities-person" placeholder="HR Manager" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Retirement -->
+          <div class="clause-toggle" id="ct-retirement">
+            <div class="clause-header" onclick="app.toggleClause('ct-retirement')">
+              <div><div class="clause-label">Retirement Age Clause</div><div class="clause-desc">Normal retirement age specification</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-retirement" onchange="app.toggleClause('ct-retirement');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body">
+              <div class="form-group"><label class="form-label">Normal Retirement Age</label><input class="form-control" type="number" id="retirement-age" value="66" min="60" max="75" oninput="app.buildPreview()"></div>
+            </div>
+          </div>
+
+          <!-- OPTIONAL: Staff Handbook -->
+          <div class="clause-toggle" id="ct-handbook">
+            <div class="clause-header" onclick="app.toggleClause('ct-handbook')">
+              <div><div class="clause-label">Staff Handbook Reference</div><div class="clause-desc">Contract incorporates company handbook policies</div></div>
+              <label class="toggle-switch" onclick="event.stopPropagation()"><input type="checkbox" id="en-handbook" onchange="app.toggleClause('ct-handbook');app.buildPreview()"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="clause-body"><div class="clause-note">Standard handbook reference paragraph will be included. Confirm handbook has been issued to the employee.</div></div>
+          </div>
+
+          <!-- GRIEVANCES -->
+          <div class="section-header">Grievances</div>
+          <div class="form-group"><label class="form-label">Grievance Contact Person</label><input class="form-control" id="grievance-person" placeholder="HR Department / Line Manager" oninput="app.buildPreview()"></div>
+
+          <!-- GENERATE -->
+          <div class="divider"></div>
+          <div class="btn-group">
+            <button class="btn btn-primary" onclick="app.generateAndSendContract()"><i class="fas fa-paper-plane"></i> Generate &amp; Send to Candidate</button>
+            <button class="btn" onclick="app.printPreview()"><i class="fas fa-print"></i> Print Preview</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: Live Preview -->
+        <div class="builder-right">
+          <div class="preview-topbar">
+            <h3><i class="fas fa-eye" style="color:var(--primary);margin-right:6px;"></i> Live Contract Preview</h3>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <span class="pill pill-ok" id="preview-status"><i class="fas fa-circle" style="font-size:7px;"></i> Updating…</span>
+              <button class="btn btn-ghost btn-sm" onclick="app.printPreview()"><i class="fas fa-expand"></i> Expand</button>
+            </div>
+          </div>
+          <div class="preview-content" id="contract-preview">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="view-3" class="card hidden">
+      <div class="card-header"><h2><i class="fas fa-envelope-open-text"></i> Candidate Decision Portal</h2><div class="step-indicator">Step 3 of 8</div></div>
+      <p style="color:var(--text2);">The candidate has received the contract package by email.</p>
+      <div class="email-card">
+        <strong>Subject:</strong> Your Employment Contract — Action Required<br>
+        <strong>To:</strong> <span id="candidate-email-display"></span><br>
+        <strong>Attachments:</strong> Contract_of_Employment.pdf, Employee_Handbook.pdf, Welcome_Guide.pdf
+      </div>
+      <p style="color:var(--muted);font-size:12px;font-style:italic;margin-top:10px;">Simulating candidate response…</p>
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="app.handleCandidateDecision(true)"><i class="fas fa-check-circle"></i> Accept Offer</button>
+        <button class="btn btn-danger" onclick="app.handleCandidateDecision(false)"><i class="fas fa-times-circle"></i> Decline Offer</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="view-4" class="card hidden">
+      <div class="card-header"><h2><i class="fas fa-id-card"></i> Candidate Portal: Personal Data</h2><div class="step-indicator">Step 4 of 8</div></div>
+      <p style="color:var(--text2);margin-bottom:16px;">Please provide the required documentation and details.</p>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Photo ID Upload (Simulated)</label><input class="form-control" value="passport.jpg" disabled style="opacity:.6;cursor:not-allowed;"></div>
+        <div class="form-group"><label class="form-label">PPSN / Tax Reference *</label><input class="form-control" id="p-ppsn" placeholder="1234567A"></div>
+      </div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Bank IBAN</label><input class="form-control" id="p-bank" placeholder="IE29 AIBK 9311 5212 3456 78"></div>
+        <div class="form-group"><label class="form-label">Emergency Contact</label><input class="form-control" id="p-emergency" placeholder="Jane Murphy — 085 123 4567"></div>
+      </div>
+      <div class="btn-group"><button class="btn btn-primary" onclick="app.submitPortalData()"><i class="fas fa-arrow-right"></i> Next: References</button></div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div id="view-5" class="card hidden">
+      <div class="card-header"><h2><i class="fas fa-user-check"></i> Candidate Portal: References</h2><div class="step-indicator">Step 5 of 8</div></div>
+      <div class="form-row cols-2">
+        <div class="form-group"><label class="form-label">Reference Name *</label><input class="form-control" id="r-name" placeholder="John Smith"></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="form-control" type="email" id="r-email" placeholder="j.smith@company.ie"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Position & Company</label><input class="form-control" id="r-pos" placeholder="Senior Manager, Tech Corp Ltd"></div>
+      <div class="btn-group"><button class="btn btn-primary" onclick="app.submitReferences()"><i class="fas fa-paper-plane"></i> Submit & Send Verification Emails</button></div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div id="view-6" class="card hidden">
+      <div class="card-header"><h2><i class="fas fa-clipboard-check"></i> HR Document Review</h2><div class="step-indicator">Step 6 of 8</div></div>
+      <div class="info-box warn-box" style="margin-bottom:16px;">
+        <strong>Status:</strong> Documents Pending Review &nbsp;·&nbsp; <strong>Reference Check:</strong> <span class="pill pill-ok">Verified</span> &nbsp;·&nbsp; <strong>ID:</strong> <span class="pill pill-warn">Pending</span>
+      </div>
+      <div class="form-group"><label class="form-label">Review Notes / Clarification Request</label><textarea class="form-control" id="hr-notes" rows="3" placeholder="Enter notes if clarification required…"></textarea></div>
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="app.hrReviewAction(true)"><i class="fas fa-check"></i> Approve Onboarding</button>
+        <button class="btn btn-danger" onclick="app.hrReviewAction(false)"><i class="fas fa-exclamation-circle"></i> Request Clarification</button>
+      </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div id="view-7" class="card hidden">
+      <div class="card-header"><h2><i class="fas fa-tasks"></i> Final Provisioning</h2><div class="step-indicator">Step 7 of 8</div></div>
+      <p style="color:var(--text2);margin-bottom:16px;">Candidate approved. Executing onboarding tasks.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <h3 style="font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><i class="fas fa-building" style="color:var(--primary);"></i> HR Tasks</h3>
+          <div class="task-list">
+            <div class="task-item"><i class="task-check fas fa-check-circle"></i> Create Employee Record</div>
+            <div class="task-item"><i class="task-check fas fa-check-circle"></i> Send Welcome Email</div>
+            <div class="task-item"><i class="task-check fas fa-check-circle"></i> Add to Payroll System</div>
+          </div>
+        </div>
+        <div>
+          <h3 style="font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;"><i class="fas fa-laptop" style="color:var(--success);"></i> IT Tasks</h3>
+          <div class="task-list">
+            <div class="task-item"><i class="task-check fas fa-check-circle"></i> System Access Generated</div>
+            <div class="task-item"><i class="task-check fas fa-check-circle"></i> Company Email Created</div>
+            <div class="task-item"><i class="task-check fas fa-check-circle"></i> Equipment Ordered</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-group"><button class="btn btn-primary" onclick="app.finalizeProcess()"><i class="fas fa-flag-checkered"></i> Complete Onboarding</button></div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div id="view-8" class="card hidden">
+      <div class="completion-screen">
+        <div class="completion-icon"><i class="fas fa-trophy"></i></div>
+        <h2>Onboarding Complete!</h2>
+        <p style="color:var(--text2);font-size:1rem;margin-bottom:18px;">The employee has been successfully onboarded.</p>
+        <div class="next-steps-box">
+          <h3>Next Steps</h3>
+          <ul>
+            <li><i class="fas fa-calendar-check" style="color:var(--success);"></i> First day orientation scheduled</li>
+            <li><i class="fas fa-laptop" style="color:var(--success);"></i> Equipment arrives in 3–5 business days</li>
+            <li><i class="fas fa-user-shield" style="color:var(--success);"></i> Security access granted</li>
+          </ul>
+        </div>
+        <div class="btn-group" style="justify-content:center;">
+          <button class="btn btn-primary" onclick="location.reload()"><i class="fas fa-user-plus"></i> Start New Candidate</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Log (shown on non-builder steps) -->
+    <div class="system-log-container" id="sys-log-outer">
+      <div class="system-log-header"><h3><i class="fas fa-terminal"></i> System Log</h3><span style="font-size:11px;color:var(--muted);">Real-time</span></div>
+      <div class="system-log" id="sys-log"></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════ */
+function q(id){ return document.getElementById(id); }
+function val(id){ const el=q(id); return el?el.value.trim():''; }
+function checked(id){ const el=q(id); return el?el.checked:false; }
+function radioVal(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el?el.value:''; }
+function ph(text){ return text?`<span class="placeholder">${text}</span>`:`<span class="placeholder">[FILL IN]</span>`; }
+function fmtDate(d){ if(!d) return ph('Date'); try{return new Date(d).toLocaleDateString('en-IE',{day:'numeric',month:'long',year:'numeric'});}catch{return d;} }
+function fmtTime(t){ if(!t) return t; const [h,m]=t.split(':'); const hr=parseInt(h); return `${hr%12||12}:${m}${hr<12?'am':'pm'}`; }
+
+/* ══════════════════════════════════════════════════════════
+   APP
+══════════════════════════════════════════════════════════ */
+const app = {
+  currentStep: 1,
+  totalSteps: 8,
+  data: { candidate:{} },
+
+  init(){
+    app.updateProgressBar();
+    app.updateSidebar();
+    app.buildDaySchedule();
+    // listen for radio changes
+    document.querySelectorAll('input[name="hours-mode"]').forEach(r => r.addEventListener('change', () => {
+      q('hours-simple-inputs').classList.toggle('hidden', r.value!=='simple' && r.value==='detail');
+      q('hours-detail-inputs').classList.toggle('hidden', r.value!=='detail');
+      q('hours-simple-inputs').classList.toggle('hidden', r.value==='detail');
+      app.buildPreview();
+    }));
+    document.querySelectorAll('input[name="pension-type"]').forEach(r => r.addEventListener('change', () => {
+      document.querySelectorAll('.pension-contrib-field').forEach(el=>el.classList.toggle('hidden', r.value!=='contribution'));
+      document.querySelectorAll('.pension-prsa-field').forEach(el=>el.classList.toggle('hidden', r.value!=='prsa'));
+      app.buildPreview();
+    }));
+    document.querySelectorAll('input[name="car-type"]').forEach(r => r.addEventListener('change', () => {
+      document.querySelectorAll('.car-allowance-field').forEach(el=>el.classList.toggle('hidden', r.value!=='allowance'));
+      app.buildPreview();
+    }));
+    document.querySelectorAll('input[name="ot-rate"]').forEach(r => r.addEventListener('change', () => {
+      q('ot-custom-input').classList.toggle('hidden', r.value!=='custom');
+      app.buildPreview();
+    }));
+    app.buildPreview();
+  },
+
+  buildDaySchedule(){
+    const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const html = days.map(d=>`
+      <div style="display:grid;grid-template-columns:90px 1fr 1fr;gap:8px;align-items:center;margin-bottom:8px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text2);">${d}</div>
+        <input class="form-control" type="time" id="day-start-${d.toLowerCase()}" value="${d==='Saturday'||d==='Sunday'?'':'09:00'}" oninput="app.buildPreview()" style="font-size:12px;padding:6px 10px;">
+        <input class="form-control" type="time" id="day-end-${d.toLowerCase()}" value="${d==='Saturday'||d==='Sunday'?'':'17:00'}" oninput="app.buildPreview()" style="font-size:12px;padding:6px 10px;">
+      </div>`).join('');
+    q('day-schedule').innerHTML = `<div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600;display:grid;grid-template-columns:90px 1fr 1fr;gap:8px;"><span></span><span>START</span><span>FINISH</span></div>${html}`;
+  },
+
+  updateProgressBar(){
+    const pct = ((app.currentStep-1)/(app.totalSteps-1))*100;
+    q('progress-bar').style.width=pct+'%';
+    q('status-badge').innerText=`Step ${app.currentStep} of ${app.totalSteps}`;
+  },
+
+  updateSidebar(){
+    document.querySelectorAll('.step-item').forEach(item=>{
+      const n=parseInt(item.dataset.step);
+      item.classList.remove('active','completed');
+      if(n===app.currentStep) item.classList.add('active');
+      else if(n<app.currentStep) item.classList.add('completed');
+    });
+  },
+
+  goToView(viewId, stepName, stepNum){
+    app.currentStep=stepNum;
+    document.querySelectorAll('#page-body > .card, #page-body > #view-2').forEach(el=>el.classList.add('hidden'));
+    q(viewId).classList.remove('hidden');
+    app.updateProgressBar();
+    app.updateSidebar();
+    // show/hide sys-log
+    q('sys-log-outer').style.display = viewId==='view-2' ? 'none' : '';
+    if(app.data.candidate.email) q('candidate-email-display').textContent=app.data.candidate.email;
+    app.log(`→ ${stepName}`, 'info');
+    window.scrollTo(0,0);
+  },
+
+  log(msg, type='info'){
+    const log=q('sys-log');
+    if(!log) return;
+    const time=new Date().toLocaleTimeString();
+    const icons={success:'✅',warning:'⚠️',error:'❌',info:'ℹ️'};
+    const entry=document.createElement('div');
+    entry.className='log-entry';
+    entry.innerHTML=`<span class="log-time">${time}</span><span class="log-${type}">${icons[type]||'ℹ️'} ${msg}</span>`;
+    log.prepend(entry);
+    log.scrollTop=0;
+  },
+
+  toggleClause(id){
+    const el=q(id);
+    const cb=el.querySelector('input[type=checkbox]');
+    const isActive=el.classList.toggle('active');
+    if(cb) cb.checked=isActive;
+    app.buildPreview();
+  },
+
+  selectRadio(name, val){
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r=>{
+      const opt=r.closest('.radio-option');
+      if(opt) opt.classList.toggle('selected', r.value===val);
+    });
+  },
+
+  /* ── STEP 1 ── */
+  saveCandidateDetails(){
+    const name=val('c-name'), email=val('c-email');
+    if(!name||!email){ app.log('Please fill in Name and Email','warning'); alert('Please fill in Name and Email'); return; }
+    app.data.candidate={name,email,address:val('c-address'),phone:val('c-phone')};
+    // Pre-fill candidate name in contract preview
+    app.log(`Candidate profile created: ${name} (${email})`, 'success');
+    app.goToView('view-2','Contract Builder',2);
+    setTimeout(()=>app.buildPreview(),100);
+  },
+
+  /* ── STEP 2: generate preview ── */
+  buildPreview(){
+    const preview=q('contract-preview');
+    if(!preview) return;
+    const status=q('preview-status');
+    if(status){ status.innerHTML='<i class="fas fa-circle" style="font-size:7px;color:var(--warning);"></i> Updating…'; }
+    
+    const cand = app.data.candidate;
+    const candName = cand.name || '[CANDIDATE NAME]';
+    const candAddr = cand.address || '[CANDIDATE ADDRESS]';
+
+    const coName  = val('co-name')||null;
+    const coAddr  = val('co-address')||null;
+    const jobTitle= val('job-title')||null;
+    const jobDuties=val('job-duties')||null;
+    const startD  = val('start-date')||null;
+    const probation=val('probation')||'3';
+    const workPlace=val('work-place')||null;
+    const workArea =val('work-area')||null;
+    const payAmt  = val('pay-amount')||null;
+    const payPer  = val('pay-period')||'per annum';
+    const payFreq = val('pay-freq')||'monthly';
+    const payMethod=val('pay-method')||'bank transfer';
+    const payDay  = val('pay-day')||null;
+    const hDays   = val('holiday-days')||'20';
+    const hType   = val('holiday-type')||'in addition';
+    const hYear   = val('holiday-year')||'1 January';
+    const hNotice = val('holiday-notice')||'2';
+    const sickPerson=val('sick-person')||null;
+    const sickTime= val('sick-time')||null;
+    const confYears=val('conf-years')||'2';
+    const noticeEmp=val('notice-employee')||null;
+    const noticeEr=val('notice-employer')||null;
+    const grievPerson=val('grievance-person')||null;
+    const lunchBreak=val('lunch-break')||'30 minutes';
+    const hoursTotal=val('hours-total')||'39';
+
+    /* hours */
+    let hoursBlock='';
+    const hMode = radioVal('hours-mode');
+    if(hMode==='detail'){
+      const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      const rows=days.map(d=>{
+        const s=val(`day-start-${d.toLowerCase()}`); const e=val(`day-end-${d.toLowerCase()}`);
+        if(!s&&!e) return '';
+        return `<div style="display:flex;gap:16px;"><strong style="min-width:90px;">${d}</strong> ${fmtTime(s)||'—'} to ${fmtTime(e)||'—'}</div>`;
+      }).filter(Boolean).join('');
+      hoursBlock=`<p>Your normal working hours are:</p><div style="padding-left:12px;margin:6px 0;">${rows}</div><p>a total of ${ph(hoursTotal)} hours per week.</p>`;
+    } else {
+      const hStart=val('hours-start')||null;
+      const hEnd  =val('hours-end')||null;
+      const hDays2=val('hours-days')||'Monday to Friday';
+      hoursBlock=`<p>Your normal working hours will be ${ph(hStart?fmtTime(hStart):null)} to ${ph(hEnd?fmtTime(hEnd):null)}, ${ph(hDays2)}, a total of ${ph(hoursTotal)} hours per week.</p>`;
+    }
+
+    /* optional blocks */
+    const inclContinuous = checked('en-continuous');
+    const inclWaiver     = checked('en-48hr');
+    const inclOvertime   = checked('en-overtime');
+    const inclPension    = checked('en-pension');
+    const inclBenefits   = checked('en-benefits');
+    const inclCar        = checked('en-car');
+    const inclHealth     = checked('en-health');
+    const inclHolidayPay = checked('en-holiday-pay');
+    const inclShutdown   = checked('en-shutdown');
+    const inclSickPay    = checked('en-sickpay');
+    const inclGarden     = checked('en-garden');
+    const inclGratuities = checked('en-gratuities');
+    const inclRetirement = checked('en-retirement');
+    const inclHandbook   = checked('en-handbook');
+    const inclNSol       = checked('en-ptr-nsol');
+    const inclNC         = checked('en-ptr-nc');
+    const inclNP         = checked('en-ptr-np');
+    const inclNI         = checked('en-ptr-ni');
+
+    let html = `
+      <h1>Contract of Employment – Permanent</h1>
+      <p style="text-align:center;font-size:12px;color:#666;margin-bottom:20px;">(Full-Time and Part-Time)</p>
+      <h2>Parties</h2>
+      <p><strong>THIS AGREEMENT</strong> is between <strong>${ph(coName)}</strong>, whose Registered Office is at ${ph(coAddr)} (<strong>"the Employer"</strong>)</p>
+      <p>and <strong>${candName}</strong> of ${candAddr} (<strong>"the Employee"</strong>).</p>
+      <p>IT IS AGREED that we will employ you and you will work for us on the following terms and conditions:</p>
+
+      <h2>1. Job Title &amp; Duties</h2>
+      <p>Your position is that of ${ph(jobTitle)}.</p>
+      ${jobDuties?`<p>Your duties will include: ${jobDuties}</p>`:''}
+      <p>You may from time to time be required to carry out such other reasonable duties as we may decide, without additional remuneration, to meet the needs of the business.</p>
+
+      <h2>2. Commencement of Employment</h2>
+      <p>Your employment with us will begin on ${ph(startD?fmtDate(startD):null)}.</p>
+      ${inclContinuous?`<div class="optional-block"><p>Your continuous employment, taking into account any service with us and with any previous employer which counts, began on ${ph(val('cont-date')?fmtDate(val('cont-date')):null)}.</p></div>`:''}
+
+      <h2>3. Probationary Period</h2>
+      <p>The first ${ph(probation)} months of employment will be a probationary period, during which time your performance will be monitored. The probationary period may be extended by us in accordance with our policy.</p>
+
+      <h2>4. Hours of Work</h2>
+      ${hoursBlock}
+      <p>You are entitled to an unpaid lunch break of ${ph(lunchBreak)} which will be taken at such time as we may require.</p>
+      ${inclWaiver?`<div class="optional-block"><p>You agree that your average weekly working hours may be in excess of those prescribed by the Organisation of Working Time Act 1997 ("the Waiver"). The Waiver will remain in force indefinitely, but you may give us not less than ${ph(val('waiver-notice'))} months' written notice to withdraw from the Waiver.</p></div>`:''}
+
+      <h2>5. Place of Work</h2>
+      <p>Your normal place of work will be ${ph(workPlace)}, or any other premises to which we may move or to which we may reasonably direct you, within ${ph(workArea)}.</p>
+
+      <h2>6. Payment</h2>
+      <p>Payment is at the rate of ${ph(payAmt?'€'+payAmt:null)} ${ph(payPer)} and is payable ${ph(payFreq)} in arrears by ${ph(payMethod)} on ${ph(payDay)}.</p>
+      ${inclOvertime?`<div class="optional-block">
+        <p>Hours in excess of ${ph(val('ot-threshold'))} per week are classed as overtime. Overtime must be authorised in advance by ${ph(val('ot-person'))}.</p>
+        ${radioVal('ot-rate')==='basic'?'<p>Overtime is paid at the basic rate.</p>':''}
+        ${radioVal('ot-rate')==='custom'?`<p>Overtime hours are paid as follows: ${ph(val('ot-rate-detail'))}.</p>`:''}
+        ${radioVal('ot-rate')==='toil'?`<p>You may with the prior consent of ${ph(val('ot-person'))} be permitted to take time off in lieu of overtime worked.</p>`:''}
+      </div>`:''}
+
+      <h2>7. Deductions from Wages</h2>
+      <p>We reserve the right to deduct from your wages any overpayment of wages, outstanding loans or advances, disallowed expenses claims, or costs arising from your breach of contract or damage to property.</p>
+
+      ${inclPension?`<h2>8. Pension</h2>
+      <div class="optional-block">
+      ${radioVal('pension-type')==='occupational'?`<p>You may, if you wish, after the completion of ${ph(val('pension-period'))} continuous employment, join and remain during your employment a member of our occupational pension scheme.</p>`:''}
+      ${radioVal('pension-type')==='prsa'?`<p>You may, if you wish, look to join a Personal Retirement Savings Account (PRSA). Further details of the PRSA are available from ${ph(val('prsa-provider'))}.</p>`:''}
+      ${radioVal('pension-type')==='contribution'?`<p>After the completion of ${ph(val('pension-period'))} continuous employment, we will contribute ${ph(val('pension-pct'))}% of your basic wages/salary to a personal pension plan of your choice.</p>`:''}
+      </div>`:''}
+
+      ${inclBenefits?`<h2>9. Benefits</h2>
+      <div class="optional-block"><p>After the completion of ${ph(val('benefits-period'))} continuous employment, the Employee will be entitled to ${ph(val('benefits-detail'))}.</p></div>`:''}
+
+      ${inclCar?`<h2>10. Company Car / Car Allowance</h2>
+      <div class="optional-block">
+      ${radioVal('car-type')==='provided'?`<p>You will be provided with a company motor car together with the right to use the car for business and private purposes, on such terms as may from time to time be directed.</p>`:''}
+      ${radioVal('car-type')==='allowance'?`<p>We will pay you a monthly car allowance of ${ph(val('car-amount')?'€'+val('car-amount'):null)} in recognition of the fact that you will buy and maintain your own car and use it for business purposes. Your car allowance will be discontinued in the event that you cease to hold a valid driving licence. Your car allowance is fully taxable but does not count in the calculation of any pension entitlement.</p>`:''}
+      </div>`:''}
+
+      ${inclHealth?`<h2>11. Health Insurance</h2>
+      <div class="optional-block"><p>Insurance will be arranged with ${ph(val('health-provider'))} for ${ph(val('health-coverage'))} in accordance with Plan ${ph(val('health-plan'))}.</p></div>`:''}
+
+      <h2>12. Holidays</h2>
+      ${hType==='in addition'
+        ?`<p>In addition to bank and public holidays, your annual holiday entitlement is ${ph(hDays)} days.</p>`
+        :`<p>Your annual holiday entitlement (inclusive of bank and public holidays) is ${ph(hDays)} days.</p>`
+      }
+      <p>The holiday year runs from ${ph(hYear)}. You must give at least ${ph(hNotice)} weeks' notice of holiday requests.</p>
+      ${inclShutdown?`<div class="optional-block"><p>You are required to retain ${ph(val('shutdown-days'))} days of your annual entitlement to cover our ${ph(val('shutdown-period'))} shutdown period.</p></div>`:''}
+      ${inclHolidayPay?`<div class="optional-block">
+      <p><strong>Holiday Pay Calculation:</strong>
+      ${radioVal('hpay-type')==='weekly'?'One day\'s holiday pay equals your basic weekly pay divided by 5 (or, if part-time, by the number of days per week normally worked).':''}
+      ${radioVal('hpay-type')==='monthly'?'One day\'s holiday pay equals your monthly pay divided by 22 (or, if part-time, by the number of days per month normally worked).':''}
+      ${radioVal('hpay-type')==='annual'?'One day\'s holiday pay equals your annual salary divided by 253 (or, if part-time, by the number of days per year normally worked).':''}
+      ${radioVal('hpay-type')==='hourly'?'One day\'s holiday pay equals your hourly rate multiplied by the number of hours normally worked per day.':''}
+      </p></div>`:''}
+
+      <h2>13. Absences Due to Sickness or Injury</h2>
+      <p>In the event of incapacity due to sickness or injury you must advise ${ph(sickPerson)} not later than ${ph(sickTime?fmtTime(sickTime):null)} on the first day of absence.</p>
+      <p>You may be eligible for statutory sick pay (SSP) under the Sick Leave Act 2022. Paid sick leave covers up to 3 sick days per year in 2023, 5 days in 2024, 7 days in 2025 and 10 days in 2026 at 70% of normal wages (max €110/day).</p>
+      ${inclSickPay?`<div class="optional-block"><p>In addition to statutory sick pay, you will be paid as follows for absence due to sickness: ${ph(val('sick-pay-detail'))} for the first ${ph(val('sick-days'))} days of absence.</p></div>`:''}
+
+      ${inclGratuities?`<h2>14. Gratuities</h2>
+      <div class="optional-block"><p>You must immediately report in writing to ${ph(val('gratuities-person'))} any offer by customers, suppliers, distributors or other persons having a connection with us of any gift, reward or benefit.</p></div>`:''}
+
+      <h2>15. Confidentiality</h2>
+      <p>You promise that you will keep all Confidential Information confidential during and after your employment. You will not use for yourself or divulge to any person any Confidential Information acquired during your employment. The provisions of this clause shall continue after termination for a period of ${ph(confYears)} years.</p>
+
+      <h2>16. Intellectual Property</h2>
+      <p>You acknowledge that all files, records, software and work products developed by you in the course of your employment are the property of the Employer. You agree to assign all such Intellectual Property to us and to do whatever is necessary to secure ownership in our name.</p>
+
+      <h2>17. Grievances</h2>
+      <p>If you have any grievance in relation to your employment, you should raise it with ${ph(grievPerson)} orally or in writing.</p>
+
+      <h2>18. Termination of Employment</h2>
+      <p>During the probationary period, this employment may be terminated by either party giving one week's written notice.</p>
+      <p>After the probationary period: you shall give us ${ph(noticeEmp)} notice of your intention to terminate, and your entitlement to notice from us shall be ${ph(noticeEr)}.</p>
+      ${inclGarden?`<div class="optional-block"><p>Once notice to terminate your employment has been given by either party, we may place you on Garden Leave for the whole or any part of the remainder of your notice period. During Garden Leave you will not be required to attend work or to undertake any duties, but you will remain an employee and will continue to receive your salary and contractual benefits.</p></div>`:''}
+
+      ${(inclNSol||inclNC||inclNP||inclNI)?`<h2>19. Post-Termination Restrictions</h2>
+      ${inclNSol?`<div class="optional-block"><p>You agree that you will not within ${ph(val('ptr-nsol-months'))} months of termination, solicit or endeavour to entice away from us the business or custom of any customer with whom you have had dealings in the course of your employment.</p></div>`:''}
+      ${inclNC?`<div class="optional-block"><p>You agree that you will not within ${ph(val('ptr-nc-months'))} months of termination, in the area of ${ph(val('ptr-nc-area'))} or within a radius of ${ph(val('ptr-nc-miles'))} miles from any of our places of business, carry on or be engaged in any business that is in competition with the business of the Employer.</p></div>`:''}
+      ${inclNP?`<div class="optional-block"><p>You agree that you will not within ${ph(val('ptr-np-months'))} months of termination, employ or provide work to any person who was employed by or who worked as a contractor for us within the period of 12 months prior to termination of your employment.</p></div>`:''}
+      ${inclNI?`<div class="optional-block"><p>You agree that you will not within ${ph(val('ptr-ni-months'))} months of termination, advise, instruct, or assist in any activity the effect of which is to encourage any customer to breach or terminate their contract with us.</p></div>`:''}
+      `:''}
+
+      ${inclRetirement?`<h2>20. Retirement</h2>
+      <div class="optional-block"><p>Our normal retirement age is ${ph(val('retirement-age'))}. You will retire on your ${ph(val('retirement-age'))}th birthday. At least 6 months but no more than 12 months before this date, you will notify us in writing of your intended date of retirement.</p></div>`:''}
+
+      ${inclHandbook?`<h2>21. Staff Handbook and Company Policies</h2>
+      <div class="optional-block"><p>The Company has adopted a staff handbook which contains details of our policies on discipline, grievances, health and safety, equal opportunities, data protection, and other matters. You acknowledge that you have been given a copy of the staff handbook and agree to comply fully with all policies contained therein. Any breach of any policy by you will be a breach of this contract.</p></div>`:''}
+
+      <h2>22. Governing Law</h2>
+      <p>This Agreement shall be construed in all respects under the law of Ireland and the Courts of Ireland shall have non-exclusive jurisdiction in all matters relating thereto.</p>
+
+      <h2>23. Personal Information</h2>
+      <p>You agree to us holding and processing your personal data for all purposes relating to this employment, including administering and maintaining personnel records, paying and reviewing salary, providing benefits, and compliance with legal requirements. The data will be held for the duration of employment or any longer period necessary to answer queries relating to your employment.</p>
+
+      <div class="sig-block">
+        <div>
+          <div class="sig-line"></div>
+          <p><strong>SIGNED FOR THE EMPLOYER</strong></p>
+          <p style="font-size:12px;color:#666;">Name: _____________________</p>
+          <p style="font-size:12px;color:#666;">Date: _____________________</p>
+        </div>
+        <div>
+          <div class="sig-line"></div>
+          <p><strong>SIGNED BY THE EMPLOYEE</strong></p>
+          <p style="font-size:12px;color:#666;">${candName}</p>
+          <p style="font-size:12px;color:#666;">Date: _____________________</p>
+        </div>
+      </div>
+    `;
+
+    preview.innerHTML=html;
+    if(status){ setTimeout(()=>{ status.innerHTML='<i class="fas fa-circle" style="font-size:7px;"></i> Live'; },300); }
+  },
+
+  printPreview(){
+    const content=q('contract-preview').innerHTML;
+    const w=window.open('','_blank');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Employment Contract</title>
+    <style>body{font-family:Georgia,serif;font-size:13px;line-height:1.8;color:#222;max-width:800px;margin:40px auto;padding:0 40px;}h1{font-size:18px;text-align:center;margin-bottom:4px;}h2{font-size:14px;font-weight:700;margin:18px 0 6px;text-decoration:underline;}p{margin-bottom:8px;}.placeholder{background:#fef08a;padding:0 2px;font-family:monospace;font-size:12px;border-radius:2px;}.optional-block{background:#eff6ff;border-left:3px solid #3b82f6;padding:6px 12px;margin:4px 0;border-radius:0 4px 4px 0;}.sig-block{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:50px;}.sig-line{border-bottom:1px solid #333;height:50px;margin-bottom:6px;}ol,ul{padding-left:20px;}</style>
+    </head><body>${content}</body></html>`);
+    w.document.close();
+    w.focus();
+    setTimeout(()=>w.print(),500);
+  },
+
+  /* ── STEP 2 → proceed ── */
+  generateAndSendContract(){
+    app.log(`Contract generated for ${app.data.candidate.name}`, 'success');
+    app.log(`Optional clauses: ${app.countOptionalClauses()} included`, 'info');
+    app.log(`DocuSign: Envelope created and sent for e-signature`, 'success');
+    app.log(`Email: Contract package sent to ${app.data.candidate.email}`, 'success');
+    app.goToView('view-3','Candidate Decision',3);
+  },
+
+  countOptionalClauses(){
+    const ids=['en-continuous','en-48hr','en-overtime','en-pension','en-benefits','en-car','en-health','en-holiday-pay','en-shutdown','en-sickpay','en-garden','en-gratuities','en-retirement','en-handbook','en-ptr-nsol','en-ptr-nc','en-ptr-np','en-ptr-ni'];
+    return ids.filter(id=>checked(id)).length;
+  },
+
+  /* ── STEPS 3–8 ── */
+  handleCandidateDecision(accepted){
+    if(accepted){
+      app.log('Offer ACCEPTED by candidate','success');
+      app.log('DocuSign: Contract countersigned — saved to HR records','success');
+      app.goToView('view-4','Candidate Portal (Data)',4);
+    } else {
+      app.log('Offer DECLINED by candidate','warning');
+      if(confirm('Offer Declined. Create a revised offer with different terms?')){
+        app.goToView('view-2','Contract Builder (Revised Offer)',2);
+        setTimeout(()=>app.buildPreview(),100);
+      }
+    }
+  },
+
+  submitPortalData(){
+    const ppsn=val('p-ppsn');
+    if(!ppsn){ app.log('Please enter PPSN/Tax reference','warning'); alert('Please enter PPSN'); return; }
+    app.log('Personal data uploaded: ID, Bank IBAN, Emergency contact','success');
+    app.goToView('view-5','Candidate Portal (References)',5);
+  },
+
+  submitReferences(){
+    const rName=val('r-name');
+    if(!rName){ app.log('Please enter a Reference Name','warning'); alert('Please enter a Reference Name'); return; }
+    app.log(`Reference captured: ${rName}`, 'success');
+    app.log(`Verification email sent to ${val('r-email')||'referee'}`, 'info');
+    setTimeout(()=>app.log('Reference verification received (simulated)','success'), 1500);
+    app.goToView('view-6','HR Document Review',6);
+  },
+
+  hrReviewAction(approved){
+    const notes=val('hr-notes');
+    if(approved){
+      app.log('HR Decision: APPROVED','success');
+      app.goToView('view-7','Provisioning',7);
+    } else {
+      if(!notes){ app.log('Please add clarification notes','warning'); alert('Please add clarification notes before rejecting.'); return; }
+      app.log(`HR Decision: Clarification required — "${notes}"`, 'warning');
+      app.log('Email sent to candidate requesting clarification', 'info');
+      alert(`Returned to candidate with note: ${notes}`);
+      app.goToView('view-4','Candidate Portal (Correction)',4);
+    }
+  },
+
+  finalizeProcess(){
+    app.log('Employee record created','success');
+    app.log('Welcome email sent','success');
+    app.log('Payroll entry created','success');
+    app.log('IT: System access and email account provisioned','success');
+    app.log('IT: Equipment ordered','success');
+    app.log('🎉 Onboarding complete!','success');
+    document.querySelectorAll('.task-check').forEach((icon,i)=>{
+      setTimeout(()=>{ icon.classList.add('pulse'); setTimeout(()=>icon.classList.remove('pulse'),500); }, i*200);
+    });
+    setTimeout(()=>app.goToView('view-8','Complete',8), 2000);
+  }
+};
+
+document.addEventListener('DOMContentLoaded',()=>app.init());
+</script>
+</body>
+</html>
