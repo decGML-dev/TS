@@ -1,0 +1,2272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IT Services Portal — Tickets, Hardware Requests & Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --bg-secondary:#f1f5f9;
+      --card:#ffffff;
+      --panel:#fafbfc;
+      --text:#0f172a;
+      --text-secondary:#334155;
+      --muted:#64748b;
+      --line:#e2e8f0;
+      --line-dark:#cbd5e1;
+      --accent:#6366f1;
+      --accent-dark:#4f46e5;
+      --accent-light:#818cf8;
+      --accent2:#8b5cf6;
+      --warn:#f59e0b;
+      --good:#10b981;
+      --bad:#ef4444;
+      --shadow: 0 4px 12px rgba(15,23,42,.08), 0 2px 6px rgba(15,23,42,.04);
+      --shadow-lg: 0 8px 24px rgba(15,23,42,.12), 0 4px 10px rgba(15,23,42,.06);
+      --radius:18px;
+      --radius2:14px;
+      --font: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(ellipse 1200px 800px at 20% -10%, rgba(99,102,241,.08), transparent 60%),
+        radial-gradient(ellipse 1000px 600px at 85% 15%, rgba(139,92,246,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg-secondary));
+      line-height: 1.6;
+    }
+    .wrap{max-width:1300px; margin:0 auto; padding:28px 24px}
+    
+    header{
+      display:flex; 
+      justify-content:space-between; 
+      align-items:flex-start; 
+      gap:20px;
+      padding:24px; 
+      border:2px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius); 
+      box-shadow:var(--shadow);
+      margin-bottom: 24px;
+    }
+    header h1{
+      margin:0 0 8px; 
+      font-family: 'Fraunces', serif;
+      font-size:28px;
+      font-weight: 600;
+      letter-spacing:-.4px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p{
+      margin:0; 
+      color:var(--text-secondary); 
+      font-size:14px; 
+      line-height:1.7;
+      font-weight: 400;
+    }
+    
+    .toolbar{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      justify-content:flex-end; 
+      align-items:center;
+    }
+    
+    button{
+      cursor:pointer; 
+      user-select:none;
+      border:2px solid var(--line);
+      background: var(--bg);
+      color:var(--text);
+      padding:12px 20px;
+      border-radius:14px;
+      font-weight:700;
+      font-size:14px;
+      font-family: inherit;
+      transition:all .2s ease;
+    }
+    button:hover{
+      background:var(--bg-secondary); 
+      border-color:var(--line-dark);
+      box-shadow: 0 2px 8px rgba(15,23,42,.06);
+    }
+    button:active{transform:scale(0.98)}
+    
+    button.primary{
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border-color:var(--accent);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99,102,241,.25);
+    }
+    button.primary:hover{
+      box-shadow: 0 6px 20px rgba(99,102,241,.35);
+      transform: translateY(-2px);
+    }
+    button.primary:active{
+      transform: translateY(0);
+    }
+    
+    button.danger{
+      background:rgba(239,68,68,.1); 
+      border-color:rgba(239,68,68,.3);
+      color: var(--bad);
+    }
+    button.danger:hover{
+      background:rgba(239,68,68,.15);
+      border-color:rgba(239,68,68,.4);
+    }
+    
+    button.ghost{
+      background:transparent;
+      border-color: var(--line);
+    }
+    button.ghost:hover{
+      background: var(--bg);
+    }
+    
+    button.small{
+      padding:10px 16px; 
+      font-size:13px; 
+      border-radius:12px;
+    }
+
+    input[type="text"], 
+    input[type="number"], 
+    input[type="email"], 
+    input[type="date"], 
+    input[type="datetime-local"],
+    textarea, 
+    select{
+      width:100%;
+      padding:12px 14px;
+      border-radius:14px;
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      outline:none;
+      transition: all .25s ease;
+    }
+    textarea{min-height:92px; resize:vertical}
+    
+    input:focus, textarea:focus, select:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 4px rgba(99,102,241,.15);
+      background: var(--card);
+    }
+    input:hover:not(:focus), textarea:hover:not(:focus), select:hover:not(:focus){
+      border-color:var(--line-dark);
+    }
+    
+    input::placeholder, textarea::placeholder{
+      color: var(--muted);
+      font-weight: 400;
+    }
+    
+    .req::after{
+      content:" *"; 
+      color:var(--warn); 
+      font-weight:900;
+    }
+    .err{
+      border-color: var(--bad) !important;
+      box-shadow:0 0 0 4px rgba(239,68,68,.15) !important;
+      background: rgba(239,68,68,.05) !important;
+    }
+    .hint{
+      color:var(--muted); 
+      font-size:12px; 
+      line-height:1.5; 
+      margin:10px 0 0;
+      font-weight: 400;
+    }
+    .notice{
+      border:2px dashed var(--line-dark);
+      border-radius:14px; 
+      padding:14px;
+      background:rgba(99,102,241,.04);
+      color:var(--text-secondary);
+      font-size:13px; 
+      line-height:1.6;
+      font-weight: 400;
+    }
+
+    .grid{
+      display:grid; 
+      grid-template-columns: 400px 1fr; 
+      gap:24px; 
+      margin-top:0; 
+      align-items:start;
+    }
+    @media (max-width: 1080px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      border:2px solid var(--line);
+      background: var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card h2{
+      margin:0;
+      padding:18px 20px;
+      border-bottom:2px solid var(--line);
+      font-size:16px;
+      font-weight: 700;
+      letter-spacing:.2px;
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      gap:16px;
+      background: var(--panel);
+    }
+    .pill{
+      font-size:12px; 
+      color:var(--text-secondary);
+      font-weight: 600;
+      border:2px solid var(--line);
+      border-radius:999px;
+      padding:6px 12px;
+      background: var(--card);
+      white-space:nowrap;
+    }
+
+    /* Tabs */
+    .tabs{
+      display:flex; 
+      gap:10px; 
+      flex-wrap:wrap;
+      padding:16px 16px 0;
+      border-bottom:2px solid var(--line);
+      background: var(--panel);
+    }
+    .tab{
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text-secondary);
+      padding:11px 16px;
+      border-radius:14px;
+      font-weight:700;
+      font-size:13px;
+      letter-spacing:.15px;
+      transition: all .25s ease;
+      cursor: pointer;
+    }
+    .tab:hover{
+      border-color:var(--line-dark);
+      background: var(--bg-secondary);
+    }
+    .tab[aria-selected="true"]{
+      color: white;
+      border-color:var(--accent);
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      box-shadow: 0 2px 8px rgba(99,102,241,.25);
+    }
+    .panel{display:none}
+    .panel.active{display:block}
+
+    .section{
+      padding:20px;
+      border-top:2px solid var(--line);
+      background: var(--card);
+    }
+    .section:first-child{border-top:none}
+    .section h3{
+      margin:0 0 16px;
+      font-size:15px;
+      font-weight: 700;
+      letter-spacing:.15px;
+      display:flex; 
+      align-items:center; 
+      gap:12px;
+      color: var(--text);
+    }
+    .tag{
+      font-size:11px; 
+      color:var(--accent-dark);
+      font-weight: 700;
+      border:2px solid var(--accent-light);
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(99,102,241,.08);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    
+    .row{
+      display:grid; 
+      grid-template-columns:1fr 1fr; 
+      gap:16px; 
+      margin-top:12px;
+    }
+    @media (max-width: 720px){ .row{grid-template-columns:1fr} }
+    
+    .field{
+      display:flex; 
+      flex-direction:column; 
+      gap:8px; 
+      min-width:0;
+    }
+    label{
+      font-size:13px; 
+      color:var(--text); 
+      line-height:1.3;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+
+    /* Lists */
+    .list{padding:16px}
+    .list .topbar{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      align-items:center; 
+      justify-content:space-between; 
+      padding:0 0 14px;
+    }
+    .filters{
+      display:flex; 
+      gap:12px; 
+      flex-wrap:wrap; 
+      align-items:center;
+    }
+    .filters input[type="text"]{width:min(360px, 75vw)}
+    
+    .table{
+      overflow:auto;
+      border:2px solid var(--line);
+      border-radius:14px;
+      background: var(--bg-secondary);
+    }
+    table{
+      width:100%; 
+      border-collapse:collapse; 
+      min-width:980px;
+    }
+    th, td{
+      border-bottom:1px solid var(--line); 
+      padding:12px; 
+      font-size:13px; 
+      vertical-align:top;
+    }
+    th{
+      position:sticky; 
+      top:0; 
+      z-index:1; 
+      background: var(--panel); 
+      text-align:left;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      font-size: 12px;
+    }
+    
+    .badge{
+      display:inline-flex; 
+      align-items:center; 
+      gap:6px;
+      padding:5px 10px;
+      border-radius:999px;
+      border:2px solid var(--line);
+      background: var(--card);
+      color:var(--text-secondary);
+      white-space:nowrap;
+      font-size:11px;
+      font-weight:700;
+    }
+    .badge.good{
+      border-color:rgba(16,185,129,.3); 
+      color:#059669; 
+      background:rgba(16,185,129,.1);
+    }
+    .badge.warn{
+      border-color:rgba(245,158,11,.3); 
+      color:#d97706; 
+      background:rgba(245,158,11,.1);
+    }
+    .badge.bad{
+      border-color:rgba(239,68,68,.3); 
+      color:#dc2626; 
+      background:rgba(239,68,68,.1);
+    }
+    
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+    }
+    .actions{
+      display:flex; 
+      gap:10px; 
+      flex-wrap:wrap;
+    }
+
+    /* Analytics */
+    .kpis{
+      display:grid; 
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:16px;
+    }
+    @media (max-width: 1080px){ .kpis{grid-template-columns:repeat(2, minmax(0,1fr))} }
+    
+    .kpi{
+      border:2px solid var(--line);
+      border-radius:16px;
+      background: var(--card);
+      padding:16px;
+      transition: all .25s ease;
+    }
+    .kpi:hover{
+      border-color: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99,102,241,.1);
+    }
+    .kpi .label{
+      color:var(--text-secondary); 
+      font-size:12px; 
+      margin:0 0 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    .kpi .value{
+      font-size:26px; 
+      font-weight:800; 
+      margin:0;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .kpi .sub{
+      color:var(--muted); 
+      font-size:12px; 
+      margin:8px 0 0;
+      font-weight: 400;
+    }
+    
+    .charts{
+      display:grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap:16px; 
+      margin-top:16px;
+    }
+    @media (max-width: 980px){ .charts{grid-template-columns:1fr} }
+    
+    .chart{
+      border:2px solid var(--line);
+      border-radius:16px;
+      background: var(--card);
+      padding:16px;
+    }
+    .chart h4{
+      margin:0 0 14px; 
+      font-size:14px; 
+      font-weight: 700;
+      letter-spacing:.15px;
+      color: var(--text);
+    }
+    .chart-wrap{
+      position: relative;
+      height: 220px;
+      width: 100%;
+    }
+    .chart canvas{
+      display:block;
+    }
+    .chart .legend{
+      margin-top:10px; 
+      color:var(--muted); 
+      font-size:12px; 
+      line-height:1.5;
+      font-weight: 400;
+    }
+    
+    .twoCols{
+      display:grid; 
+      grid-template-columns:1fr 1fr; 
+      gap:16px;
+    }
+    @media (max-width: 980px){ .twoCols{grid-template-columns:1fr} }
+
+    /* Drawer modal (details) */
+    .backdrop{
+      position:fixed; 
+      inset:0;
+      background:rgba(15,23,42,.5);
+      backdrop-filter: blur(4px);
+      display:none;
+      align-items:stretch;
+      justify-content:flex-end;
+      z-index:60;
+    }
+    .backdrop.open{display:flex}
+    
+    .drawer{
+      width:min(540px, 96vw);
+      max-width:540px;
+      height:100%;
+      border-left:2px solid var(--line);
+      background: var(--card);
+      box-shadow:var(--shadow-lg);
+      display:flex;
+      flex-direction:column;
+      animation: drawerSlideIn 0.3s ease;
+    }
+    
+    @keyframes drawerSlideIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+    
+    .drawer header{
+      border-radius:0;
+      box-shadow:none;
+      border:none;
+      border-bottom:2px solid var(--line);
+      background: var(--panel);
+      padding:18px 20px;
+      align-items:center;
+      margin-bottom: 0;
+    }
+    .drawer header h3{
+      margin:0; 
+      font-size:18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .drawer header .sub{
+      margin:4px 0 0; 
+      color:var(--text-secondary); 
+      font-size:13px;
+      font-weight: 400;
+    }
+    .drawer .content{
+      padding:20px; 
+      overflow:auto;
+      flex: 1;
+    }
+    
+    .kv{
+      display:grid; 
+      grid-template-columns:150px 1fr; 
+      gap:10px 14px; 
+      font-size:13px; 
+      margin-top:14px;
+    }
+    .kv .k{
+      color:var(--text-secondary);
+      font-weight: 600;
+    }
+    .kv .v{
+      color:var(--text); 
+      word-break:break-word;
+      font-weight: 400;
+    }
+    
+    .drawer footer{
+      border-top:2px solid var(--line);
+      padding:16px 20px;
+      background: var(--panel);
+      display:flex; 
+      gap:12px; 
+      justify-content:space-between; 
+      flex-wrap:wrap;
+    }
+
+    /* Task list */
+    .task{
+      border:2px solid var(--line);
+      border-radius:16px;
+      background: var(--card);
+      padding:16px;
+      margin-top:12px;
+      transition: all .25s ease;
+    }
+    .task:hover{
+      border-color: var(--accent-light);
+      background: rgba(99,102,241,.03);
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(99,102,241,.08);
+    }
+    .taskTop{
+      display:flex; 
+      justify-content:space-between; 
+      gap:14px; 
+      flex-wrap:wrap; 
+      align-items:flex-start;
+    }
+    .taskTitle{
+      margin:0; 
+      font-weight:700; 
+      font-size:14px;
+      color: var(--text);
+    }
+    .taskMeta{
+      color:var(--muted); 
+      font-size:12px; 
+      margin-top:6px;
+      font-weight: 400;
+    }
+    .taskActions{
+      display:flex; 
+      gap:10px; 
+      flex-wrap:wrap; 
+      margin-top:12px;
+    }
+    .task input[type="checkbox"]{
+      transform:scale(1.3); 
+      accent-color:var(--accent); 
+      margin-right:12px;
+      cursor: pointer;
+    }
+
+    /* Statusbar */
+    .statusbar{
+      display:flex; 
+      justify-content:space-between; 
+      align-items:center; 
+      gap:16px;
+      padding:14px 20px; 
+      border-top:2px solid var(--line);
+      background: var(--panel);
+      color:var(--text-secondary);
+      font-size:13px;
+      font-weight: 500;
+    }
+    .status{
+      display:flex; 
+      align-items:center; 
+      gap:10px; 
+      flex-wrap:wrap;
+    }
+    .dot{
+      width:12px; 
+      height:12px; 
+      border-radius:999px; 
+      background:var(--muted); 
+      box-shadow:0 0 0 4px rgba(100,116,139,.1);
+      transition: all .3s ease;
+    }
+    .dot.good{
+      background:var(--good); 
+      box-shadow:0 0 0 4px rgba(16,185,129,.15);
+    }
+    .dot.bad{
+      background:var(--bad); 
+      box-shadow:0 0 0 4px rgba(239,68,68,.15);
+    }
+    
+    .toast{
+      position:fixed; 
+      bottom:24px; 
+      left:50%;
+      transform:translateX(-50%);
+      background: var(--text);
+      border:2px solid var(--line);
+      border-radius:999px;
+      padding:12px 20px;
+      color: white;
+      font-size:13px;
+      font-weight: 600;
+      display:none;
+      z-index:80;
+      box-shadow:0 12px 40px rgba(15,23,42,.2);
+      animation: toastSlideUp 0.3s ease;
+    }
+    
+    @keyframes toastSlideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, 10px);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+    
+    .toast.show{display:block}
+
+    @media print{
+      header, .toolbar, .tabs, .filters, .actions, .statusbar{display:none !important}
+      body{background:#fff; color:#000}
+      .card{box-shadow:none; border-color:#ccc}
+      input, textarea, select{border:1px solid #999; background:#fff; color:#000}
+      table{min-width:0}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>IT Services Portal</h1>
+        <p>
+          Log IT issue tickets, request hardware purchases, manage tasks/actions, and view analytics for volume,
+          turnaround times, and issue trends. Data is stored locally in your browser.
+        </p>
+      </div>
+      <div class="toolbar">
+        <button class="primary" id="btnNewIssue">New Issue Ticket</button>
+        <button class="primary" id="btnNewHardware">New Hardware Request</button>
+        <button id="btnExport">Export JSON</button>
+        <button id="btnPrint">Print</button>
+        <button class="danger" id="btnReset">Reset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT: Create / Update -->
+      <div class="card">
+        <h2>
+          Create / Update
+          <span class="pill" id="formPill">Issue Ticket</span>
+        </h2>
+
+        <div class="tabs" role="tablist" aria-label="Create tabs">
+          <button class="tab" role="tab" aria-selected="true" data-tab="issueForm">Issue Ticket</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="hardwareForm">Hardware Request</button>
+          <button class="tab" role="tab" aria-selected="false" data-tab="taskForm">Task / Action</button>
+        </div>
+
+        <!-- Issue Form -->
+        <div class="panel active" id="issueForm">
+          <div class="section">
+            <h3>Reporter <span class="tag">Ticket</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Name</label>
+                <input id="i_name" type="text" placeholder="e.g., Jane Doe" />
+              </div>
+              <div class="field">
+                <label class="req">Email</label>
+                <input id="i_email" type="email" placeholder="name@company.com" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Department</label>
+                <input id="i_dept" type="text" placeholder="e.g., Finance" />
+              </div>
+              <div class="field">
+                <label>Location</label>
+                <input id="i_location" type="text" placeholder="e.g., Dublin / Remote" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Issue details <span class="tag">Ticket</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Title</label>
+                <input id="i_title" type="text" placeholder="Short summary (e.g., VPN not connecting)" />
+              </div>
+              <div class="field">
+                <label class="req">Category</label>
+                <select id="i_category">
+                  <option value="">Select…</option>
+                  <option>Access / Accounts</option>
+                  <option>Email / Collaboration</option>
+                  <option>Network / VPN</option>
+                  <option>Hardware</option>
+                  <option>Software</option>
+                  <option>Security</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Priority</label>
+                <select id="i_priority">
+                  <option value="">Select…</option>
+                  <option value="P1">P1 - Critical (Business down)</option>
+                  <option value="P2">P2 - High</option>
+                  <option value="P3">P3 - Medium</option>
+                  <option value="P4">P4 - Low</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Impact</label>
+                <select id="i_impact">
+                  <option value="">Select…</option>
+                  <option>Single user</option>
+                  <option>Multiple users</option>
+                  <option>Department</option>
+                  <option>Company-wide</option>
+                </select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label class="req">Description</label>
+              <textarea id="i_desc" placeholder="What happened? When did it start? What have you tried? Error messages?"></textarea>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Device / Asset tag</label>
+                <input id="i_device" type="text" placeholder="e.g., LAP-0234 / iPhone 14" />
+              </div>
+              <div class="field">
+                <label>Affected system / app</label>
+                <input id="i_system" type="text" placeholder="e.g., Outlook, Teams, ERP, VPN" />
+              </div>
+            </div>
+            <p class="hint">Submitting creates a ticket with "Open" status and timestamps for analytics.</p>
+          </div>
+
+          <div class="section">
+            <div class="actions">
+              <button class="primary" id="btnSubmitIssue">Submit Ticket</button>
+              <button class="ghost" id="btnClearIssue">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hardware Form -->
+        <div class="panel" id="hardwareForm">
+          <div class="section">
+            <h3>Requester <span class="tag">Hardware</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Name</label>
+                <input id="h_name" type="text" placeholder="e.g., Jane Doe" />
+              </div>
+              <div class="field">
+                <label class="req">Email</label>
+                <input id="h_email" type="email" placeholder="name@company.com" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Department</label>
+                <input id="h_dept" type="text" placeholder="e.g., Sales" />
+              </div>
+              <div class="field">
+                <label>Cost centre / project</label>
+                <input id="h_cost" type="text" placeholder="Optional" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Purchase request <span class="tag">Hardware</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Item type</label>
+                <select id="h_type">
+                  <option value="">Select…</option>
+                  <option>Laptop</option>
+                  <option>Desktop</option>
+                  <option>Monitor</option>
+                  <option>Docking station</option>
+                  <option>Keyboard / Mouse</option>
+                  <option>Headset</option>
+                  <option>Printer</option>
+                  <option>Phone</option>
+                  <option>Network equipment</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="req">Quantity</label>
+                <input id="h_qty" type="number" min="1" value="1" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label class="req">Budget range (€)</label>
+                <input id="h_budget" type="text" placeholder="e.g., 900–1200" />
+              </div>
+              <div class="field">
+                <label>Needed by</label>
+                <input id="h_neededBy" type="date" />
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label class="req">Business justification</label>
+              <textarea id="h_just" placeholder="Why is this needed? New starter, replacement, performance needs, etc."></textarea>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label>Preferred specs / model</label>
+              <textarea id="h_specs" placeholder="CPU/RAM/storage, size, OS, ports, model preference, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="actions">
+              <button class="primary" id="btnSubmitHardware">Submit Request</button>
+              <button class="ghost" id="btnClearHardware">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task Form -->
+        <div class="panel" id="taskForm">
+          <div class="section">
+            <h3>Create a task/action <span class="tag">Tasks</span></h3>
+            <div class="row">
+              <div class="field">
+                <label class="req">Title</label>
+                <input id="t_title" type="text" placeholder="e.g., Reset VPN profile" />
+              </div>
+              <div class="field">
+                <label>Assign to</label>
+                <input id="t_assignee" type="text" placeholder="e.g., IT Support" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Due date/time</label>
+                <input id="t_due" type="datetime-local" />
+              </div>
+              <div class="field">
+                <label>Link to ticket/request</label>
+                <select id="t_link">
+                  <option value="">None</option>
+                </select>
+              </div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label>Notes</label>
+              <textarea id="t_notes" placeholder="Steps, context, or checklist items…"></textarea>
+            </div>
+            <div class="actions" style="margin-top:14px">
+              <button class="primary" id="btnAddTask">Add Task</button>
+              <button class="ghost" id="btnClearTask">Clear</button>
+            </div>
+            <div class="notice" style="margin-top:14px;">
+              Tasks can be linked to an Issue ticket or Hardware request. Mark them done from the Tasks panel.
+            </div>
+          </div>
+        </div>
+
+        <div class="statusbar">
+          <div class="status">
+            <span class="dot" id="statusDot"></span>
+            <span id="statusText">Ready</span>
+          </div>
+          <span id="saveText">Saved: —</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Data + Analytics -->
+      <div class="card">
+        <h2>
+          Workspace
+          <span class="pill" id="workspacePill">Tickets</span>
+        </h2>
+
+        <div class="tabs" role="tablist" aria-label="Workspace tabs">
+          <button class="tab" role="tab" aria-selected="true" data-wtab="ticketsPanel">Tickets</button>
+          <button class="tab" role="tab" aria-selected="false" data-wtab="hardwarePanel">Hardware</button>
+          <button class="tab" role="tab" aria-selected="false" data-wtab="tasksPanel">Tasks</button>
+          <button class="tab" role="tab" aria-selected="false" data-wtab="analyticsPanel">Analytics</button>
+        </div>
+
+        <!-- Tickets Panel -->
+        <div class="panel active" id="ticketsPanel">
+          <div class="list">
+            <div class="topbar">
+              <div class="filters">
+                <input id="ticketSearch" type="text" placeholder="Search tickets (title, category, reporter, id)..." />
+                <select id="ticketStatusFilter">
+                  <option value="">All statuses</option>
+                  <option>Open</option>
+                  <option>In Progress</option>
+                  <option>Resolved</option>
+                  <option>Closed</option>
+                </select>
+                <select id="ticketPriorityFilter">
+                  <option value="">All priorities</option>
+                  <option>P1</option><option>P2</option><option>P3</option><option>P4</option>
+                </select>
+              </div>
+              <span class="pill" id="ticketCountPill">0 tickets</span>
+            </div>
+
+            <div class="table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Created</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Age / TAT</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketsTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hardware Panel -->
+        <div class="panel" id="hardwarePanel">
+          <div class="list">
+            <div class="topbar">
+              <div class="filters">
+                <input id="hardwareSearch" type="text" placeholder="Search hardware (type, requester, id, dept)..." />
+                <select id="hardwareStatusFilter">
+                  <option value="">All statuses</option>
+                  <option>Submitted</option>
+                  <option>Approved</option>
+                  <option>Ordered</option>
+                  <option>Delivered</option>
+                  <option>Closed</option>
+                </select>
+              </div>
+              <span class="pill" id="hardwareCountPill">0 requests</span>
+            </div>
+
+            <div class="table">
+              <table style="min-width: 1040px;">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Created</th>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Budget</th>
+                    <th>Needed by</th>
+                    <th>Status</th>
+                    <th>Age / TAT</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="hardwareTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tasks Panel -->
+        <div class="panel" id="tasksPanel">
+          <div class="section">
+            <h3>Tasks / Actions <span class="tag">Track work</span></h3>
+            <div class="notice">
+              Use tasks to break down work, track steps, and link actions to tickets/requests.
+            </div>
+            <div id="tasksList"></div>
+          </div>
+        </div>
+
+        <!-- Analytics Panel -->
+        <div class="panel" id="analyticsPanel">
+          <div class="section">
+            <h3>Analytics overview <span class="tag">Tickets + Hardware</span></h3>
+
+            <div class="kpis">
+              <div class="kpi">
+                <p class="label">Tickets logged (last 30 days)</p>
+                <p class="value" id="kpiTickets30">0</p>
+                <p class="sub" id="kpiTicketsOpen">0 open</p>
+              </div>
+              <div class="kpi">
+                <p class="label">Avg turnaround time (tickets)</p>
+                <p class="value" id="kpiTicketAvgTat">—</p>
+                <p class="sub">Resolved/Closed only</p>
+              </div>
+              <div class="kpi">
+                <p class="label">Hardware requests (last 30 days)</p>
+                <p class="value" id="kpiHardware30">0</p>
+                <p class="sub" id="kpiHardwareOpen">0 active</p>
+              </div>
+              <div class="kpi">
+                <p class="label">Avg turnaround time (hardware)</p>
+                <p class="value" id="kpiHardwareAvgTat">—</p>
+                <p class="sub">Delivered/Closed only</p>
+              </div>
+            </div>
+
+            <div class="charts">
+              <div class="chart">
+                <h4>Ticket volume (last 14 days)</h4>
+                <div class="chart-wrap"><canvas id="chartVolume"></canvas></div>
+                <div class="legend">Counts of tickets created per day.</div>
+              </div>
+              <div class="chart">
+                <h4>Issue trends (top categories last 30 days)</h4>
+                <div class="chart-wrap"><canvas id="chartTrends"></canvas></div>
+                <div class="legend">Helps monitor recurring issue areas.</div>
+              </div>
+            </div>
+
+            <div class="charts">
+              <div class="chart">
+                <h4>Turnaround time distribution (tickets)</h4>
+                <div class="chart-wrap"><canvas id="chartTat"></canvas></div>
+                <div class="legend">Resolved/Closed tickets bucketed by duration.</div>
+              </div>
+              <div class="chart">
+                <h4>Task completion</h4>
+                <div class="chart-wrap"><canvas id="chartTasks"></canvas></div>
+                <div class="legend">Open vs Done tasks (and overdue).</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAILS DRAWER -->
+  <div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-label="Details">
+    <div class="drawer">
+      <header>
+        <div>
+          <h3 id="dTitle">Details</h3>
+          <div class="sub" id="dSub">—</div>
+        </div>
+        <button id="dClose" aria-label="Close">Close</button>
+      </header>
+      <div class="content">
+        <div class="notice" id="dNotice" style="display:none;"></div>
+        <div class="kv" id="dKv"></div>
+
+        <div class="section" style="margin-top:16px; border-radius:16px; border:2px solid var(--line);">
+          <h3 style="margin:0 0 12px;">Update status <span class="tag">Workflow</span></h3>
+          <div class="row">
+            <div class="field">
+              <label>Status</label>
+              <select id="dStatus"></select>
+            </div>
+            <div class="field">
+              <label>Assigned to</label>
+              <input id="dAssignee" type="text" placeholder="Optional" />
+            </div>
+          </div>
+          <div class="field" style="margin-top:12px;">
+            <label>Internal notes</label>
+            <textarea id="dInternalNotes" placeholder="Add notes, steps taken, resolution detail, etc."></textarea>
+          </div>
+          <div class="actions" style="margin-top:14px;">
+            <button class="primary" id="dSave">Save updates</button>
+            <button class="ghost" id="dAddTask">Add task linked to this</button>
+          </div>
+        </div>
+      </div>
+      <footer>
+        <div class="pill" id="dPill">—</div>
+        <div class="actions">
+          <button id="dCopy" class="small">Copy</button>
+          <button id="dDelete" class="danger small">Delete</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Saved</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    // Wait for Chart.js to load
+    function initApp(){
+      if (typeof Chart === 'undefined') {
+        console.error('Chart.js not loaded');
+        setTimeout(initApp, 100);
+        return;
+      }
+      
+    (function(){
+      // -------------------- Storage & helpers --------------------
+      const STORAGE_KEY = "it_services_portal_v1";
+
+      const $ = (sel, root=document) => root.querySelector(sel);
+      const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+      const now = () => new Date();
+      const toISO = (d) => new Date(d).toISOString();
+      const fromISO = (s) => s ? new Date(s) : null;
+
+      function pad(n){ return String(n).padStart(2,"0"); }
+      function fmtDateTime(d){
+        if (!d) return "—";
+        const x = new Date(d);
+        return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())} ${pad(x.getHours())}:${pad(x.getMinutes())}`;
+      }
+      function fmtDate(d){
+        if (!d) return "—";
+        const x = new Date(d);
+        return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`;
+      }
+      function daysBetween(a,b){
+        const ms = Math.max(0, (b - a));
+        return ms / (1000*60*60*24);
+      }
+      function hoursBetween(a,b){
+        const ms = Math.max(0, (b - a));
+        return ms / (1000*60*60);
+      }
+      function humanDuration(ms){
+        if (!isFinite(ms) || ms < 0) return "—";
+        const mins = Math.round(ms / 60000);
+        if (mins < 60) return `${mins}m`;
+        const hrs = Math.round(mins/60);
+        if (hrs < 48) return `${hrs}h`;
+        const d = Math.round(hrs/24);
+        return `${d}d`;
+      }
+      function uid(prefix){
+        const d = new Date();
+        const stamp = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+        const rnd = Math.random().toString(16).slice(2,6).toUpperCase();
+        return `${prefix}-${stamp}-${rnd}`;
+      }
+
+      function showToast(msg){
+        const t = $("#toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(()=>t.classList.remove("show"), 1800);
+      }
+
+      async function copyText(text){
+        try{
+          await navigator.clipboard.writeText(text);
+          showToast("Copied to clipboard");
+        }catch{
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+          showToast("Copied");
+        }
+      }
+
+      function setStatus(text, kind){
+        $("#statusText").textContent = text;
+        const dot = $("#statusDot");
+        dot.classList.remove("good","bad");
+        if (kind === "good") dot.classList.add("good");
+        if (kind === "bad") dot.classList.add("bad");
+      }
+
+      // -------------------- App state --------------------
+      const state = {
+        issues: [],
+        hardware: [],
+        tasks: [],
+        ui: {
+          createTab: "issueForm",
+          workspaceTab: "ticketsPanel",
+          drawer: { open:false, type:null, id:null }
+        }
+      };
+
+      const ISSUE_STATUSES = ["Open","In Progress","Resolved","Closed"];
+      const HARDWARE_STATUSES = ["Submitted","Approved","Ordered","Delivered","Closed"];
+
+      function save(){
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        $("#saveText").textContent = "Saved: " + new Date().toLocaleString();
+      }
+      function load(){
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try{
+          const data = JSON.parse(raw);
+          if (data && typeof data === "object"){
+            state.issues = data.issues || [];
+            state.hardware = data.hardware || [];
+            state.tasks = data.tasks || [];
+            state.ui = data.ui || state.ui;
+          }
+        }catch(e){
+          console.warn("Load failed", e);
+        }
+      }
+
+      // -------------------- Tabs --------------------
+      function activateCreateTab(id){
+        state.ui.createTab = id;
+        $$(".tab[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === id)));
+        $$(".panel").forEach(p => {
+          if (p.id === "ticketsPanel" || p.id === "hardwarePanel" || p.id === "tasksPanel" || p.id === "analyticsPanel") return;
+          p.classList.toggle("active", p.id === id);
+        });
+        $("#formPill").textContent =
+          id === "issueForm" ? "Issue Ticket" : id === "hardwareForm" ? "Hardware Request" : "Task";
+        save();
+      }
+
+      function activateWorkspaceTab(id){
+        state.ui.workspaceTab = id;
+        $$(".tab[data-wtab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.wtab === id)));
+        ["ticketsPanel","hardwarePanel","tasksPanel","analyticsPanel"].forEach(pid => {
+          $("#" + pid).classList.toggle("active", pid === id);
+        });
+        $("#workspacePill").textContent =
+          id === "ticketsPanel" ? "Tickets" :
+          id === "hardwarePanel" ? "Hardware" :
+          id === "tasksPanel" ? "Tasks" : "Analytics";
+
+        if (id === "analyticsPanel") drawAnalytics();
+        save();
+      }
+
+      // -------------------- Validation --------------------
+      function clearErrors(root){
+        $$(".err", root).forEach(el => el.classList.remove("err"));
+      }
+      function markErr(el){ if (el) el.classList.add("err"); }
+      function requiredText(el){
+        const v = (el.value || "").trim();
+        if (!v){ markErr(el); return false; }
+        return true;
+      }
+
+      // -------------------- Create issue ticket --------------------
+      function getIssueForm(){
+        return {
+          reporter: {
+            name: $("#i_name").value.trim(),
+            email: $("#i_email").value.trim(),
+            department: $("#i_dept").value.trim(),
+            location: $("#i_location").value.trim()
+          },
+          title: $("#i_title").value.trim(),
+          category: $("#i_category").value,
+          priority: $("#i_priority").value,
+          impact: $("#i_impact").value,
+          description: $("#i_desc").value.trim(),
+          device: $("#i_device").value.trim(),
+          system: $("#i_system").value.trim(),
+        };
+      }
+
+      function validateIssueForm(){
+        const root = $("#issueForm");
+        clearErrors(root);
+        const ok =
+          requiredText($("#i_name")) &
+          requiredText($("#i_email")) &
+          requiredText($("#i_title")) &
+          requiredText($("#i_desc")) &
+          requiredText($("#i_category")) &
+          requiredText($("#i_priority"));
+        if (!ok){
+          setStatus("Issue form: please complete required fields", "bad");
+          const first = $(".err", root);
+          if (first) first.scrollIntoView({behavior:"smooth", block:"center"});
+          return false;
+        }
+        setStatus("Ready", "good");
+        return true;
+      }
+
+      function submitIssue(){
+        if (!validateIssueForm()) return;
+
+        const form = getIssueForm();
+        const createdAt = now();
+        const issue = {
+          id: uid("ISS"),
+          type: "Issue",
+          status: "Open",
+          assignee: "",
+          internalNotes: "",
+          createdAt: toISO(createdAt),
+          updatedAt: toISO(createdAt),
+          resolvedAt: null,
+          closedAt: null,
+          ...form
+        };
+
+        state.issues.unshift(issue);
+
+        if (issue.priority === "P1" || issue.priority === "P2"){
+          state.tasks.unshift({
+            id: uid("TSK"),
+            title: `Triage ${issue.priority} — ${issue.title}`,
+            assignee: "IT Support",
+            dueAt: toISO(new Date(createdAt.getTime() + (issue.priority==="P1"?60:180)*60000)),
+            linkedType: "Issue",
+            linkedId: issue.id,
+            notes: "Initial triage, confirm scope/impact, update ticket.",
+            createdAt: toISO(createdAt),
+            doneAt: null
+          });
+        }
+
+        save();
+        renderAll();
+        refreshLinkDropdown();
+        clearIssueForm();
+        showToast("Ticket created");
+        activateWorkspaceTab("ticketsPanel");
+      }
+
+      function clearIssueForm(){
+        ["#i_name","#i_email","#i_dept","#i_location","#i_title","#i_desc","#i_device","#i_system"].forEach(sel => $(sel).value="");
+        $("#i_category").value="";
+        $("#i_priority").value="";
+        $("#i_impact").value="";
+        clearErrors($("#issueForm"));
+      }
+
+      // -------------------- Create hardware request --------------------
+      function getHardwareForm(){
+        return {
+          requester: {
+            name: $("#h_name").value.trim(),
+            email: $("#h_email").value.trim(),
+            department: $("#h_dept").value.trim(),
+            costCentre: $("#h_cost").value.trim()
+          },
+          itemType: $("#h_type").value,
+          quantity: parseInt($("#h_qty").value, 10) || 1,
+          budgetRange: $("#h_budget").value.trim(),
+          neededBy: $("#h_neededBy").value || "",
+          justification: $("#h_just").value.trim(),
+          preferredSpecs: $("#h_specs").value.trim(),
+        };
+      }
+
+      function validateHardwareForm(){
+        const root = $("#hardwareForm");
+        clearErrors(root);
+        const ok =
+          requiredText($("#h_name")) &
+          requiredText($("#h_email")) &
+          requiredText($("#h_type")) &
+          requiredText($("#h_qty")) &
+          requiredText($("#h_budget")) &
+          requiredText($("#h_just"));
+        if (!ok){
+          setStatus("Hardware form: please complete required fields", "bad");
+          const first = $(".err", root);
+          if (first) first.scrollIntoView({behavior:"smooth", block:"center"});
+          return false;
+        }
+        setStatus("Ready", "good");
+        return true;
+      }
+
+      function submitHardware(){
+        if (!validateHardwareForm()) return;
+
+        const form = getHardwareForm();
+        const createdAt = now();
+        const req = {
+          id: uid("HW"),
+          type: "Hardware",
+          status: "Submitted",
+          assignee: "",
+          internalNotes: "",
+          createdAt: toISO(createdAt),
+          updatedAt: toISO(createdAt),
+          deliveredAt: null,
+          closedAt: null,
+          ...form
+        };
+
+        state.hardware.unshift(req);
+
+        state.tasks.unshift({
+          id: uid("TSK"),
+          title: `Review hardware request — ${req.itemType} (${req.quantity})`,
+          assignee: "IT Procurement",
+          dueAt: toISO(new Date(createdAt.getTime() + 24*60*60000)),
+          linkedType: "Hardware",
+          linkedId: req.id,
+          notes: "Check budget, approve model/specs, confirm availability.",
+          createdAt: toISO(createdAt),
+          doneAt: null
+        });
+
+        save();
+        renderAll();
+        refreshLinkDropdown();
+        clearHardwareForm();
+        showToast("Hardware request created");
+        activateWorkspaceTab("hardwarePanel");
+      }
+
+      function clearHardwareForm(){
+        ["#h_name","#h_email","#h_dept","#h_cost","#h_budget","#h_just","#h_specs"].forEach(sel => $(sel).value="");
+        $("#h_type").value="";
+        $("#h_qty").value=1;
+        $("#h_neededBy").value="";
+        clearErrors($("#hardwareForm"));
+      }
+
+      // -------------------- Tasks --------------------
+      function validateTaskForm(){
+        const root = $("#taskForm");
+        clearErrors(root);
+        const ok = requiredText($("#t_title"));
+        if (!ok){
+          setStatus("Task: title required", "bad");
+          const first = $(".err", root);
+          if (first) first.scrollIntoView({behavior:"smooth", block:"center"});
+          return false;
+        }
+        setStatus("Ready", "good");
+        return true;
+      }
+
+      function addTask(task){
+        state.tasks.unshift(task);
+        save();
+        renderTasks();
+        drawAnalytics();
+        showToast("Task added");
+      }
+
+      function submitTask(){
+        if (!validateTaskForm()) return;
+        const createdAt = now();
+        addTask({
+          id: uid("TSK"),
+          title: $("#t_title").value.trim(),
+          assignee: $("#t_assignee").value.trim(),
+          dueAt: $("#t_due").value ? toISO(new Date($("#t_due").value)) : null,
+          linkedType: $("#t_link").value ? $("#t_link").value.split("|")[0] : "",
+          linkedId: $("#t_link").value ? $("#t_link").value.split("|")[1] : "",
+          notes: $("#t_notes").value.trim(),
+          createdAt: toISO(createdAt),
+          doneAt: null
+        });
+        clearTaskForm();
+      }
+
+      function clearTaskForm(){
+        ["#t_title","#t_assignee","#t_notes"].forEach(sel => $(sel).value="");
+        $("#t_due").value = "";
+        $("#t_link").value = "";
+        clearErrors($("#taskForm"));
+      }
+
+      function toggleTaskDone(taskId, done){
+        const t = state.tasks.find(x => x.id === taskId);
+        if (!t) return;
+        t.doneAt = done ? toISO(now()) : null;
+        save();
+        renderTasks();
+        drawAnalytics();
+      }
+
+      function deleteTask(taskId){
+        if (!confirm("Delete this task?")) return;
+        state.tasks = state.tasks.filter(x => x.id !== taskId);
+        save();
+        renderTasks();
+        drawAnalytics();
+        showToast("Task deleted");
+      }
+
+      function renderTasks(){
+        const el = $("#tasksList");
+        el.innerHTML = "";
+        if (!state.tasks.length){
+          el.innerHTML = '<div class="notice" style="margin-top:12px;">No tasks yet. Create one above or link tasks to tickets.</div>';
+          return;
+        }
+
+        state.tasks.forEach(t => {
+          const isDone = !!t.doneAt;
+          const isOverdue = !isDone && t.dueAt && fromISO(t.dueAt) < now();
+          const div = document.createElement("div");
+          div.className = "task";
+          div.innerHTML = `
+            <div class="taskTop">
+              <div style="flex:1">
+                <div style="display:flex; gap:10px; align-items:flex-start;">
+                  <input type="checkbox" ${isDone?"checked":""} data-task-toggle="${t.id}" />
+                  <div>
+                    <p class="taskTitle">${t.title}</p>
+                    <div class="taskMeta">
+                      ${t.assignee ? `<strong>${t.assignee}</strong> • ` : ""}
+                      ${t.linkedType ? `Linked: ${t.linkedType} ${t.linkedId} • ` : ""}
+                      ${t.dueAt ? `Due: ${fmtDateTime(t.dueAt)}` : ""}
+                      ${isOverdue ? ' <span class="badge bad">Overdue</span>' : ""}
+                      ${isDone ? ' <span class="badge good">Done</span>' : ""}
+                    </div>
+                    ${t.notes ? `<div class="hint" style="margin-top:8px;">${t.notes}</div>` : ""}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="taskActions">
+              <button class="small ghost" data-task-delete="${t.id}">Delete</button>
+            </div>
+          `;
+          el.appendChild(div);
+        });
+
+        $$("[data-task-toggle]", el).forEach(cb => {
+          cb.addEventListener("change", (e) => {
+            toggleTaskDone(e.target.dataset.taskToggle, e.target.checked);
+          });
+        });
+        $$("[data-task-delete]", el).forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            deleteTask(e.target.dataset.taskDelete);
+          });
+        });
+      }
+
+      function refreshLinkDropdown(){
+        const sel = $("#t_link");
+        const current = sel.value;
+        sel.innerHTML = '<option value="">None</option>';
+        state.issues.forEach(iss => {
+          const opt = document.createElement("option");
+          opt.value = `Issue|${iss.id}`;
+          opt.textContent = `[${iss.id}] ${iss.title}`;
+          sel.appendChild(opt);
+        });
+        state.hardware.forEach(hw => {
+          const opt = document.createElement("option");
+          opt.value = `Hardware|${hw.id}`;
+          opt.textContent = `[${hw.id}] ${hw.itemType}`;
+          sel.appendChild(opt);
+        });
+        sel.value = current;
+      }
+
+      // -------------------- Render tickets --------------------
+      function filterTickets(){
+        const q = ($("#ticketSearch").value || "").toLowerCase();
+        const st = $("#ticketStatusFilter").value;
+        const pr = $("#ticketPriorityFilter").value;
+
+        return state.issues.filter(iss => {
+          if (st && iss.status !== st) return false;
+          if (pr && iss.priority !== pr) return false;
+          if (!q) return true;
+          const hay = (iss.id + " " + iss.title + " " + iss.category + " " + (iss.reporter?.name||"")).toLowerCase();
+          return hay.includes(q);
+        });
+      }
+
+      function renderTickets(){
+        const list = filterTickets();
+        $("#ticketCountPill").textContent = `${list.length} ticket${list.length===1?"":"s"}`;
+
+        const tbody = $("#ticketsTbody");
+        tbody.innerHTML = "";
+        if (!list.length){
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:20px; color:var(--muted);">No tickets match your filter.</td></tr>';
+          return;
+        }
+
+        list.forEach(iss => {
+          const createdDate = fromISO(iss.createdAt);
+          const ageMs = now() - createdDate;
+          const isDone = (iss.status === "Resolved" || iss.status === "Closed");
+          const tatMs = isDone ? ((iss.resolvedAt ? fromISO(iss.resolvedAt) : fromISO(iss.closedAt)) - createdDate) : null;
+
+          const prioClass = (iss.priority === "P1" || iss.priority === "P2") ? "bad" : (iss.priority === "P3" ? "warn" : "");
+          const statusClass = isDone ? "good" : (iss.status === "In Progress" ? "warn" : "");
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="mono">${iss.id}</td>
+            <td>${fmtDateTime(createdDate)}</td>
+            <td><strong>${iss.title}</strong></td>
+            <td>${iss.category}</td>
+            <td><span class="badge ${prioClass}">${iss.priority}</span></td>
+            <td><span class="badge ${statusClass}">${iss.status}</span></td>
+            <td>${isDone ? humanDuration(tatMs) : humanDuration(ageMs)}</td>
+            <td>
+              <div class="actions">
+                <button class="small primary" data-open-issue="${iss.id}">Open</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        $$("[data-open-issue]", tbody).forEach(btn => {
+          btn.addEventListener("click", () => openDrawer("Issue", btn.dataset.openIssue));
+        });
+      }
+
+      // -------------------- Render hardware --------------------
+      function filterHardware(){
+        const q = ($("#hardwareSearch").value || "").toLowerCase();
+        const st = $("#hardwareStatusFilter").value;
+
+        return state.hardware.filter(hw => {
+          if (st && hw.status !== st) return false;
+          if (!q) return true;
+          const hay = (hw.id + " " + hw.itemType + " " + (hw.requester?.name||"") + " " + (hw.requester?.department||"")).toLowerCase();
+          return hay.includes(q);
+        });
+      }
+
+      function renderHardware(){
+        const list = filterHardware();
+        $("#hardwareCountPill").textContent = `${list.length} request${list.length===1?"":"s"}`;
+
+        const tbody = $("#hardwareTbody");
+        tbody.innerHTML = "";
+        if (!list.length){
+          tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--muted);">No hardware requests match your filter.</td></tr>';
+          return;
+        }
+
+        list.forEach(hw => {
+          const createdDate = fromISO(hw.createdAt);
+          const ageMs = now() - createdDate;
+          const isDone = (hw.status === "Delivered" || hw.status === "Closed");
+          const tatMs = isDone ? ((hw.deliveredAt ? fromISO(hw.deliveredAt) : fromISO(hw.closedAt)) - createdDate) : null;
+
+          const statusClass = isDone ? "good" : (hw.status === "Ordered" ? "warn" : "");
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="mono">${hw.id}</td>
+            <td>${fmtDateTime(createdDate)}</td>
+            <td><strong>${hw.itemType}</strong></td>
+            <td>${hw.quantity}</td>
+            <td>${hw.budgetRange}</td>
+            <td>${hw.neededBy ? fmtDate(hw.neededBy) : "—"}</td>
+            <td><span class="badge ${statusClass}">${hw.status}</span></td>
+            <td>${isDone ? humanDuration(tatMs) : humanDuration(ageMs)}</td>
+            <td>
+              <div class="actions">
+                <button class="small primary" data-open-hardware="${hw.id}">Open</button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        $$("[data-open-hardware]", tbody).forEach(btn => {
+          btn.addEventListener("click", () => openDrawer("Hardware", btn.dataset.openHardware));
+        });
+      }
+
+      // -------------------- Drawer --------------------
+      function openDrawer(type, id){
+        state.ui.drawer = {open:true, type, id};
+        const backdrop = $("#backdrop");
+        backdrop.classList.add("open");
+
+        if (type === "Issue"){
+          const iss = state.issues.find(x => x.id === id);
+          if (!iss) return;
+          $("#dTitle").textContent = iss.title;
+          $("#dSub").textContent = `${iss.id} • ${iss.category}`;
+          $("#dPill").textContent = `Issue • ${iss.status}`;
+
+          const kv = $("#dKv");
+          kv.innerHTML = "";
+          const rows = [
+            ["Reporter", iss.reporter?.name || "—"],
+            ["Email", iss.reporter?.email || "—"],
+            ["Department", iss.reporter?.department || "—"],
+            ["Location", iss.reporter?.location || "—"],
+            ["Priority", iss.priority],
+            ["Impact", iss.impact || "—"],
+            ["Created", fmtDateTime(iss.createdAt)],
+            ["Updated", fmtDateTime(iss.updatedAt)],
+            ["Device", iss.device || "—"],
+            ["System", iss.system || "—"],
+            ["Description", iss.description || "—"],
+            ["Assigned to", iss.assignee || "—"],
+            ["Internal notes", iss.internalNotes || "—"]
+          ];
+          rows.forEach(([k,v]) => {
+            kv.innerHTML += `<div class="k">${k}</div><div class="v">${v}</div>`;
+          });
+
+          const dStatus = $("#dStatus");
+          dStatus.innerHTML = "";
+          ISSUE_STATUSES.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            if (s === iss.status) opt.selected = true;
+            dStatus.appendChild(opt);
+          });
+
+          $("#dAssignee").value = iss.assignee || "";
+          $("#dInternalNotes").value = iss.internalNotes || "";
+
+          $("#dNotice").style.display = "none";
+
+        } else if (type === "Hardware"){
+          const hw = state.hardware.find(x => x.id === id);
+          if (!hw) return;
+          $("#dTitle").textContent = hw.itemType;
+          $("#dSub").textContent = `${hw.id} • Qty: ${hw.quantity}`;
+          $("#dPill").textContent = `Hardware • ${hw.status}`;
+
+          const kv = $("#dKv");
+          kv.innerHTML = "";
+          const rows = [
+            ["Requester", hw.requester?.name || "—"],
+            ["Email", hw.requester?.email || "—"],
+            ["Department", hw.requester?.department || "—"],
+            ["Cost Centre", hw.requester?.costCentre || "—"],
+            ["Item Type", hw.itemType],
+            ["Quantity", hw.quantity],
+            ["Budget Range", hw.budgetRange],
+            ["Needed By", hw.neededBy ? fmtDate(hw.neededBy) : "—"],
+            ["Created", fmtDateTime(hw.createdAt)],
+            ["Updated", fmtDateTime(hw.updatedAt)],
+            ["Justification", hw.justification || "—"],
+            ["Preferred Specs", hw.preferredSpecs || "—"],
+            ["Assigned to", hw.assignee || "—"],
+            ["Internal notes", hw.internalNotes || "—"]
+          ];
+          rows.forEach(([k,v]) => {
+            kv.innerHTML += `<div class="k">${k}</div><div class="v">${v}</div>`;
+          });
+
+          const dStatus = $("#dStatus");
+          dStatus.innerHTML = "";
+          HARDWARE_STATUSES.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s;
+            opt.textContent = s;
+            if (s === hw.status) opt.selected = true;
+            dStatus.appendChild(opt);
+          });
+
+          $("#dAssignee").value = hw.assignee || "";
+          $("#dInternalNotes").value = hw.internalNotes || "";
+
+          $("#dNotice").style.display = "none";
+        }
+
+        save();
+      }
+
+      function closeDrawer(){
+        $("#backdrop").classList.remove("open");
+        state.ui.drawer = {open:false, type:null, id:null};
+        save();
+      }
+
+      function saveDrawer(){
+        const {type, id} = state.ui.drawer;
+        if (!type || !id) return;
+
+        if (type === "Issue"){
+          const iss = state.issues.find(x => x.id === id);
+          if (!iss) return;
+          iss.status = $("#dStatus").value;
+          iss.assignee = $("#dAssignee").value.trim();
+          iss.internalNotes = $("#dInternalNotes").value.trim();
+          iss.updatedAt = toISO(now());
+
+          if (iss.status === "Resolved" && !iss.resolvedAt) iss.resolvedAt = toISO(now());
+          if (iss.status === "Closed" && !iss.closedAt) iss.closedAt = toISO(now());
+
+        } else if (type === "Hardware"){
+          const hw = state.hardware.find(x => x.id === id);
+          if (!hw) return;
+          hw.status = $("#dStatus").value;
+          hw.assignee = $("#dAssignee").value.trim();
+          hw.internalNotes = $("#dInternalNotes").value.trim();
+          hw.updatedAt = toISO(now());
+
+          if (hw.status === "Delivered" && !hw.deliveredAt) hw.deliveredAt = toISO(now());
+          if (hw.status === "Closed" && !hw.closedAt) hw.closedAt = toISO(now());
+        }
+
+        save();
+        renderAll();
+        showToast("Saved");
+        closeDrawer();
+      }
+
+      function deleteFromDrawer(){
+        const {type, id} = state.ui.drawer;
+        if (!type || !id) return;
+        if (!confirm(`Delete this ${type}?`)) return;
+
+        if (type === "Issue"){
+          state.issues = state.issues.filter(x => x.id !== id);
+        } else if (type === "Hardware"){
+          state.hardware = state.hardware.filter(x => x.id !== id);
+        }
+
+        save();
+        renderAll();
+        closeDrawer();
+        showToast("Deleted");
+      }
+
+      function copyFromDrawer(){
+        const {type, id} = state.ui.drawer;
+        if (!type || !id) return;
+
+        let text = "";
+        if (type === "Issue"){
+          const iss = state.issues.find(x => x.id === id);
+          if (iss) text = JSON.stringify(iss, null, 2);
+        } else if (type === "Hardware"){
+          const hw = state.hardware.find(x => x.id === id);
+          if (hw) text = JSON.stringify(hw, null, 2);
+        }
+
+        copyText(text);
+      }
+
+      function addTaskFromDrawer(){
+        const {type, id} = state.ui.drawer;
+        if (!type || !id) return;
+
+        let title = "Follow-up action";
+        if (type === "Issue"){
+          const iss = state.issues.find(x => x.id === id);
+          if (iss) title = `Follow-up on ${iss.id} — ${iss.title}`;
+        } else if (type === "Hardware"){
+          const hw = state.hardware.find(x => x.id === id);
+          if (hw) title = `Follow-up on ${hw.id} — ${hw.itemType}`;
+        }
+
+        const createdAt = now();
+        addTask({
+          id: uid("TSK"),
+          title,
+          assignee: "IT Support",
+          dueAt: toISO(new Date(createdAt.getTime() + 4*60*60000)),
+          linkedType: type,
+          linkedId: id,
+          notes: "Created from drawer.",
+          createdAt: toISO(createdAt),
+          doneAt: null
+        });
+
+        showToast("Task created");
+      }
+
+      // -------------------- Analytics --------------------
+      let chartVolume, chartTrends, chartTat, chartTasks;
+
+      function drawAnalytics(){
+        try {
+          if (typeof Chart === 'undefined') {
+            console.error('Chart.js is not loaded');
+            return;
+          }
+          
+        const last30 = new Date(now().getTime() - 30*24*60*60000);
+        const last14 = new Date(now().getTime() - 14*24*60*60000);
+
+        // KPI: Tickets last 30 days
+        const tickets30 = state.issues.filter(iss => fromISO(iss.createdAt) >= last30);
+        $("#kpiTickets30").textContent = tickets30.length;
+        $("#kpiTicketsOpen").textContent = state.issues.filter(iss => iss.status === "Open").length + " open";
+
+        // KPI: Ticket avg TAT
+        const doneTickets = state.issues.filter(iss => iss.resolvedAt || iss.closedAt);
+        if (doneTickets.length){
+          const sum = doneTickets.reduce((acc, iss) => {
+            const end = fromISO(iss.resolvedAt || iss.closedAt);
+            const start = fromISO(iss.createdAt);
+            return acc + (end - start);
+          }, 0);
+          const avgMs = sum / doneTickets.length;
+          $("#kpiTicketAvgTat").textContent = humanDuration(avgMs);
+        } else {
+          $("#kpiTicketAvgTat").textContent = "—";
+        }
+
+        // KPI: Hardware last 30 days
+        const hw30 = state.hardware.filter(hw => fromISO(hw.createdAt) >= last30);
+        $("#kpiHardware30").textContent = hw30.length;
+        $("#kpiHardwareOpen").textContent = state.hardware.filter(hw => hw.status !== "Delivered" && hw.status !== "Closed").length + " active";
+
+        // KPI: Hardware avg TAT
+        const doneHw = state.hardware.filter(hw => hw.deliveredAt || hw.closedAt);
+        if (doneHw.length){
+          const sum = doneHw.reduce((acc, hw) => {
+            const end = fromISO(hw.deliveredAt || hw.closedAt);
+            const start = fromISO(hw.createdAt);
+            return acc + (end - start);
+          }, 0);
+          const avgMs = sum / doneHw.length;
+          $("#kpiHardwareAvgTat").textContent = humanDuration(avgMs);
+        } else {
+          $("#kpiHardwareAvgTat").textContent = "—";
+        }
+
+        // Chart: Volume (last 14 days)
+        const canvasVolume = $("#chartVolume");
+        if (!canvasVolume) {
+          console.error('Canvas element #chartVolume not found');
+          return;
+        }
+        
+        const volumeData = [];
+        for (let i = 13; i >= 0; i--){
+          const d = new Date(now().getTime() - i*24*60*60000);
+          const label = `${pad(d.getMonth()+1)}/${pad(d.getDate())}`;
+          const count = state.issues.filter(iss => {
+            const c = fromISO(iss.createdAt);
+            return c.getFullYear() === d.getFullYear() && c.getMonth() === d.getMonth() && c.getDate() === d.getDate();
+          }).length;
+          volumeData.push({label, count});
+        }
+
+        if (chartVolume) chartVolume.destroy();
+        chartVolume = new Chart(canvasVolume.getContext('2d'), {
+          type: "bar",
+          data: {
+            labels: volumeData.map(x => x.label),
+            datasets: [{
+              label: "Tickets",
+              data: volumeData.map(x => x.count),
+              backgroundColor: "rgba(99,102,241,0.6)",
+              borderColor: "rgba(99,102,241,1)",
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: {display:false} },
+            scales: {
+              y: {beginAtZero: true, ticks: {stepSize:1}}
+            }
+          }
+        });
+
+        // Chart: Trends (top categories last 30 days)
+        const canvasTrends = $("#chartTrends");
+        if (!canvasTrends) {
+          console.error('Canvas element #chartTrends not found');
+          return;
+        }
+        
+        const catCounts = {};
+        tickets30.forEach(iss => {
+          const cat = iss.category || "Other";
+          catCounts[cat] = (catCounts[cat] || 0) + 1;
+        });
+        const catList = Object.keys(catCounts).map(cat => ({cat, count: catCounts[cat]})).sort((a,b) => b.count - a.count).slice(0,5);
+
+        if (chartTrends) chartTrends.destroy();
+        chartTrends = new Chart(canvasTrends.getContext('2d'), {
+          type: "doughnut",
+          data: {
+            labels: catList.map(x => x.cat),
+            datasets: [{
+              data: catList.map(x => x.count),
+              backgroundColor: ["rgba(99,102,241,0.7)","rgba(139,92,246,0.7)","rgba(16,185,129,0.7)","rgba(245,158,11,0.7)","rgba(239,68,68,0.7)"]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: {display:true, position:"bottom"} }
+          }
+        });
+
+        // Chart: TAT distribution
+        const canvasTat = $("#chartTat");
+        if (!canvasTat) {
+          console.error('Canvas element #chartTat not found');
+          return;
+        }
+        
+        const tatBuckets = {"<1h":0, "1-4h":0, "4-24h":0, "1-3d":0, ">3d":0};
+        doneTickets.forEach(iss => {
+          const end = fromISO(iss.resolvedAt || iss.closedAt);
+          const start = fromISO(iss.createdAt);
+          const hrs = hoursBetween(start, end);
+          if (hrs < 1) tatBuckets["<1h"]++;
+          else if (hrs < 4) tatBuckets["1-4h"]++;
+          else if (hrs < 24) tatBuckets["4-24h"]++;
+          else if (hrs < 72) tatBuckets["1-3d"]++;
+          else tatBuckets[">3d"]++;
+        });
+
+        if (chartTat) chartTat.destroy();
+        chartTat = new Chart(canvasTat.getContext('2d'), {
+          type: "bar",
+          data: {
+            labels: Object.keys(tatBuckets),
+            datasets: [{
+              label: "Count",
+              data: Object.values(tatBuckets),
+              backgroundColor: "rgba(16,185,129,0.6)",
+              borderColor: "rgba(16,185,129,1)",
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: {display:false} },
+            scales: { y: {beginAtZero: true, ticks: {stepSize:1}} }
+          }
+        });
+
+        // Chart: Tasks
+        const canvasTasks = $("#chartTasks");
+        if (!canvasTasks) {
+          console.error('Canvas element #chartTasks not found');
+          return;
+        }
+        
+        const openTasks = state.tasks.filter(t => !t.doneAt);
+        const doneTasks = state.tasks.filter(t => !!t.doneAt);
+        const overdue = openTasks.filter(t => t.dueAt && fromISO(t.dueAt) < now()).length;
+
+        if (chartTasks) chartTasks.destroy();
+        chartTasks = new Chart(canvasTasks.getContext('2d'), {
+          type: "bar",
+          data: {
+            labels: ["Open", "Done", "Overdue"],
+            datasets: [{
+              data: [openTasks.length, doneTasks.length, overdue],
+              backgroundColor: ["rgba(99,102,241,0.6)","rgba(16,185,129,0.6)","rgba(239,68,68,0.6)"],
+              borderColor: ["rgba(99,102,241,1)","rgba(16,185,129,1)","rgba(239,68,68,1)"],
+              borderWidth: 2
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: {display:false} },
+            scales: { y: {beginAtZero: true, ticks: {stepSize:1}} }
+          }
+        });
+        
+        } catch(err) {
+          console.error('Error drawing analytics:', err);
+          showToast('Analytics error - check console');
+        }
+      }
+
+      // -------------------- Render all --------------------
+      function renderAll(){
+        renderTickets();
+        renderHardware();
+        renderTasks();
+        if (state.ui.workspaceTab === "analyticsPanel") drawAnalytics();
+      }
+
+      // -------------------- Events --------------------
+      $$(".tab[data-tab]").forEach(btn => {
+        btn.addEventListener("click", () => activateCreateTab(btn.dataset.tab));
+      });
+
+      $$(".tab[data-wtab]").forEach(btn => {
+        btn.addEventListener("click", () => activateWorkspaceTab(btn.dataset.wtab));
+      });
+
+      $("#btnSubmitIssue").addEventListener("click", submitIssue);
+      $("#btnClearIssue").addEventListener("click", clearIssueForm);
+
+      $("#btnSubmitHardware").addEventListener("click", submitHardware);
+      $("#btnClearHardware").addEventListener("click", clearHardwareForm);
+
+      $("#btnAddTask").addEventListener("click", submitTask);
+      $("#btnClearTask").addEventListener("click", clearTaskForm);
+
+      $("#ticketSearch").addEventListener("input", renderTickets);
+      $("#ticketStatusFilter").addEventListener("change", renderTickets);
+      $("#ticketPriorityFilter").addEventListener("change", renderTickets);
+
+      $("#hardwareSearch").addEventListener("input", renderHardware);
+      $("#hardwareStatusFilter").addEventListener("change", renderHardware);
+
+      $("#btnNewIssue").addEventListener("click", () => {
+        activateCreateTab("issueForm");
+        $("#i_name").focus();
+      });
+
+      $("#btnNewHardware").addEventListener("click", () => {
+        activateCreateTab("hardwareForm");
+        $("#h_name").focus();
+      });
+
+      $("#btnExport").addEventListener("click", () => {
+        const data = {issues: state.issues, hardware: state.hardware, tasks: state.tasks};
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "it-services-export.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast("Exported");
+      });
+
+      $("#btnPrint").addEventListener("click", () => window.print());
+
+      $("#btnReset").addEventListener("click", () => {
+        if (!confirm("Reset all data? This cannot be undone.")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        state.issues = [];
+        state.hardware = [];
+        state.tasks = [];
+        renderAll();
+        refreshLinkDropdown();
+        showToast("Reset complete");
+      });
+
+      $("#dClose").addEventListener("click", closeDrawer);
+      $("#backdrop").addEventListener("click", (e) => {
+        if (e.target === $("#backdrop")) closeDrawer();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeDrawer();
+      });
+
+      $("#dSave").addEventListener("click", saveDrawer);
+      $("#dDelete").addEventListener("click", deleteFromDrawer);
+      $("#dCopy").addEventListener("click", copyFromDrawer);
+      $("#dAddTask").addEventListener("click", addTaskFromDrawer);
+
+      // -------------------- Init --------------------
+      load();
+      renderAll();
+      refreshLinkDropdown();
+      activateCreateTab(state.ui.createTab);
+      activateWorkspaceTab(state.ui.workspaceTab);
+      setStatus("Ready", "good");
+    })();
+    
+    } // end initApp
+    
+    // Start the app when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
